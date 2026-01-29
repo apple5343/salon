@@ -1,0 +1,155 @@
+package postgres
+
+import (
+	"context"
+	"fmt"
+	"strings"
+
+	service "salon/internal/models"
+	"salon/internal/repository/models"
+)
+
+func (r *carRepository) GetCarsByFilter(ctx context.Context, filter *service.CarFilters) ([]*service.CarShort, error) {
+	var cars []*models.CarShort
+	query := `SELECT c.id, m.name as model_name, s.name as supplier_name, b.name as brand_name, c.vin, c.status, c.price, c.year
+		FROM cars c
+		JOIN models m ON c.model_id = m.id
+		JOIN brands b ON m.brand_id = b.id
+		JOIN suppliers s ON c.supplier_id = s.id`
+	conditions := []string{}
+	args := []interface{}{}
+	addCondition := func(condition string, val interface{}) {
+		args = append(args, val)
+		conditions = append(conditions, fmt.Sprintf("%s $%d", condition, len(args)))
+	}
+	if filter.SupplierID != nil {
+		addCondition("s.id =", *filter.SupplierID)
+	}
+	if filter.ModelID != nil {
+		addCondition("m.id =", *filter.ModelID)
+	}
+	if filter.BrandID != nil {
+		addCondition("b.id =", *filter.BrandID)
+	}
+	if filter.Color != nil {
+		addCondition("c.color =", *filter.Color)
+	}
+	if filter.Status != nil {
+		addCondition("c.status =", *filter.Status)
+	}
+	if filter.MinPrice != nil {
+		addCondition("c.price >=", *filter.MinPrice)
+	}
+	if filter.MaxPrice != nil {
+		addCondition("c.price <=", *filter.MaxPrice)
+	}
+	if filter.MinYear != nil {
+		addCondition("c.year >=", *filter.MinYear)
+	}
+	if filter.MaxYear != nil {
+		addCondition("c.year <=", *filter.MaxYear)
+	}
+	if len(conditions) > 0 {
+		query += " WHERE " + strings.Join(conditions, " AND ")
+	}
+	if filter.Limit != nil {
+		query += fmt.Sprintf(" LIMIT $%d ", len(args)+1)
+		args = append(args, *filter.Limit)
+	}
+	if filter.Offset != nil {
+		query += fmt.Sprintf(" OFFSET $%d", len(args)+1)
+		args = append(args, *filter.Offset)
+	}
+	err := r.db.SelectContext(ctx, &cars, query, args...)
+	if err != nil {
+		return nil, err
+	}
+	result := make([]*service.CarShort, len(cars))
+	for i, c := range cars {
+		result[i] = models.CarShortToService(c)
+	}
+	return result, nil
+}
+
+func (r *carRepository) GetModelsByFilter(ctx context.Context, filter *service.ModelFilters) ([]*service.ModelShort, error) {
+	var modelsList []*models.ModelShort
+	query := `SELECT m.id, b.name as brand_name, m.name, m.generation, m.body_type, m.drive_type, m.power_hp, m.base_price
+		FROM models m
+		JOIN brands b ON m.brand_id = b.id`
+	conditions := []string{}
+	args := []interface{}{}
+	addCondition := func(condition string, val interface{}) {
+		args = append(args, val)
+		conditions = append(conditions, fmt.Sprintf("%s $%d", condition, len(args)))
+	}
+	if filter.BrandID != nil {
+		addCondition("b.id =", *filter.BrandID)
+	}
+	if filter.BodyType != nil {
+		addCondition("m.body_type =", *filter.BodyType)
+	}
+	if filter.DriveType != nil {
+		addCondition("m.drive_type =", *filter.DriveType)
+	}
+	if filter.MinEngineDisplacement != nil {
+		addCondition("m.engine_displacement >=", *filter.MinEngineDisplacement)
+	}
+	if filter.MaxEngineDisplacement != nil {
+		addCondition("m.engine_displacement <=", *filter.MaxEngineDisplacement)
+	}
+	if filter.MinPowerHP != nil {
+		addCondition("m.power_hp >=", *filter.MinPowerHP)
+	}
+	if filter.MaxPowerHP != nil {
+		addCondition("m.power_hp <=", *filter.MaxPowerHP)
+	}
+	if filter.MinBasePrice != nil {
+		addCondition("m.base_price >=", *filter.MinBasePrice)
+	}
+	if filter.MaxBasePrice != nil {
+		addCondition("m.base_price <=", *filter.MaxBasePrice)
+	}
+	if filter.Name != nil {
+		args = append(args, *filter.Name)
+		conditions = append(conditions, fmt.Sprintf("m.name ILIKE $%d", len(args)))
+	}
+	if filter.Generation != nil {
+		args = append(args, *filter.Generation)
+		conditions = append(conditions, fmt.Sprintf("m.generation ILIKE $%d", len(args)))
+	}
+	if len(conditions) > 0 {
+		query += " WHERE " + strings.Join(conditions, " AND ")
+	}
+	if filter.OrderBy != nil {
+		sortMap := map[service.ModelOrderBy]string{
+			service.ModelOrderByBasePrice:          "m.base_price",
+			service.ModelOrderByEngineDisplacement: "m.engine_displacement",
+			service.ModelOrderByPowerHP:            "m.power_hp",
+			service.ModelOrderByName:               "m.name",
+		}
+		direction := "ASC"
+		if filter.OrderDirection != nil && *filter.OrderDirection == service.OrderDirectionDESC {
+			direction = "DESC"
+		}
+		if dbField, ok := sortMap[*filter.OrderBy]; ok {
+			query += fmt.Sprintf(" ORDER BY %s %s", dbField, direction)
+		}
+	}
+	if filter.Limit != nil {
+		query += fmt.Sprintf(" LIMIT $%d ", len(args)+1)
+		args = append(args, *filter.Limit)
+	}
+	if filter.Offset != nil {
+		query += fmt.Sprintf(" OFFSET $%d", len(args)+1)
+		args = append(args, *filter.Offset)
+	}
+	err := r.db.SelectContext(ctx, &modelsList, query, args...)
+	if err != nil {
+		return nil, err
+	}
+	result := make([]*service.ModelShort, len(modelsList))
+	for i, m := range modelsList {
+		result[i] = models.ModelShortToService(m)
+	}
+	return result, nil
+}
