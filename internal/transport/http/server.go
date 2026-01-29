@@ -2,6 +2,7 @@ package http
 
 import (
 	"context"
+	"net/http"
 	"salon/internal/config"
 	"salon/internal/service"
 	"salon/internal/transport/http/car"
@@ -60,6 +61,10 @@ func (s *Server) routes() {
 	s.e.Use(middlewares.LoggerMiddleware(s.logger))
 	s.e.Use(middlewares.ErrorMiddleware())
 
+	s.e.GET("/health", func(c echo.Context) error {
+		return c.NoContent(http.StatusOK)
+	})
+
 	employees := s.e.Group("/employees")
 	{
 		auth := employees.Group("/auth")
@@ -71,7 +76,7 @@ func (s *Server) routes() {
 		}
 	}
 
-	clients := s.e.Group("clients")
+	clients := s.e.Group("/clients")
 	{
 		auth := clients.Group("/auth")
 		{

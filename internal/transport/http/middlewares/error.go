@@ -1,10 +1,10 @@
 package middlewares
 
 import (
-	"salon/pkg/logger"
 	"errors"
 	"fmt"
 	"net/http"
+	"salon/pkg/logger"
 
 	"github.com/apple5343/errorx"
 	"github.com/labstack/echo/v4"
@@ -21,7 +21,6 @@ func ErrorMiddleware() echo.MiddlewareFunc {
 			if c.Response().Committed {
 				return err
 			}
-			fmt.Println(err.Error())
 			l, okk := logger.FromContext(c.Request().Context())
 			if okk {
 				l.Error(c.Request().Context(), err.Error())

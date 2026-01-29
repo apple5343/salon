@@ -6,6 +6,7 @@ import (
 	"salon/internal/models"
 	repo "salon/internal/repository/errors"
 	ctxutil "salon/internal/utils/context"
+	"salon/internal/utils/password"
 
 	"github.com/apple5343/errorx"
 )
@@ -14,6 +15,21 @@ func (s *clientService) Update(ctx context.Context, c *models.Client) (*models.C
 	role := ctxutil.UserRoleFromContext(ctx)
 	if role != string(models.EmployeeRoleAdmin) && role != string(models.EmployeeRoleManager) {
 		return nil, ErrForbidden
+	}
+	// При обновлении: если пароль пустой — не менять (подставляем текущий хеш из БД)
+	if c.PasswordHash == "" {
+		existing, err := s.repo.GetByID(ctx, c.ID)
+		if err != nil {
+			return nil, errorx.NewError("update client: "+err.Error(), errorx.Internal)
+		}
+		c.PasswordHash = existing.PasswordHash
+	} else {
+		// Меняем пароль — нужно пройти BeforeUpdate (без хеширования там) или захешировать здесь
+		hashed, err := password.HashPassword(c.PasswordHash)
+		if err != nil {
+			return nil, errorx.NewError("update client: "+err.Error(), errorx.BadRequest)
+		}
+		c.PasswordHash = hashed
 	}
 	if err := c.BeforeUpdate(); err != nil {
 		return nil, errorx.NewError("update client: "+err.Error(), errorx.BadRequest)
