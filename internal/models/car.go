@@ -15,6 +15,7 @@ var (
 	CarStatusPending   CarStatus = "pending"
 	CarStatusArchived  CarStatus = "archived"
 	CarStatusIncoming  CarStatus = "incoming"
+	CarStatusBooked    CarStatus = "booked"
 )
 
 type Car struct {

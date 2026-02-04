@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-const timeLayout = "02.01.2006"
+const TimeLayout = "02.01.2006"
 
 type Client struct {
 	ID        string    `json:"id"`
@@ -27,7 +27,7 @@ func ClientToHttp(c *models.Client) *Client {
 		Email:     c.Email,
 		Password:  c.PasswordHash,
 		Passport:  PassportToHttp(c.Passport),
-		BirthDate: c.BirthDate.Format(timeLayout),
+		BirthDate: c.BirthDate.Format(TimeLayout),
 		CreatedAt: c.CreatedAt,
 		UpdatedAt: c.UpdatedAt,
 	}
@@ -39,18 +39,17 @@ func ClientToService(c *Client) (*models.Client, error) {
 		return nil, err
 	}
 	return &models.Client{
-		ID:           c.ID,
-		FullName:     c.FullName,
-		Phone:        c.Phone,
-		Email:        c.Email,
-		PasswordHash: c.Password,
-		Passport:     PassportToService(c.Passport),
-		BirthDate:    birthDate,
-		CreatedAt:    c.CreatedAt,
-		UpdatedAt:    c.UpdatedAt,
+		ID:        c.ID,
+		FullName:  c.FullName,
+		Phone:     c.Phone,
+		Email:     c.Email,
+		Passport:  PassportToService(c.Passport),
+		BirthDate: birthDate,
+		CreatedAt: c.CreatedAt,
+		UpdatedAt: c.UpdatedAt,
 	}, nil
 }
 
 func toTime(t string) (time.Time, error) {
-	return time.Parse(timeLayout, t)
+	return time.Parse(TimeLayout, t)
 }

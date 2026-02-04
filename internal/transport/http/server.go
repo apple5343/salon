@@ -10,6 +10,7 @@ import (
 	"salon/internal/transport/http/employee"
 	"salon/internal/transport/http/event"
 	"salon/internal/transport/http/middlewares"
+	"salon/internal/transport/http/sale"
 	"salon/internal/transport/http/supplier"
 	"salon/pkg/logger"
 
@@ -24,6 +25,7 @@ type Server struct {
 	supplierHandler *supplier.Handler
 	clientHandler   *client.Handler
 	carHandler      *car.Handler
+	saleHandler     *sale.Handler
 	eventHandler    *event.Handler
 	e               *echo.Echo
 }
@@ -31,7 +33,7 @@ type Server struct {
 func NewServer(config *config.HttpServer, jwtConfig *config.JWT, logger logger.Logger,
 	employeeService service.EmployeeService, supplierService service.SupplierService,
 	clientService service.ClientService, carService service.CarService,
-	eventService service.EventService) (*Server, error) {
+	saleService service.SaleService, eventService service.EventService) (*Server, error) {
 	return &Server{
 		config:          config,
 		jwtConfig:       jwtConfig,
@@ -39,6 +41,7 @@ func NewServer(config *config.HttpServer, jwtConfig *config.JWT, logger logger.L
 		supplierHandler: supplier.NewHandler(supplierService),
 		clientHandler:   client.NewHandler(clientService),
 		carHandler:      car.NewHandler(carService),
+		saleHandler:     sale.NewHandler(saleService),
 		eventHandler:    event.NewHandler(eventService),
 		logger:          logger,
 		e:               echo.New(),
@@ -114,6 +117,12 @@ func (s *Server) routes() {
 		suppliers.POST("", authMiddleware(s.supplierHandler.Create()))
 		suppliers.GET("/:id", softAuthMiddleware(s.supplierHandler.GetByID()))
 		suppliers.PUT("/:id", authMiddleware(s.supplierHandler.Update()))
+	}
+
+	sales := s.e.Group("/sales")
+	{
+		sales.POST("", authMiddleware(s.saleHandler.Create()))
+		sales.PATCH("/:id", authMiddleware(s.saleHandler.Update()))
 	}
 
 	events := s.e.Group("/events")

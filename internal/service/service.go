@@ -35,6 +35,14 @@ type CarService interface {
 	UpdateCar(ctx context.Context, c *models.Car) (*models.Car, *models.Model, *models.Brand, *models.Supplier, error)
 }
 
+type SaleService interface {
+	GetByID(ctx context.Context, id string) (*models.Sale, error)
+	GetSales(ctx context.Context, filters *models.SaleFilters) ([]*models.Sale, error)
+	Create(ctx context.Context, s *models.Sale) (*models.Sale, error)
+	Complete(ctx context.Context, id string) (*models.Sale, error)
+	Cancel(ctx context.Context, id string) error
+}
+
 type SupplierService interface {
 	GetByID(ctx context.Context, id string) (*models.Supplier, error)
 	Create(ctx context.Context, s *models.Supplier) (*models.Supplier, error)

@@ -33,6 +33,14 @@ type CarRepository interface {
 	UpdateCar(ctx context.Context, c *models.Car) (*models.Car, error)
 }
 
+type SaleRepository interface {
+	GetByID(ctx context.Context, id string) (*models.Sale, error)
+	GetSalesByFilter(ctx context.Context, filter *models.SaleFilters) ([]*models.Sale, error)
+	Create(ctx context.Context, s *models.Sale) (*models.Sale, error)
+	Complete(ctx context.Context, id string) error
+	Cancel(ctx context.Context, id string) error
+}
+
 type SupplierRepository interface {
 	GetByID(ctx context.Context, id string) (*models.Supplier, error)
 	Create(ctx context.Context, s *models.Supplier) (*models.Supplier, error)

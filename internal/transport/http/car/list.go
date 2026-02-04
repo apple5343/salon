@@ -224,11 +224,7 @@ func modelFiltersFromRequest(c echo.Context) (*service.ModelFilters, error) {
 		filter.OrderBy = &o
 	}
 	if orderDirection := c.QueryParam("order_direction"); orderDirection != "" {
-		orderDirectionMap := map[string]service.OrderDirection{
-			"asc":  service.OrderDirectionASC,
-			"desc": service.OrderDirectionDESC,
-		}
-		o, ok := orderDirectionMap[orderDirection]
+		o, ok := models.DirectionMap[orderDirection]
 		if !ok {
 			return nil, errorx.NewError("invalid order direction", errorx.BadRequest)
 		}
