@@ -16,7 +16,7 @@ func (s *clientService) Update(ctx context.Context, c *models.Client) (*models.C
 	if role != string(models.EmployeeRoleAdmin) && role != string(models.EmployeeRoleManager) {
 		return nil, ErrForbidden
 	}
-	// При обновлении: если пароль пустой — не менять (подставляем текущий хеш из БД)
+
 	if c.PasswordHash == "" {
 		existing, err := s.repo.GetByID(ctx, c.ID)
 		if err != nil {
@@ -24,7 +24,6 @@ func (s *clientService) Update(ctx context.Context, c *models.Client) (*models.C
 		}
 		c.PasswordHash = existing.PasswordHash
 	} else {
-		// Меняем пароль — нужно пройти BeforeUpdate (без хеширования там) или захешировать здесь
 		hashed, err := password.HashPassword(c.PasswordHash)
 		if err != nil {
 			return nil, errorx.NewError("update client: "+err.Error(), errorx.BadRequest)

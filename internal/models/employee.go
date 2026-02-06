@@ -21,7 +21,7 @@ type Employee struct {
 	FullName     string `validate:"required"`
 	Phone        string `validate:"required,phone"`
 	Email        string `validate:"required,email"`
-	PasswordHash string `validate:"required"`
+	PasswordHash string
 	Passport     Passport
 	Role         EmployeeRole   `validate:"required"`
 	Status       EmployeeStatus `validate:"required"`
@@ -34,6 +34,9 @@ func (e *Employee) BeforeCreate() error {
 	if err := e.Validate(); err != nil {
 		return err
 	}
+	if e.PasswordHash == "" || len(e.PasswordHash) < 8 {
+		return ErrPasswordTooShort
+	}
 	now := time.Now()
 	e.CreatedAt = now
 	e.UpdatedAt = now
@@ -42,6 +45,18 @@ func (e *Employee) BeforeCreate() error {
 		return err
 	}
 	e.PasswordHash = passwordHash
+	return nil
+}
+
+func (e *Employee) BeforeUpdate() error {
+	if err := e.Validate(); err != nil {
+		return err
+	}
+	if e.PasswordHash != "" && len(e.PasswordHash) < 8 {
+		return ErrPasswordTooShort
+	}
+	now := time.Now()
+	e.UpdatedAt = now
 	return nil
 }
 

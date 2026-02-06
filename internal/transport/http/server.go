@@ -73,10 +73,17 @@ func (s *Server) routes() {
 		auth := employees.Group("/auth")
 		{
 			auth.POST("/login", s.employeeHandler.Login())
-			auth.POST("/register", s.employeeHandler.Register()) //TODO добавить мидлвары
+			auth.POST("/register", authMiddleware(s.employeeHandler.Register()))
 			auth.GET("/access", tokenMiddleware(s.employeeHandler.GetAccessToken()))
 			auth.GET("/refresh", tokenMiddleware(s.employeeHandler.GetRefreshToken()))
 		}
+		me := employees.Group("/me")
+		{
+			me.GET("", authMiddleware(s.employeeHandler.Profile()))
+		}
+
+		employees.GET("/:id", authMiddleware(s.employeeHandler.GetByID()))
+		employees.PUT("/:id", authMiddleware(s.employeeHandler.Update()))
 	}
 
 	clients := s.e.Group("/clients")

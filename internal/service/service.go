@@ -7,10 +7,14 @@ import (
 
 type EmployeeService interface {
 	Register(ctx context.Context, e *models.Employee) (*models.Employee, error)
+	RegisterAdmin(ctx context.Context, e *models.Employee) (*models.Employee, error)
 	Login(ctx context.Context, email, password string) (accessToken string, refreshToken string, err error)
 	GetRefreshToken(ctx context.Context) (string, error)
 	GetAccessToken(ctx context.Context) (string, error)
+
 	GetByID(ctx context.Context, id string) (*models.Employee, error)
+	Profile(ctx context.Context) (*models.Employee, error)
+	Update(ctx context.Context, e *models.Employee) (*models.Employee, error)
 }
 
 type ClientService interface {

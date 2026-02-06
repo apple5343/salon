@@ -9,6 +9,7 @@ type EmployeeRepository interface {
 	GetByEmail(ctx context.Context, email string) (*models.Employee, error)
 	GetByID(ctx context.Context, id string) (*models.Employee, error)
 	Create(ctx context.Context, e *models.Employee) (*models.Employee, error)
+	Update(ctx context.Context, e *models.Employee) (*models.Employee, error)
 }
 
 type ClientRepository interface {

@@ -3,6 +3,7 @@ package employee
 import (
 	"context"
 	"errors"
+	"salon/internal/models"
 	repo "salon/internal/repository/errors"
 	ctxutil "salon/internal/utils/context"
 	utils "salon/internal/utils/password"
@@ -19,7 +20,9 @@ func (s *employeeService) Login(ctx context.Context, email, password string) (st
 		}
 		return "", "", errorx.NewError("login employee: "+err.Error(), errorx.Internal)
 	}
-
+	if e.Status != models.EmployeeStatusActive {
+		return "", "", ErrInvalidCreds
+	}
 	if !utils.CheckPasswordHash(password, e.PasswordHash) {
 		return "", "", ErrInvalidCreds
 	}
@@ -53,7 +56,9 @@ func (s *employeeService) GetRefreshToken(ctx context.Context) (string, error) {
 		}
 		return "", err
 	}
-
+	if e.Status != models.EmployeeStatusActive {
+		return "", ErrInvalidToken
+	}
 	refreshToken, err = jwt.GenerateToken(jwt.UserInfo{ID: e.ID, Role: string(e.Role)}, []byte(s.jwtConfig.RefreshSecret), s.jwtConfig.RefreshTTL)
 	if err != nil {
 		return "", errorx.NewError("get refreshToken employee: "+err.Error(), errorx.Internal)
@@ -78,7 +83,9 @@ func (s *employeeService) GetAccessToken(ctx context.Context) (string, error) {
 		}
 		return "", err
 	}
-
+	if e.Status != models.EmployeeStatusActive {
+		return "", ErrInvalidToken
+	}
 	accessToken, err := jwt.GenerateToken(jwt.UserInfo{ID: e.ID, Role: string(e.Role)}, []byte(s.jwtConfig.AccessSecret), s.jwtConfig.AccessTTL)
 	if err != nil {
 		return "", errorx.NewError("get accessToken employee: "+err.Error(), errorx.Internal)
