@@ -3,8 +3,8 @@ package models
 type OrderDirection string
 
 const (
-	OrderDirectionASC  = "asc"
-	OrderDirectionDESC = "desc"
+	OrderDirectionASC  OrderDirection = "asc"
+	OrderDirectionDESC OrderDirection = "desc"
 )
 
 type BaseList struct {

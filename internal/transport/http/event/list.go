@@ -32,14 +32,14 @@ func (h *Handler) GetEvents() echo.HandlerFunc {
 func eventFiltersFromRequest(c echo.Context) (*service.EventFilters, error) {
 	filters := &service.EventFilters{}
 	if eventType := c.QueryParam("event_type"); eventType != "" {
-		t, ok := models.EventType[eventType]
+		t, ok := models.EventTypeMap[eventType]
 		if !ok {
 			return nil, errorx.NewError("invalid event type", errorx.BadRequest)
 		}
 		filters.Type = &t
 	}
 	if entityType := c.QueryParam("entity_type"); entityType != "" {
-		t, ok := models.EntityType[entityType]
+		t, ok := models.EntityTypeMap[entityType]
 		if !ok {
 			return nil, errorx.NewError("invalid entity type", errorx.BadRequest)
 		}
@@ -52,7 +52,7 @@ func eventFiltersFromRequest(c echo.Context) (*service.EventFilters, error) {
 		filters.ActorID = &actorID
 	}
 	if actorRole := c.QueryParam("actor_role"); actorRole != "" {
-		t, ok := models.EmployeeRole[actorRole]
+		t, ok := models.EmployeeRoleMap[actorRole]
 		if !ok {
 			return nil, errorx.NewError("invalid actor role", errorx.BadRequest)
 		}

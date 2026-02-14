@@ -7,10 +7,14 @@ import (
 	repo "salon/internal/repository/errors"
 
 	"github.com/apple5343/errorx"
+	"github.com/google/uuid"
 )
 
 func (s *carService) getBrandByID(ctx context.Context, id string) (*models.Brand, error) {
 	//TODO кеширование
+	if _, err := uuid.Parse(id); err != nil {
+		return nil, ErrInvalidID
+	}
 	b, err := s.repo.GetBrandByID(ctx, id)
 	if err != nil {
 		if errors.Is(err, repo.ErrNotFound) {

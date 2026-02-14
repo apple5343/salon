@@ -4,6 +4,7 @@ import (
 	"net/http"
 	service "salon/internal/models"
 	"salon/internal/transport/http/models"
+	ctxutil "salon/internal/utils/context"
 	"strconv"
 
 	"github.com/apple5343/errorx"
@@ -49,6 +50,32 @@ func (h *Handler) GetModels() echo.HandlerFunc {
 	}
 }
 
+func (h *Handler) GetBrands() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		filters, err := brandFiltersFromRequest(c)
+		if err != nil {
+			return err
+		}
+		brandsList, err := h.service.GetBrands(c.Request().Context(), filters)
+		if err != nil {
+			return err
+		}
+		c.Response().Header().Set("X-Total-Count", strconv.Itoa(len(brandsList)))
+		if role := ctxutil.UserRoleFromContext(c.Request().Context()); role == string(service.EmployeeRoleAdmin) || role == string(service.EmployeeRoleManager) {
+			result := make([]*models.BrandInternalResponse, len(brandsList))
+			for i, b := range brandsList {
+				result[i] = models.BrandInternalToHttp(b)
+			}
+			return c.JSON(http.StatusOK, result)
+		}
+		result := make([]*models.BrandPublicResponse, len(brandsList))
+		for i, b := range brandsList {
+			result[i] = models.BrandPublicToHttp(b)
+		}
+		return c.JSON(http.StatusOK, result)
+	}
+}
+
 func carFiltersFromRequest(c echo.Context) (*service.CarFilters, error) {
 	filter := service.CarFilters{}
 	if supplierID := c.QueryParam("supplier_id"); supplierID != "" {
@@ -78,7 +105,7 @@ func carFiltersFromRequest(c echo.Context) (*service.CarFilters, error) {
 		filter.Color = &color
 	}
 	if status := c.QueryParam("status"); status != "" {
-		s, ok := models.CarStatusType[status]
+		s, ok := models.CarStatusTypeMap[status]
 		if !ok {
 			return nil, errorx.NewError("invalid status", errorx.BadRequest)
 		}
@@ -112,20 +139,11 @@ func carFiltersFromRequest(c echo.Context) (*service.CarFilters, error) {
 		}
 		filter.MaxMileage = &maxMileageInt
 	}
-	if offset := c.QueryParam("offset"); offset != "" {
-		offsetInt, err := strconv.Atoi(offset)
-		if err != nil {
-			return nil, errorx.NewError(err.Error(), errorx.BadRequest)
-		}
-		filter.Offset = &offsetInt
+	base, err := baseListFromRequest(c)
+	if err != nil {
+		return nil, err
 	}
-	if limit := c.QueryParam("limit"); limit != "" {
-		limitInt, err := strconv.Atoi(limit)
-		if err != nil {
-			return nil, errorx.NewError(err.Error(), errorx.BadRequest)
-		}
-		filter.Limit = &limitInt
-	}
+	filter.BaseList = base
 	return &filter, nil
 }
 
@@ -141,21 +159,21 @@ func modelFiltersFromRequest(c echo.Context) (*service.ModelFilters, error) {
 		filter.Generation = &generation
 	}
 	if bodyType := c.QueryParam("body_type"); bodyType != "" {
-		b, ok := models.BodyType[bodyType]
+		b, ok := models.BodyTypeMap[bodyType]
 		if !ok {
 			return nil, errorx.NewError("invalid body type", errorx.BadRequest)
 		}
 		filter.BodyType = &b
 	}
 	if transmissionType := c.QueryParam("transmission_type"); transmissionType != "" {
-		t, ok := models.TransmissionType[transmissionType]
+		t, ok := models.TransmissionTypeMap[transmissionType]
 		if !ok {
 			return nil, errorx.NewError("invalid transmission type", errorx.BadRequest)
 		}
 		filter.TransmissionType = &t
 	}
 	if fuelType := c.QueryParam("fuel_type"); fuelType != "" {
-		f, ok := models.FuelType[fuelType]
+		f, ok := models.FuelTypeMap[fuelType]
 		if !ok {
 			return nil, errorx.NewError("invalid fuel type", errorx.BadRequest)
 		}
@@ -176,7 +194,7 @@ func modelFiltersFromRequest(c echo.Context) (*service.ModelFilters, error) {
 		filter.MaxEngineDisplacement = &maxEngineDisplacementInt
 	}
 	if driveType := c.QueryParam("drive_type"); driveType != "" {
-		d, ok := models.DriveType[driveType]
+		d, ok := models.DriveTypeMap[driveType]
 		if !ok {
 			return nil, errorx.NewError("invalid drive type", errorx.BadRequest)
 		}
@@ -196,39 +214,68 @@ func modelFiltersFromRequest(c echo.Context) (*service.ModelFilters, error) {
 		}
 		filter.MaxBasePrice = &maxBasePriceDec
 	}
-	if offset := c.QueryParam("offset"); offset != "" {
-		offsetInt, err := strconv.Atoi(offset)
-		if err != nil {
-			return nil, errorx.NewError(err.Error(), errorx.BadRequest)
-		}
-		filter.Offset = &offsetInt
-	}
-	if limit := c.QueryParam("limit"); limit != "" {
-		limitInt, err := strconv.Atoi(limit)
-		if err != nil {
-			return nil, errorx.NewError(err.Error(), errorx.BadRequest)
-		}
-		filter.Limit = &limitInt
-	}
 	if orderBy := c.QueryParam("order_by"); orderBy != "" {
-		orderMap := map[string]service.ModelOrderBy{
-			"name":                service.ModelOrderByName,
-			"base_price":          service.ModelOrderByBasePrice,
-			"engine_displacement": service.ModelOrderByEngineDisplacement,
-			"power_hp":            service.ModelOrderByPowerHP,
-		}
-		o, ok := orderMap[orderBy]
+		o, ok := models.ModelOrderByMap[orderBy]
 		if !ok {
 			return nil, errorx.NewError("invalid order by", errorx.BadRequest)
 		}
 		filter.OrderBy = &o
 	}
-	if orderDirection := c.QueryParam("order_direction"); orderDirection != "" {
-		o, ok := models.DirectionMap[orderDirection]
-		if !ok {
-			return nil, errorx.NewError("invalid order direction", errorx.BadRequest)
-		}
-		filter.OrderDirection = &o
+
+	base, err := baseListFromRequest(c)
+	if err != nil {
+		return nil, err
 	}
+	filter.BaseList = base
 	return &filter, nil
+}
+
+func brandFiltersFromRequest(c echo.Context) (*service.BrandFilters, error) {
+	var filters service.BrandFilters
+	if name := c.QueryParam("name"); name != "" {
+		filters.Name = &name
+	}
+	if countryCode := c.QueryParam("country_code"); countryCode != "" {
+		filters.CountryCode = &countryCode
+	}
+	if orderBy := c.QueryParam("order_by"); orderBy != "" {
+		o, ok := models.BrandOrderByMap[orderBy]
+		if !ok {
+			return nil, errorx.NewError("invalid order by", errorx.BadRequest)
+		}
+		filters.OrderBy = &o
+	}
+	base, err := baseListFromRequest(c)
+	if err != nil {
+		return nil, err
+	}
+	filters.BaseList = base
+
+	return &filters, nil
+}
+
+func baseListFromRequest(c echo.Context) (service.BaseList, error) {
+	var filters service.BaseList
+	if offset := c.QueryParam("offset"); offset != "" {
+		offsetInt, err := strconv.Atoi(offset)
+		if err != nil {
+			return filters, errorx.NewError(err.Error(), errorx.BadRequest)
+		}
+		filters.Offset = &offsetInt
+	}
+	if limit := c.QueryParam("limit"); limit != "" {
+		limitInt, err := strconv.Atoi(limit)
+		if err != nil {
+			return filters, errorx.NewError(err.Error(), errorx.BadRequest)
+		}
+		filters.Limit = &limitInt
+	}
+	if orderDirection := c.QueryParam("order_direction"); orderDirection != "" {
+		o, ok := models.OrderDirectionMap[orderDirection]
+		if !ok {
+			return filters, errorx.NewError("invalid order direction", errorx.BadRequest)
+		}
+		filters.OrderDirection = &o
+	}
+	return filters, nil
 }

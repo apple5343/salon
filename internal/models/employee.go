@@ -3,6 +3,8 @@ package models
 import (
 	"salon/internal/utils/password"
 	"time"
+
+	"github.com/google/uuid"
 )
 
 type EmployeeRole string
@@ -21,7 +23,7 @@ type Employee struct {
 	FullName     string `validate:"required"`
 	Phone        string `validate:"required,phone"`
 	Email        string `validate:"required,email"`
-	PasswordHash string
+	PasswordHash string // до хеширования сюда приходит пароль из запроса; при Update может быть пустым (не менять)
 	Passport     Passport
 	Role         EmployeeRole   `validate:"required"`
 	Status       EmployeeStatus `validate:"required"`
@@ -54,6 +56,9 @@ func (e *Employee) BeforeUpdate() error {
 	}
 	if e.PasswordHash != "" && len(e.PasswordHash) < 8 {
 		return ErrPasswordTooShort
+	}
+	if _, err := uuid.Parse(e.ID); err != nil {
+		return ErrInvalidID
 	}
 	now := time.Now()
 	e.UpdatedAt = now

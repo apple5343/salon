@@ -4,9 +4,14 @@ import (
 	"errors"
 	"salon/internal/utils/password"
 	"time"
+
+	"github.com/google/uuid"
 )
 
-var ErrPasswordTooShort = errors.New("password must be at least 8 characters")
+var (
+	ErrPasswordTooShort = errors.New("password must be at least 8 characters")
+	ErrInvalidID        = errors.New("invalid id")
+)
 
 type Client struct {
 	ID           string
@@ -24,6 +29,7 @@ func (c *Client) BeforeCreate() error {
 	if err := c.Validate(); err != nil {
 		return err
 	}
+
 	if c.PasswordHash == "" || len(c.PasswordHash) < 8 {
 		return ErrPasswordTooShort
 	}
@@ -42,6 +48,9 @@ func (c *Client) BeforeCreate() error {
 func (c *Client) BeforeUpdate() error {
 	if err := c.Validate(); err != nil {
 		return err
+	}
+	if _, err := uuid.Parse(c.ID); err != nil {
+		return ErrInvalidID
 	}
 	c.UpdatedAt = time.Now()
 	return nil

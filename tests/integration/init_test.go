@@ -13,13 +13,14 @@ import (
 	"time"
 
 	"github.com/ilyakaznacheev/cleanenv"
+	_ "github.com/lib/pq"
 	"github.com/stretchr/testify/suite"
 	"github.com/testcontainers/testcontainers-go/modules/compose"
 	"github.com/testcontainers/testcontainers-go/wait"
 )
 
 const (
-	Timeout = 5 * time.Minute
+	Timeout = 10 * time.Minute
 )
 
 type TestConfig struct {
@@ -65,6 +66,18 @@ func (s *BaseTestSuite) TestEmployee() {
 	t := &EmployeeSuite{base: s}
 	suite.Run(s.T(), t)
 	s.SaveAppLogs("employee")
+}
+
+func (s *BaseTestSuite) TestSupplier() {
+	t := &SupplierSuite{base: s}
+	suite.Run(s.T(), t)
+	s.SaveAppLogs("supplier")
+}
+
+func (s *BaseTestSuite) TestBrand() {
+	t := &BrandSuite{base: s}
+	suite.Run(s.T(), t)
+	s.SaveAppLogs("brand")
 }
 
 func (suite *BaseTestSuite) SetupSuite() {

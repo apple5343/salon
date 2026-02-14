@@ -8,7 +8,7 @@ import (
 	"github.com/shopspring/decimal"
 )
 
-var CarStatusType = map[string]models.CarStatus{
+var CarStatusTypeMap = map[string]models.CarStatus{
 	"available": models.CarStatusAvailable,
 	"sold":      models.CarStatusSold,
 	"pending":   models.CarStatusPending,
@@ -105,7 +105,7 @@ func CarInternalToHttp(c *models.Car, m *models.Model, b *models.Brand, s *model
 }
 
 func CarToService(c *Car) (*models.Car, error) {
-	status, ok := CarStatusType[c.Status]
+	status, ok := CarStatusTypeMap[c.Status]
 	if !ok {
 		return nil, errorx.NewError("invalid status", errorx.BadRequest)
 	}

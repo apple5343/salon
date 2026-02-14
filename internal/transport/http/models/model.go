@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-var BodyType = map[string]models.BodyType{
+var BodyTypeMap = map[string]models.BodyType{
 	"sedan":       models.BodyTypeSedan,
 	"coupe":       models.BodyTypeCoupe,
 	"hatchback":   models.BodyTypeHatchback,
@@ -19,7 +19,7 @@ var BodyType = map[string]models.BodyType{
 	"crossover":   models.BodyTypeCrossover,
 }
 
-var TransmissionType = map[string]models.TransmissionType{
+var TransmissionTypeMap = map[string]models.TransmissionType{
 	"auto":         models.TransmissionTypeAutomatic,
 	"manual":       models.TransmissionTypeManual,
 	"cvt":          models.TransmissionTypeCVT,
@@ -27,7 +27,7 @@ var TransmissionType = map[string]models.TransmissionType{
 	"single-speed": models.TransmissionTypeSingleSpeed,
 }
 
-var FuelType = map[string]models.FuelType{
+var FuelTypeMap = map[string]models.FuelType{
 	"gasoline":       models.FuelTypeGasoline,
 	"diesel":         models.FuelTypeDiesel,
 	"electric":       models.FuelTypeElectric,
@@ -37,11 +37,18 @@ var FuelType = map[string]models.FuelType{
 	"plug-in-hybrid": models.FuelTypePlugInHybrid,
 }
 
-var DriveType = map[string]models.DriveType{
+var DriveTypeMap = map[string]models.DriveType{
 	"awd": models.DriveTypeAwd,
 	"fwd": models.DriveTypeFwd,
 	"rwd": models.DriveTypeRwd,
 	"4wd": models.DriveType4wd,
+}
+
+var ModelOrderByMap = map[string]models.ModelOrderBy{
+	"name":                models.ModelOrderByName,
+	"base_price":          models.ModelOrderByBasePrice,
+	"engine_displacement": models.ModelOrderByEngineDisplacement,
+	"power_hp":            models.ModelOrderByPowerHP, //TODO add created_at & updated_at
 }
 
 type Model struct {
@@ -134,22 +141,22 @@ func ModelShortToHttp(model *models.ModelShort) *ModelShort {
 }
 
 func ModelToService(model *Model) (*models.Model, error) {
-	bodyType, ok := BodyType[model.BodyType]
+	bodyType, ok := BodyTypeMap[model.BodyType]
 	if !ok {
 		return nil, errors.New("invalid body type")
 	}
 
-	transmissionType, ok := TransmissionType[model.TransmissionType]
+	transmissionType, ok := TransmissionTypeMap[model.TransmissionType]
 	if !ok {
 		return nil, errors.New("invalid transmission type")
 	}
 
-	fuelType, ok := FuelType[model.FuelType]
+	fuelType, ok := FuelTypeMap[model.FuelType]
 	if !ok {
 		return nil, errors.New("invalid fuel type")
 	}
 
-	driveType, ok := DriveType[model.DriveType]
+	driveType, ok := DriveTypeMap[model.DriveType]
 	if !ok {
 		return nil, errors.New("invalid drive type")
 	}

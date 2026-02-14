@@ -5,13 +5,13 @@ import (
 	"time"
 )
 
-var EventType = map[string]models.EventType{
+var EventTypeMap = map[string]models.EventType{
 	"created": models.EventTypeCreated,
 	"updated": models.EventTypeUpdated,
 	"deleted": models.EventTypeDeleted,
 }
 
-var EntityType = map[string]models.EntityType{
+var EntityTypeMap = map[string]models.EntityType{
 	"car":      models.EntityTypeCar,
 	"supplier": models.EntityTypeSupplier,
 	"model":    models.EntityTypeModel,
@@ -19,7 +19,7 @@ var EntityType = map[string]models.EntityType{
 	"employee": models.EntityTypeEmployee,
 }
 
-var EmployeeRole = map[string]models.EmployeeRole{
+var EmployeeRoleMap = map[string]models.EmployeeRole{
 	"admin": models.EmployeeRoleAdmin,
 	"user":  models.EmployeeRoleManager,
 }

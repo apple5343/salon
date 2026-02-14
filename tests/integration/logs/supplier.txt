@@ -114,3 +114,79 @@ ____________________________________O/_______
 {"level":"error","ts":1771076420.3676784,"caller":"logger/logger.go:62","msg":"client already exists"}
 {"level":"error","ts":1771076420.3685675,"caller":"logger/logger.go:62","msg":"token is empty"}
 {"level":"error","ts":1771076420.369419,"caller":"logger/logger.go:62","msg":"invalid token"}
+{"level":"error","ts":1771076448.8287425,"caller":"logger/logger.go:62","msg":"invalid credentials"}
+{"level":"error","ts":1771076450.9205937,"caller":"logger/logger.go:62","msg":"invalid credentials"}
+{"level":"error","ts":1771076452.9967945,"caller":"logger/logger.go:62","msg":"invalid credentials"}
+{"level":"error","ts":1771076455.1009665,"caller":"logger/logger.go:62","msg":"invalid credentials"}
+{"level":"error","ts":1771076457.2154756,"caller":"logger/logger.go:62","msg":"invalid credentials"}
+{"level":"error","ts":1771076457.2167966,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1771076457.217653,"caller":"logger/logger.go:62","msg":"invalid token"}
+{"level":"error","ts":1771076457.2184467,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1771076457.2192996,"caller":"logger/logger.go:62","msg":"invalid token"}
+{"level":"error","ts":1771076457.2200868,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1771076457.2208927,"caller":"logger/logger.go:62","msg":"invalid token"}
+{"level":"error","ts":1771076478.4595344,"caller":"logger/logger.go:62","msg":"employee not found"}
+{"level":"error","ts":1771076478.460415,"caller":"logger/logger.go:62","msg":"invalid id"}
+{"level":"error","ts":1771076478.4611754,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1771076478.461799,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1771076478.4623241,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1771076478.463325,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1771076478.4642,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1771076489.1829927,"caller":"logger/logger.go:62","msg":"forbidden"}
+{"level":"error","ts":1771076489.1843402,"caller":"logger/logger.go:62","msg":"forbidden"}
+{"level":"error","ts":1771076489.1853635,"caller":"logger/logger.go:62","msg":"forbidden"}
+{"level":"error","ts":1771076489.1863558,"caller":"logger/logger.go:62","msg":"forbidden"}
+{"level":"error","ts":1771076489.187089,"caller":"logger/logger.go:62","msg":"forbidden"}
+{"level":"error","ts":1771076500.0792253,"caller":"logger/logger.go:62","msg":"register employee: Key: 'Employee.FullName' Error:Field validation for 'FullName' failed on the 'required' tag"}
+{"level":"error","ts":1771076500.0804784,"caller":"logger/logger.go:62","msg":"register employee: Key: 'Employee.Phone' Error:Field validation for 'Phone' failed on the 'required' tag"}
+{"level":"error","ts":1771076500.081583,"caller":"logger/logger.go:62","msg":"register employee: Key: 'Employee.Passport.Series' Error:Field validation for 'Series' failed on the 'required' tag"}
+{"level":"error","ts":1771076500.083118,"caller":"logger/logger.go:62","msg":"register employee: Key: 'Employee.Passport.Number' Error:Field validation for 'Number' failed on the 'required' tag"}
+{"level":"error","ts":1771076500.0844584,"caller":"logger/logger.go:62","msg":"register employee: Key: 'Employee.Passport.IssuedBy' Error:Field validation for 'IssuedBy' failed on the 'required' tag"}
+{"level":"error","ts":1771076500.0853798,"caller":"logger/logger.go:62","msg":"register employee: password must be at least 8 characters"}
+{"level":"error","ts":1771076500.0864098,"caller":"logger/logger.go:62","msg":"register employee: Key: 'Employee.Email' Error:Field validation for 'Email' failed on the 'required' tag"}
+{"level":"error","ts":1771076500.0872674,"caller":"logger/logger.go:62","msg":"invalid role"}
+{"level":"error","ts":1771076500.0880044,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1771076520.9826186,"caller":"logger/logger.go:62","msg":"only admin can register employee"}
+{"level":"error","ts":1771076520.9841816,"caller":"logger/logger.go:62","msg":"admin cannot be registered"}
+{"level":"error","ts":1771076563.0750737,"caller":"logger/logger.go:62","msg":"employee not found"}
+{"level":"error","ts":1771076563.0764875,"caller":"logger/logger.go:62","msg":"invalid id"}
+{"level":"error","ts":1771076563.0780134,"caller":"logger/logger.go:62","msg":"update employee: Key: 'Employee.Email' Error:Field validation for 'Email' failed on the 'email' tag"}
+{"level":"error","ts":1771076563.079994,"caller":"logger/logger.go:62","msg":"employee alredy exists"}
+{"level":"error","ts":1771076563.0815442,"caller":"logger/logger.go:62","msg":"update employee: Key: 'Employee.Phone' Error:Field validation for 'Phone' failed on the 'phone' tag"}
+{"level":"error","ts":1771076563.0835705,"caller":"logger/logger.go:62","msg":"employee alredy exists"}
+{"level":"error","ts":1771076563.0850854,"caller":"logger/logger.go:62","msg":"update employee: Key: 'Employee.Passport.Series' Error:Field validation for 'Series' failed on the 'len' tag"}
+{"level":"error","ts":1771076563.0865185,"caller":"logger/logger.go:62","msg":"update employee: Key: 'Employee.Passport.Number' Error:Field validation for 'Number' failed on the 'len' tag"}
+{"level":"error","ts":1771076563.0885782,"caller":"logger/logger.go:62","msg":"employee alredy exists"}
+{"level":"error","ts":1771076563.0902193,"caller":"logger/logger.go:62","msg":"update employee: Key: 'Employee.FullName' Error:Field validation for 'FullName' failed on the 'required' tag"}
+{"level":"error","ts":1771076563.0911992,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1771076563.0920086,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1771076563.112068,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1771076563.1146839,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1771076563.1164384,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1771076563.1177716,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1771076563.118915,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1771076563.1197908,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1771076563.1207943,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1771076563.121692,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1771076565.2070117,"caller":"logger/logger.go:62","msg":"forbidden"}
+{"level":"error","ts":1771076565.208478,"caller":"logger/logger.go:62","msg":"forbidden"}
+{"level":"error","ts":1771076565.2095068,"caller":"logger/logger.go:62","msg":"forbidden"}
+{"level":"error","ts":1771076565.210487,"caller":"logger/logger.go:62","msg":"forbidden"}
+{"level":"error","ts":1771076565.2114944,"caller":"logger/logger.go:62","msg":"forbidden"}
+{"level":"error","ts":1771076565.2126513,"caller":"logger/logger.go:62","msg":"forbidden"}
+{"level":"error","ts":1771076565.2137794,"caller":"logger/logger.go:62","msg":"forbidden"}
+{"level":"error","ts":1771076565.21481,"caller":"logger/logger.go:62","msg":"forbidden"}
+{"level":"error","ts":1771076565.2157896,"caller":"logger/logger.go:62","msg":"forbidden"}
+{"level":"error","ts":1771076565.2167273,"caller":"logger/logger.go:62","msg":"forbidden"}
+{"level":"error","ts":1771076575.251884,"caller":"logger/logger.go:62","msg":"create supplier: Key: 'Supplier.CountryCode' Error:Field validation for 'CountryCode' failed on the 'iso3166_1_alpha2' tag"}
+{"level":"error","ts":1771076575.2533386,"caller":"logger/logger.go:62","msg":"create supplier: Key: 'Supplier.Name' Error:Field validation for 'Name' failed on the 'required' tag"}
+{"level":"error","ts":1771076575.2547338,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1771076575.2612033,"caller":"logger/logger.go:62","msg":"forbidden"}
+{"level":"error","ts":1771076575.3040707,"caller":"logger/logger.go:62","msg":"invalid id"}
+{"level":"error","ts":1771076575.3063965,"caller":"logger/logger.go:62","msg":"supplier not found"}
+{"level":"error","ts":1771076575.4073546,"caller":"logger/logger.go:62","msg":"update supplier: invalid id"}
+{"level":"error","ts":1771076575.409541,"caller":"logger/logger.go:62","msg":"supplier not found"}
+{"level":"error","ts":1771076575.4110222,"caller":"logger/logger.go:62","msg":"update supplier: Key: 'Supplier.Name' Error:Field validation for 'Name' failed on the 'required' tag"}
+{"level":"error","ts":1771076575.4125185,"caller":"logger/logger.go:62","msg":"update supplier: Key: 'Supplier.CountryCode' Error:Field validation for 'CountryCode' failed on the 'iso3166_1_alpha2' tag"}
+{"level":"error","ts":1771076575.4137688,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1771076575.4153175,"caller":"logger/logger.go:62","msg":"forbidden"}

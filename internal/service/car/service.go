@@ -16,6 +16,7 @@ var (
 	ErrCarExists     = errorx.NewError("car already exists", errorx.Conflict)
 	ErrCarNotFound   = errorx.NewError("car not found", errorx.BadRequest)
 	ErrForeignKey    = errorx.NewError("foreign key, entity not found", errorx.BadRequest)
+	ErrInvalidID     = errorx.NewError("invalid id", errorx.BadRequest)
 )
 
 type carService struct {

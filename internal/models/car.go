@@ -69,6 +69,16 @@ type CarShort struct {
 	Year         int
 }
 
+type CarOrderBy string
+
+const (
+	CarOrderByYear      CarOrderBy = "year"
+	CarOrderByPrice     CarOrderBy = "price"
+	CarOrderByMile      CarOrderBy = "mileage"
+	CarOrderByCreatedAt CarOrderBy = "created_at"
+	CarOrderByUpdatedAt CarOrderBy = "updated_at"
+)
+
 type CarFilters struct {
 	SupplierID *string `validate:"omitempty,uuid"`
 	ModelID    *string `validate:"omitempty,uuid"`
@@ -81,8 +91,8 @@ type CarFilters struct {
 	MaxPrice   *decimal.Decimal
 	MinMileage *int `validate:"omitempty,min=0"`
 	MaxMileage *int `validate:"omitempty,min=0"`
-	Limit      *int `validate:"omitempty,min=1"`
-	Offset     *int `validate:"omitempty,min=0"`
+	OrderBy    *CarOrderBy
+	BaseList
 }
 
 func (f *CarFilters) Validate() error {

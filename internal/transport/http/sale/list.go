@@ -87,7 +87,7 @@ func salesFiltersFromRequest(c echo.Context) (*service.SaleFilters, error) {
 		filters.OrderBy = &o
 	}
 	if orderDirection := c.QueryParam("order_direction"); orderDirection != "" {
-		o, ok := models.DirectionMap[orderDirection]
+		o, ok := models.OrderDirectionMap[orderDirection]
 		if !ok {
 			return nil, errorx.NewError("invalid order direction", errorx.BadRequest)
 		}

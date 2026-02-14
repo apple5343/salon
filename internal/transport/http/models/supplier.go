@@ -5,6 +5,11 @@ import (
 	"time"
 )
 
+var SupplierOrderByMap = map[string]models.SupplierOrderBy{
+	"created_at": models.SupplierOrderByCreatedAt,
+	"updated_at": models.SupplierOrderByUpdatedAt,
+}
+
 type Supplier struct {
 	ID          string    `json:"id"`
 	Name        string    `json:"name"`

@@ -7,9 +7,13 @@ import (
 	repo "salon/internal/repository/errors"
 
 	"github.com/apple5343/errorx"
+	"github.com/docker/distribution/uuid"
 )
 
 func (s *supplierService) GetByID(ctx context.Context, id string) (*models.Supplier, error) {
+	if _, err := uuid.Parse(id); err != nil {
+		return nil, ErrInvalidID
+	}
 	supplier, err := s.repo.GetByID(ctx, id)
 	if err != nil {
 		if errors.Is(err, repo.ErrNotFound) {

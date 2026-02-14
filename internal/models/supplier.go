@@ -1,6 +1,10 @@
 package models
 
-import "time"
+import (
+	"time"
+
+	"github.com/google/uuid"
+)
 
 type Supplier struct {
 	ID          string
@@ -24,10 +28,31 @@ func (s *Supplier) BeforeUpdate() error {
 	if err := s.Validate(); err != nil {
 		return err
 	}
+	if _, err := uuid.Parse(s.ID); err != nil {
+		return ErrInvalidID
+	}
 	s.UpdatedAt = time.Now()
 	return nil
 }
 
 func (s *Supplier) Validate() error {
 	return Validator().Struct(s)
+}
+
+type SupplierOrderBy string
+
+const (
+	SupplierOrderByCreatedAt SupplierOrderBy = "created_at"
+	SupplierOrderByUpdatedAt SupplierOrderBy = "updated_at"
+)
+
+type SupplierFilters struct {
+	Name        *string `validate:"omitempty,min=1"`
+	CountryCode *string `validate:"omitempty,iso3166_1_alpha2"`
+	BaseList
+	OrderBy *SupplierOrderBy
+}
+
+func (f *SupplierFilters) Validate() error {
+	return Validator().Struct(f)
 }

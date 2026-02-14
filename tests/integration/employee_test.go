@@ -21,7 +21,7 @@ type EmployeeSuite struct {
 	adminToken      *models.EmployeeToken
 }
 
-func (s *EmployeeSuite) SetupTest() {
+func (s *EmployeeSuite) SetupSuite() {
 	s.employees = make(map[string]*httpModels.Employee)
 	s.employeesCreds = make(map[string]*models.EmployeeCreds)
 	s.employeesTokens = make(map[string]*models.EmployeeToken)
@@ -37,13 +37,13 @@ func (s *EmployeeSuite) TestGet() {
 	s.T().Run("get", s.GetByID)
 	s.T().Run("update", s.Update)
 	s.T().Run("get after update", s.GetByID)
-	s.T().Run("invalid data", s.GetByIDInvalid)
+	s.T().Run("invalid", s.GetByIDInvalid)
 	s.T().Run("forbidden", s.GetByIDForbidden)
 }
 
 func (s *EmployeeSuite) TestUpdate() {
 	s.T().Run("update", s.Update)
-	s.T().Run("invalid data", s.UpdateInvalid)
+	s.T().Run("invalid", s.UpdateInvalid)
 	s.T().Run("forbidden", s.UpdateForbidden)
 }
 
@@ -52,12 +52,12 @@ func (s *EmployeeSuite) TestAuth() {
 	s.T().Run("get refresh token", s.GetRefreshToken)
 	s.T().Run("get access token", s.GetAccessToken)
 	s.T().Run("get profile", s.Profile)
-	s.T().Run("invalid data", s.AuthInvalid)
+	s.T().Run("invalid", s.AuthInvalid)
 }
 
 func (s *EmployeeSuite) TestRegister() {
 	s.T().Run("register", s.Register)
-	s.T().Run("invalid data", s.RegisterInvalidData)
+	s.T().Run("invalid", s.RegisterInvalidData)
 	s.T().Run("forbidden", s.RegisterForbidden)
 }
 
@@ -177,7 +177,7 @@ func (s *EmployeeSuite) RegisterForbidden(t *testing.T) {
 }
 
 func (s *EmployeeSuite) Reregister(t *testing.T) {
-	s.T().Run("existing email", func(t *testing.T) {
+	t.Run("existing email", func(t *testing.T) {
 		for id := range s.employees {
 			e := models.GenerateEmployee()
 			e.Email = s.employees[id].Email
@@ -187,7 +187,7 @@ func (s *EmployeeSuite) Reregister(t *testing.T) {
 		}
 	})
 
-	s.T().Run("existing phone", func(t *testing.T) {
+	t.Run("existing phone", func(t *testing.T) {
 		for id := range s.employees {
 			e := models.GenerateEmployee()
 			e.Phone = s.employees[id].Phone
@@ -197,7 +197,7 @@ func (s *EmployeeSuite) Reregister(t *testing.T) {
 		}
 	})
 
-	s.T().Run("existing passport", func(t *testing.T) {
+	t.Run("existing passport", func(t *testing.T) {
 		for id := range s.employees {
 			e := models.GenerateEmployee()
 			e.Passport = s.employees[id].Passport

@@ -25,7 +25,6 @@ func ClientToHttp(c *models.Client) *Client {
 		FullName:  c.FullName,
 		Phone:     c.Phone,
 		Email:     c.Email,
-		Password:  c.PasswordHash,
 		Passport:  PassportToHttp(c.Passport),
 		BirthDate: c.BirthDate.Format(TimeLayout),
 		CreatedAt: c.CreatedAt,
@@ -39,14 +38,15 @@ func ClientToService(c *Client) (*models.Client, error) {
 		return nil, err
 	}
 	return &models.Client{
-		ID:        c.ID,
-		FullName:  c.FullName,
-		Phone:     c.Phone,
-		Email:     c.Email,
-		Passport:  PassportToService(c.Passport),
-		BirthDate: birthDate,
-		CreatedAt: c.CreatedAt,
-		UpdatedAt: c.UpdatedAt,
+		ID:           c.ID,
+		FullName:     c.FullName,
+		Phone:        c.Phone,
+		Email:        c.Email,
+		PasswordHash: c.Password,
+		Passport:     PassportToService(c.Passport),
+		BirthDate:    birthDate,
+		CreatedAt:    c.CreatedAt,
+		UpdatedAt:    c.UpdatedAt,
 	}, nil
 }
 

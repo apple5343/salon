@@ -12,6 +12,7 @@ var (
 	ErrForbidden      = errorx.NewError("forbidden", errorx.Forbidden)
 	ErrClientExists   = errorx.NewError("client already exists", errorx.Conflict)
 	ErrClientNotFound = errorx.NewError("client not found", errorx.BadRequest)
+	ErrInvalidID      = errorx.NewError("invalid id", errorx.BadRequest)
 )
 
 type clientService struct {

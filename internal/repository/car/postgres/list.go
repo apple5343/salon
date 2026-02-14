@@ -52,6 +52,22 @@ func (r *carRepository) GetCarsByFilter(ctx context.Context, filter *service.Car
 	if len(conditions) > 0 {
 		query += " WHERE " + strings.Join(conditions, " AND ")
 	}
+	if filter.OrderBy != nil {
+		sortMap := map[service.CarOrderBy]string{
+			service.CarOrderByPrice:     "price",
+			service.CarOrderByYear:      "year",
+			service.CarOrderByMile:      "mileage",
+			service.CarOrderByCreatedAt: "created_at",
+			service.CarOrderByUpdatedAt: "updated_at",
+		}
+		direction := "ASC"
+		if filter.OrderDirection != nil && *filter.OrderDirection == service.OrderDirectionDESC {
+			direction = "DESC"
+		}
+		if dbField, ok := sortMap[*filter.OrderBy]; ok {
+			query += fmt.Sprintf(" ORDER BY %s %s", dbField, direction)
+		}
+	}
 	if filter.Limit != nil {
 		query += fmt.Sprintf(" LIMIT $%d ", len(args)+1)
 		args = append(args, *filter.Limit)
@@ -110,12 +126,10 @@ func (r *carRepository) GetModelsByFilter(ctx context.Context, filter *service.M
 		addCondition("m.base_price <=", *filter.MaxBasePrice)
 	}
 	if filter.Name != nil {
-		args = append(args, *filter.Name)
-		conditions = append(conditions, fmt.Sprintf("m.name ILIKE $%d", len(args)))
+		addCondition("m.name ILIKE", "%"+*filter.Name+"%")
 	}
 	if filter.Generation != nil {
-		args = append(args, *filter.Generation)
-		conditions = append(conditions, fmt.Sprintf("m.generation ILIKE $%d", len(args)))
+		addCondition("m.generation ILIKE", "%"+*filter.Generation+"%")
 	}
 	if len(conditions) > 0 {
 		query += " WHERE " + strings.Join(conditions, " AND ")
@@ -150,6 +164,56 @@ func (r *carRepository) GetModelsByFilter(ctx context.Context, filter *service.M
 	result := make([]*service.ModelShort, len(modelsList))
 	for i, m := range modelsList {
 		result[i] = models.ModelShortToService(m)
+	}
+	return result, nil
+}
+
+func (r *carRepository) GetBrandsByFilter(ctx context.Context, filter *service.BrandFilters) ([]*service.Brand, error) {
+	var brandsList []*models.Brand
+	query := `SELECT * FROM brands`
+	conditions := []string{}
+	args := []interface{}{}
+	addCondition := func(condition string, val interface{}) {
+		args = append(args, val)
+		conditions = append(conditions, fmt.Sprintf("%s $%d", condition, len(args)))
+	}
+	if filter.Name != nil {
+		addCondition("name ILIKE", "%"+*filter.Name+"%")
+	}
+	if filter.CountryCode != nil {
+		addCondition("country_code =", *filter.CountryCode)
+	}
+	if len(conditions) > 0 {
+		query += fmt.Sprintf(" WHERE %s", strings.Join(conditions, " AND "))
+	}
+	if filter.OrderBy != nil {
+		sortMap := map[service.BrandOrderBy]string{
+			service.BrandOrderByCreatedAt: "created_at",
+			service.BrandOrderByUpdatedAt: "updated_at",
+		}
+		direction := "ASC"
+		if filter.OrderDirection != nil && *filter.OrderDirection == service.OrderDirectionDESC {
+			direction = "DESC"
+		}
+		if dbField, ok := sortMap[*filter.OrderBy]; ok {
+			query += fmt.Sprintf(" ORDER BY %s %s", dbField, direction)
+		}
+	}
+	if filter.Limit != nil {
+		query += fmt.Sprintf(" LIMIT $%d ", len(args)+1)
+		args = append(args, *filter.Limit)
+	}
+	if filter.Offset != nil {
+		query += fmt.Sprintf(" OFFSET $%d", len(args)+1)
+		args = append(args, *filter.Offset)
+	}
+	err := r.db.SelectContext(ctx, &brandsList, query, args...)
+	if err != nil {
+		return nil, err
+	}
+	result := make([]*service.Brand, len(brandsList))
+	for i, b := range brandsList {
+		result[i] = models.BrandToService(b)
 	}
 	return result, nil
 }

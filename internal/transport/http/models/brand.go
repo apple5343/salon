@@ -5,6 +5,11 @@ import (
 	"time"
 )
 
+var BrandOrderByMap = map[string]models.BrandOrderBy{
+	"created_at": models.BrandOrderByCreatedAt,
+	"updated_at": models.BrandOrderByUpdatedAt,
+}
+
 type Brand struct {
 	ID          string    `json:"id"`
 	Name        string    `json:"name"`

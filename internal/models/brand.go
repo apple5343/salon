@@ -32,3 +32,21 @@ func (b *Brand) BeforeUpdate() error {
 func (b *Brand) Validate() error {
 	return Validator().Struct(b)
 }
+
+type BrandOrderBy string
+
+const (
+	BrandOrderByCreatedAt BrandOrderBy = "created_at"
+	BrandOrderByUpdatedAt BrandOrderBy = "updated_at"
+)
+
+type BrandFilters struct {
+	Name        *string `validate:"omitempty,min=1"`
+	CountryCode *string `validate:"omitempty,iso3166_1_alpha2"`
+	BaseList
+	OrderBy *BrandOrderBy
+}
+
+func (f *BrandFilters) Validate() error {
+	return Validator().Struct(f)
+}

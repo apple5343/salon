@@ -99,6 +99,7 @@ func (s *Server) routes() {
 	brands := s.e.Group("/brands")
 	{
 		brands.POST("", authMiddleware(s.carHandler.CreateBrand()))
+		brands.GET("", softAuthMiddleware(s.carHandler.GetBrands()))
 		brands.GET("/:id", softAuthMiddleware(s.carHandler.GetBrandByID()))
 		brands.PUT("/:id", authMiddleware(s.carHandler.UpdateBrand()))
 	}
@@ -122,6 +123,7 @@ func (s *Server) routes() {
 	suppliers := s.e.Group("/suppliers")
 	{
 		suppliers.POST("", authMiddleware(s.supplierHandler.Create()))
+		suppliers.GET("", softAuthMiddleware(s.supplierHandler.GetSuppliers()))
 		suppliers.GET("/:id", softAuthMiddleware(s.supplierHandler.GetByID()))
 		suppliers.PUT("/:id", authMiddleware(s.supplierHandler.Update()))
 	}

@@ -20,6 +20,7 @@ type ClientRepository interface {
 
 type CarRepository interface {
 	GetBrandByID(ctx context.Context, id string) (*models.Brand, error)
+	GetBrandsByFilter(ctx context.Context, filter *models.BrandFilters) ([]*models.Brand, error)
 	CreateBrand(ctx context.Context, b *models.Brand) (*models.Brand, error)
 	UpdateBrand(ctx context.Context, b *models.Brand) (*models.Brand, error)
 
@@ -44,6 +45,7 @@ type SaleRepository interface {
 
 type SupplierRepository interface {
 	GetByID(ctx context.Context, id string) (*models.Supplier, error)
+	GetSuppliersByFilter(ctx context.Context, filter *models.SupplierFilters) ([]*models.Supplier, error)
 	Create(ctx context.Context, s *models.Supplier) (*models.Supplier, error)
 	Update(ctx context.Context, s *models.Supplier) (*models.Supplier, error)
 }

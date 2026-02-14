@@ -10,6 +10,7 @@ import (
 var (
 	ErrSupplierNotFound = errorx.NewError("supplier not found", errorx.BadRequest)
 	ErrForbidden        = errorx.NewError("forbidden", errorx.Forbidden)
+	ErrInvalidID        = errorx.NewError("invalid id", errorx.BadRequest)
 )
 
 type supplierService struct {

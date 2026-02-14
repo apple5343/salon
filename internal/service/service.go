@@ -13,6 +13,8 @@ type EmployeeService interface {
 	GetAccessToken(ctx context.Context) (string, error)
 
 	GetByID(ctx context.Context, id string) (*models.Employee, error)
+	//TODO list
+	//TODO stat
 	Profile(ctx context.Context) (*models.Employee, error)
 	Update(ctx context.Context, e *models.Employee) (*models.Employee, error)
 }
@@ -20,11 +22,13 @@ type EmployeeService interface {
 type ClientService interface {
 	GetByID(ctx context.Context, id string) (*models.Client, error)
 	Register(ctx context.Context, c *models.Client) (*models.Client, error)
+	//TODO list
 	Update(ctx context.Context, c *models.Client) (*models.Client, error)
 }
 
 type CarService interface {
 	GetBrandByID(ctx context.Context, id string) (*models.Brand, error)
+	GetBrands(ctx context.Context, filters *models.BrandFilters) ([]*models.Brand, error)
 	CreateBrand(ctx context.Context, b *models.Brand) (*models.Brand, error)
 	UpdateBrand(ctx context.Context, b *models.Brand) (*models.Brand, error)
 
@@ -49,8 +53,10 @@ type SaleService interface {
 
 type SupplierService interface {
 	GetByID(ctx context.Context, id string) (*models.Supplier, error)
+	GetSuppliers(ctx context.Context, filters *models.SupplierFilters) ([]*models.Supplier, error)
 	Create(ctx context.Context, s *models.Supplier) (*models.Supplier, error)
 	Update(ctx context.Context, s *models.Supplier) (*models.Supplier, error)
+	//TODO stat
 }
 
 type EventService interface {

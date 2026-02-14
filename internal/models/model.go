@@ -124,10 +124,8 @@ type ModelFilters struct {
 	DriveType             *DriveType
 	MinBasePrice          *int `validate:"omitempty,min=0"`
 	MaxBasePrice          *int `validate:"omitempty,min=0"`
-	Limit                 *int `validate:"omitempty,min=1"`
-	Offset                *int `validate:"omitempty,min=0"`
 	OrderBy               *ModelOrderBy
-	OrderDirection        *OrderDirection
+	BaseList
 }
 
 func (f *ModelFilters) Validate() error {
