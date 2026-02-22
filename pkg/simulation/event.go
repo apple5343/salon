@@ -10,6 +10,10 @@ import (
 type EventType string
 
 const (
+	BrandCreated EventType = "brand_created"
+
+	ModelCreated EventType = "model_created"
+
 	CarCreated EventType = "car_created"
 	CarUpdated EventType = "car_updated"
 
@@ -19,6 +23,7 @@ const (
 
 	EmployeeCreated EventType = "employee_created"
 	EmployeeUpdated EventType = "employee_updated"
+	EmployeeHired   EventType = "employee_hired"
 )
 
 const timeLayout = "2006-01-02"
@@ -27,6 +32,7 @@ type Event struct {
 	Type EventType
 	Data interface{}
 	Date string
+	Time *time.Time
 }
 
 type EventNode struct {
@@ -60,11 +66,19 @@ func (s *Simulation) handleEventNode(head *EventNode) {
 }
 
 func (s *Simulation) handleEvent(e *Event, t time.Time) {
-	fmt.Println(e.Type, e.Data, t)
+	fmt.Println(e.Type, t)
 	s.clock.Set(t)
 	switch e.Type {
 	case EmployeeCreated:
+		s.ProcessEmployeeCreatedEvent(e, t)
+	case EmployeeHired:
 		s.ProcessHireEmployeeEvent(e, t)
+	case BrandCreated:
+		s.ProcessBrandCreatedEvent(e, t)
+	case ModelCreated:
+		s.ProcessModelCreatedEvent(e, t)
+	case CarCreated:
+		s.ProcessCarCreatedEvent(e, t)
 	case CarUpdated:
 		s.ProcessCarUpdateEvent(e, t)
 	case SaleCreated:

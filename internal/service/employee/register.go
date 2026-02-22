@@ -21,7 +21,7 @@ func (s *employeeService) Register(ctx context.Context, e *models.Employee) (*mo
 	if e.Role == models.EmployeeRoleAdmin {
 		return nil, errorx.NewError("admin cannot be registered", errorx.BadRequest)
 	}
-
+	e.Status = models.EmployeeStatusInactive
 	if err := e.BeforeCreate(s.clock); err != nil {
 		return nil, errorx.NewError("register employee: "+err.Error(), errorx.BadRequest)
 	}
@@ -32,6 +32,31 @@ func (s *employeeService) Register(ctx context.Context, e *models.Employee) (*mo
 			return nil, errorx.NewError("employee alredy exists", errorx.Conflict)
 		}
 		return nil, errorx.NewError("register employee: "+err.Error(), errorx.Internal)
+	}
+	//TODO добавить логи
+	return e, nil
+}
+
+func (s *employeeService) Hire(ctx context.Context, id string) (*models.Employee, error) {
+	userRole := ctxutil.UserRoleFromContext(ctx)
+	if userRole == "" {
+		return nil, ErrUnauthorized
+	}
+	if userRole != string(models.EmployeeRoleAdmin) {
+		return nil, errorx.NewError("only admin can hire employee", errorx.Forbidden)
+	}
+	e, err := s.getByID(ctx, id)
+	if err != nil {
+		return nil, err
+	}
+	if e.Status != models.EmployeeStatusInactive {
+		return nil, errorx.NewError("employee already hired", errorx.BadRequest)
+	}
+	e.Status = models.EmployeeStatusActive
+	e.HireDate = s.clock.Now()
+	e, err = s.repo.Update(ctx, e)
+	if err != nil {
+		return nil, errorx.NewError("hire employee: "+err.Error(), errorx.Internal)
 	}
 	//TODO добавить логи
 	return e, nil

@@ -7,6 +7,7 @@ import (
 
 type EmployeeService interface {
 	Register(ctx context.Context, e *models.Employee) (*models.Employee, error)
+	Hire(ctx context.Context, id string) (*models.Employee, error)
 	RegisterAdmin(ctx context.Context, e *models.Employee) (*models.Employee, error)
 	Login(ctx context.Context, email, password string) (accessToken string, refreshToken string, err error)
 	GetRefreshToken(ctx context.Context) (string, error)
