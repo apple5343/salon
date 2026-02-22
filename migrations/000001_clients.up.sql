@@ -8,8 +8,8 @@ CREATE TABLE IF NOT EXISTS clients (
     passport_number CHAR(6) NOT NULL,
     passport_issued_by VARCHAR(255) NOT NULL,
     birth_date DATE NOT NULL,
-    created_at TIMESTAMP NOT NULL DEFAULT now(),
-    updated_at TIMESTAMP NOT NULL DEFAULT now(),
+    created_at TIMESTAMP NOT NULL,
+    updated_at TIMESTAMP NOT NULL,
     CONSTRAINT unique_client_email UNIQUE (email),
     CONSTRAINT unique_client_phone UNIQUE (phone),
     CONSTRAINT unique_client_passport UNIQUE (passport_series, passport_number)

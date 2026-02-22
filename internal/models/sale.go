@@ -2,6 +2,7 @@ package models
 
 import (
 	"errors"
+	"salon/pkg/clock"
 	"time"
 
 	"github.com/shopspring/decimal"
@@ -39,21 +40,21 @@ type Sale struct {
 	UpdatedAt       time.Time
 }
 
-func (s *Sale) BeforeCreate() error {
+func (s *Sale) BeforeCreate(c clock.Clock) error {
 	if err := s.Validate(); err != nil {
 		return err
 	}
-	now := time.Now()
+	now := c.Now()
 	s.CreatedAt = now
 	s.UpdatedAt = now
 	return nil
 }
 
-func (s *Sale) BeforeUpdate() error {
+func (s *Sale) BeforeUpdate(c clock.Clock) error {
 	if err := s.Validate(); err != nil {
 		return err
 	}
-	s.UpdatedAt = time.Now()
+	s.UpdatedAt = c.Now()
 	return nil
 }
 

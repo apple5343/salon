@@ -2,6 +2,7 @@ package models
 
 import (
 	"salon/internal/utils/password"
+	"salon/pkg/clock"
 	"time"
 
 	"github.com/google/uuid"
@@ -32,14 +33,14 @@ type Employee struct {
 	UpdatedAt    time.Time
 }
 
-func (e *Employee) BeforeCreate() error {
+func (e *Employee) BeforeCreate(c clock.Clock) error {
 	if err := e.Validate(); err != nil {
 		return err
 	}
 	if e.PasswordHash == "" || len(e.PasswordHash) < 8 {
 		return ErrPasswordTooShort
 	}
-	now := time.Now()
+	now := c.Now()
 	e.CreatedAt = now
 	e.UpdatedAt = now
 	passwordHash, err := password.HashPassword(e.PasswordHash)
@@ -50,7 +51,7 @@ func (e *Employee) BeforeCreate() error {
 	return nil
 }
 
-func (e *Employee) BeforeUpdate() error {
+func (e *Employee) BeforeUpdate(c clock.Clock) error {
 	if err := e.Validate(); err != nil {
 		return err
 	}
@@ -60,7 +61,7 @@ func (e *Employee) BeforeUpdate() error {
 	if _, err := uuid.Parse(e.ID); err != nil {
 		return ErrInvalidID
 	}
-	now := time.Now()
+	now := c.Now()
 	e.UpdatedAt = now
 	return nil
 }

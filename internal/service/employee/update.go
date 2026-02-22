@@ -23,7 +23,7 @@ func (s *employeeService) Update(ctx context.Context, e *models.Employee) (*mode
 	if existing.Role == models.EmployeeRoleAdmin {
 		return nil, errorx.NewError("admin cannot be updated", errorx.BadRequest)
 	}
-	if err := e.BeforeUpdate(); err != nil {
+	if err := e.BeforeUpdate(s.clock); err != nil {
 		return nil, errorx.NewError("update employee: "+err.Error(), errorx.BadRequest)
 	}
 	if e.PasswordHash != "" {
@@ -43,5 +43,6 @@ func (s *employeeService) Update(ctx context.Context, e *models.Employee) (*mode
 		}
 		return nil, errorx.NewError("update employee: "+err.Error(), errorx.Internal)
 	}
+	//TODO добавить логи
 	return updated, nil
 }

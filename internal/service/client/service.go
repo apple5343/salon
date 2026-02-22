@@ -3,6 +3,7 @@ package client
 import (
 	"salon/internal/repository"
 	"salon/internal/service"
+	"salon/pkg/clock"
 
 	"github.com/apple5343/errorx"
 )
@@ -16,11 +17,13 @@ var (
 )
 
 type clientService struct {
-	repo repository.ClientRepository
+	repo  repository.ClientRepository
+	clock clock.Clock
 }
 
-func NewService(repo repository.ClientRepository) service.ClientService {
+func NewService(repo repository.ClientRepository, clock clock.Clock) service.ClientService {
 	return &clientService{
-		repo: repo,
+		repo:  repo,
+		clock: clock,
 	}
 }

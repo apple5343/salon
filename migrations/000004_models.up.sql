@@ -11,6 +11,6 @@ CREATE TABLE if NOT EXISTS models (
     drive_type VARCHAR(128) NOT NULL,
     base_price INTEGER NOT NULL,
     technical_characteristics JSONB,
-    created_at TIMESTAMP NOT NULL DEFAULT now(),
-    updated_at TIMESTAMP NOT NULL DEFAULT now()
+    created_at TIMESTAMP NOT NULL,
+    updated_at TIMESTAMP NOT NULL
 )

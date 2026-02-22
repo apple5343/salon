@@ -26,7 +26,7 @@ func (s *saleService) Create(ctx context.Context, sale *models.Sale) (*models.Sa
 	employeeID := ctxutil.UserIDFromContext(ctx)
 	sale.EmployeeID = employeeID
 	sale.Status = models.SaleStatusPending
-	if err := sale.BeforeCreate(); err != nil {
+	if err := sale.BeforeCreate(s.clock); err != nil {
 		return nil, errorx.NewError(err.Error(), errorx.BadRequest)
 	}
 	sale.OriginPrice = car.Price
@@ -55,7 +55,7 @@ func (s *saleService) Complete(ctx context.Context, id string) (*models.Sale, er
 		return nil, errorx.NewError("sale is not pending", errorx.BadRequest)
 	}
 	sale.Status = models.SaleStatusCompleted
-	if err := sale.BeforeUpdate(); err != nil {
+	if err := sale.BeforeUpdate(s.clock); err != nil {
 		return nil, err
 	}
 	err = s.repo.Complete(ctx, id)
@@ -82,7 +82,7 @@ func (s *saleService) Cancel(ctx context.Context, id string) error {
 		return ErrForbidden
 	}
 	sale.Status = models.SaleStatusCanceled
-	if err := sale.BeforeUpdate(); err != nil {
+	if err := sale.BeforeUpdate(s.clock); err != nil {
 		return err
 	}
 	if err := s.repo.Cancel(ctx, id); err != nil {

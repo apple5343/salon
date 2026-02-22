@@ -17,7 +17,7 @@ func (s *clientService) Register(ctx context.Context, c *models.Client) (*models
 	} else if userRole != string(models.EmployeeRoleAdmin) && userRole != string(models.EmployeeRoleManager) {
 		return nil, ErrForbidden
 	}
-	if err := c.BeforeCreate(); err != nil {
+	if err := c.BeforeCreate(s.clock); err != nil {
 		return nil, errorx.NewError("register client: "+err.Error(), errorx.BadRequest)
 	}
 	c, err := s.repo.Create(ctx, c)

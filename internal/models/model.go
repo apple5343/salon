@@ -2,6 +2,7 @@ package models
 
 import (
 	"errors"
+	"salon/pkg/clock"
 	"time"
 )
 
@@ -68,21 +69,21 @@ type Model struct {
 	UpdatedAt              time.Time
 }
 
-func (m *Model) BeforeCreate() error {
+func (m *Model) BeforeCreate(c clock.Clock) error {
 	if err := m.Validate(); err != nil {
 		return err
 	}
-	now := time.Now()
+	now := c.Now()
 	m.CreatedAt = now
 	m.UpdatedAt = now
 	return nil
 }
 
-func (m *Model) BeforeUpdate() error {
+func (m *Model) BeforeUpdate(c clock.Clock) error {
 	if err := m.Validate(); err != nil {
 		return err
 	}
-	m.UpdatedAt = time.Now()
+	m.UpdatedAt = c.Now()
 	return nil
 }
 

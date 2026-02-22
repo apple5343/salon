@@ -22,7 +22,7 @@ func (s *employeeService) Register(ctx context.Context, e *models.Employee) (*mo
 		return nil, errorx.NewError("admin cannot be registered", errorx.BadRequest)
 	}
 
-	if err := e.BeforeCreate(); err != nil {
+	if err := e.BeforeCreate(s.clock); err != nil {
 		return nil, errorx.NewError("register employee: "+err.Error(), errorx.BadRequest)
 	}
 	e.HireDate = e.CreatedAt
@@ -39,7 +39,7 @@ func (s *employeeService) Register(ctx context.Context, e *models.Employee) (*mo
 
 // from cli only
 func (s *employeeService) RegisterAdmin(ctx context.Context, e *models.Employee) (*models.Employee, error) {
-	if err := e.BeforeCreate(); err != nil {
+	if err := e.BeforeCreate(s.clock); err != nil {
 		return nil, errorx.NewError("register employee: "+err.Error(), errorx.BadRequest)
 	}
 	e.HireDate = e.CreatedAt

@@ -7,7 +7,6 @@ import (
 	"salon/internal/repository/errors"
 	"salon/internal/repository/models"
 	sqlutil "salon/internal/utils/sql"
-	"time"
 
 	"github.com/google/uuid"
 )
@@ -52,7 +51,7 @@ func (r *saleRepository) Complete(ctx context.Context, id string) error {
 		return err
 	}
 	defer tx.Rollback()
-	now := time.Now()
+	now := r.clock.Now()
 	res := tx.QueryRowContext(ctx, "UPDATE sales SET status = $1, updated_at = $2, sale_date = $3 WHERE id = $4 AND status = $5 RETURNING car_id",
 		string(service.SaleStatusCompleted), now, now, id, string(service.SaleStatusPending))
 
@@ -81,7 +80,8 @@ func (r *saleRepository) Cancel(ctx context.Context, id string) error {
 		return err
 	}
 	defer tx.Rollback()
-	res := tx.QueryRowContext(ctx, "UPDATE sales SET status = $1 WHERE id = $2 RETURNING car_id", string(service.SaleStatusCanceled), id)
+	now := r.clock.Now()
+	res := tx.QueryRowContext(ctx, "UPDATE sales SET status = $1 , updated_at = $2 WHERE id = $3 RETURNING car_id", string(service.SaleStatusCanceled), now, id)
 
 	var carID string
 	if err = res.Scan(&carID); err != nil {

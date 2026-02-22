@@ -1,6 +1,7 @@
 package models
 
 import (
+	"salon/pkg/clock"
 	"time"
 
 	"github.com/google/uuid"
@@ -14,24 +15,24 @@ type Supplier struct {
 	UpdatedAt   time.Time
 }
 
-func (s *Supplier) BeforeCreate() error {
+func (s *Supplier) BeforeCreate(c clock.Clock) error {
 	if err := s.Validate(); err != nil {
 		return err
 	}
-	now := time.Now()
+	now := c.Now()
 	s.CreatedAt = now
 	s.UpdatedAt = now
 	return nil
 }
 
-func (s *Supplier) BeforeUpdate() error {
+func (s *Supplier) BeforeUpdate(c clock.Clock) error {
 	if err := s.Validate(); err != nil {
 		return err
 	}
 	if _, err := uuid.Parse(s.ID); err != nil {
 		return ErrInvalidID
 	}
-	s.UpdatedAt = time.Now()
+	s.UpdatedAt = c.Now()
 	return nil
 }
 

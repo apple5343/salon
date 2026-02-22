@@ -35,6 +35,20 @@ type CarRepository interface {
 	UpdateCar(ctx context.Context, c *models.Car) (*models.Car, error)
 }
 
+type BrandRepository interface {
+	GetByID(ctx context.Context, id string) (*models.Brand, error)
+	GetBrandsByFilter(ctx context.Context, filter *models.BrandFilters) ([]*models.Brand, error)
+	Create(ctx context.Context, b *models.Brand) (*models.Brand, error)
+	Update(ctx context.Context, b *models.Brand) (*models.Brand, error)
+}
+
+type ModelRepository interface {
+	GetByID(ctx context.Context, id string) (*models.Model, error)
+	GetModelsByFilter(ctx context.Context, filter *models.ModelFilters) ([]*models.ModelShort, error)
+	Create(ctx context.Context, m *models.Model) (*models.Model, error)
+	Update(ctx context.Context, m *models.Model) (*models.Model, error)
+}
+
 type SaleRepository interface {
 	GetByID(ctx context.Context, id string) (*models.Sale, error)
 	GetSalesByFilter(ctx context.Context, filter *models.SaleFilters) ([]*models.Sale, error)

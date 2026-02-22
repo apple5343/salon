@@ -3,6 +3,7 @@ package car
 import (
 	"salon/internal/repository"
 	"salon/internal/service"
+	"salon/pkg/clock"
 
 	"github.com/apple5343/errorx"
 )
@@ -23,12 +24,14 @@ type carService struct {
 	repo         repository.CarRepository
 	eventService service.EventService
 	supplier     service.SupplierService
+	clock        clock.Clock
 }
 
-func NewService(repo repository.CarRepository, eventService service.EventService, supplierService service.SupplierService) service.CarService {
+func NewService(repo repository.CarRepository, eventService service.EventService, supplierService service.SupplierService, clock clock.Clock) service.CarService {
 	return &carService{
 		repo:         repo,
 		eventService: eventService,
 		supplier:     supplierService,
+		clock:        clock,
 	}
 }

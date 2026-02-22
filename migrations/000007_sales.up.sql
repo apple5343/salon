@@ -11,6 +11,6 @@ CREATE TABLE IF NOT EXISTS sales (
     payment_type VARCHAR(64) NOT NULL,
     status VARCHAR(32) NOT NULL,
     notes TEXT,
-    created_at TIMESTAMP NOT NULL DEFAULT now(),
-    updated_at TIMESTAMP NOT NULL DEFAULT now()
+    created_at TIMESTAMP NOT NULL,
+    updated_at TIMESTAMP NOT NULL
 )

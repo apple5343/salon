@@ -3,6 +3,6 @@ CREATE TABLE IF NOT EXISTS brands (
     name VARCHAR(255) NOT NULL,
     country_code VARCHAR(2) NOT NULL,
     description VARCHAR(2048),
-    created_at TIMESTAMP NOT NULL DEFAULT now(),
-    updated_at TIMESTAMP NOT NULL DEFAULT now()
+    created_at TIMESTAMP NOT NULL,
+    updated_at TIMESTAMP NOT NULL
 )

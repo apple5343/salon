@@ -10,8 +10,8 @@ CREATE TABLE IF NOT EXISTS employees (
     role VARCHAR(32) NOT NULL,
     status VARCHAR(32) NOT NULL,
     hire_date DATE NOT NULL,
-    created_at TIMESTAMP NOT NULL DEFAULT now(),
-    updated_at TIMESTAMP NOT NULL DEFAULT now(),
+    created_at TIMESTAMP NOT NULL,
+    updated_at TIMESTAMP NOT NULL,
     CONSTRAINT unique_employee_email UNIQUE (email),
     CONSTRAINT unique_employee_phone UNIQUE (phone),
     CONSTRAINT unique_employee_passport UNIQUE (passport_series, passport_number)

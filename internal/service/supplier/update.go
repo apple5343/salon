@@ -6,7 +6,6 @@ import (
 	"salon/internal/models"
 	repo "salon/internal/repository/errors"
 	ctxutil "salon/internal/utils/context"
-	"time"
 
 	"github.com/apple5343/errorx"
 )
@@ -16,7 +15,7 @@ func (s *supplierService) Update(ctx context.Context, supplier *models.Supplier)
 	if role != string(models.EmployeeRoleAdmin) {
 		return nil, ErrForbidden
 	}
-	if err := supplier.BeforeUpdate(); err != nil {
+	if err := supplier.BeforeUpdate(s.clock); err != nil {
 		return nil, errorx.NewError("update supplier: "+err.Error(), errorx.BadRequest)
 	}
 	supplier, err := s.repo.Update(ctx, supplier)
@@ -33,7 +32,7 @@ func (s *supplierService) Update(ctx context.Context, supplier *models.Supplier)
 		ActorID:    ctxutil.UserIDFromContext(ctx),
 		ActorRole:  role,
 		Payload:    models.SupplierPayload(supplier),
-		CreatedAt:  time.Now(),
+		CreatedAt:  s.clock.Now(),
 	})
 	return supplier, nil
 }

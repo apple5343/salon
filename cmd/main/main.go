@@ -1,6 +1,8 @@
 package main
 
-import "salon/internal/app"
+import (
+	"salon/internal/app"
+)
 
 func main() {
 	a := app.NewApp()

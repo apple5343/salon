@@ -5,11 +5,13 @@ import (
 	"net/http"
 	"salon/internal/config"
 	"salon/internal/service"
+	"salon/internal/transport/http/brand"
 	"salon/internal/transport/http/car"
 	"salon/internal/transport/http/client"
 	"salon/internal/transport/http/employee"
 	"salon/internal/transport/http/event"
 	"salon/internal/transport/http/middlewares"
+	"salon/internal/transport/http/model"
 	"salon/internal/transport/http/sale"
 	"salon/internal/transport/http/supplier"
 	"salon/pkg/logger"
@@ -18,12 +20,15 @@ import (
 )
 
 type Server struct {
-	config          *config.HttpServer
-	jwtConfig       *config.JWT
-	logger          logger.Logger
+	config    *config.HttpServer
+	jwtConfig *config.JWT
+	logger    logger.Logger
+
 	employeeHandler *employee.Handler
 	supplierHandler *supplier.Handler
 	clientHandler   *client.Handler
+	brandHandler    *brand.Handler
+	modelHandler    *model.Handler
 	carHandler      *car.Handler
 	saleHandler     *sale.Handler
 	eventHandler    *event.Handler
@@ -33,6 +38,7 @@ type Server struct {
 func NewServer(config *config.HttpServer, jwtConfig *config.JWT, logger logger.Logger,
 	employeeService service.EmployeeService, supplierService service.SupplierService,
 	clientService service.ClientService, carService service.CarService,
+	brandService service.BrandService, modelService service.ModelService,
 	saleService service.SaleService, eventService service.EventService) (*Server, error) {
 	return &Server{
 		config:          config,
@@ -40,6 +46,8 @@ func NewServer(config *config.HttpServer, jwtConfig *config.JWT, logger logger.L
 		employeeHandler: employee.NewHandler(employeeService),
 		supplierHandler: supplier.NewHandler(supplierService),
 		clientHandler:   client.NewHandler(clientService),
+		brandHandler:    brand.NewHandler(brandService),
+		modelHandler:    model.NewHandler(modelService),
 		carHandler:      car.NewHandler(carService),
 		saleHandler:     sale.NewHandler(saleService),
 		eventHandler:    event.NewHandler(eventService),
@@ -98,18 +106,18 @@ func (s *Server) routes() {
 
 	brands := s.e.Group("/brands")
 	{
-		brands.POST("", authMiddleware(s.carHandler.CreateBrand()))
-		brands.GET("", softAuthMiddleware(s.carHandler.GetBrands()))
-		brands.GET("/:id", softAuthMiddleware(s.carHandler.GetBrandByID()))
-		brands.PUT("/:id", authMiddleware(s.carHandler.UpdateBrand()))
+		brands.POST("", authMiddleware(s.brandHandler.Create()))
+		brands.GET("", softAuthMiddleware(s.brandHandler.GetBrands()))
+		brands.GET("/:id", softAuthMiddleware(s.brandHandler.GetByID()))
+		brands.PUT("/:id", authMiddleware(s.brandHandler.Update()))
 	}
 
 	models := s.e.Group("/models")
 	{
-		models.POST("", authMiddleware(s.carHandler.CreateModel()))
+		models.POST("", authMiddleware(s.modelHandler.Create()))
 		models.GET("", s.carHandler.GetModels())
-		models.GET("/:id", softAuthMiddleware(s.carHandler.GetModelByID()))
-		models.PUT("/:id", authMiddleware(s.carHandler.UpdateModel()))
+		models.GET("/:id", softAuthMiddleware(s.modelHandler.GetByID()))
+		models.PUT("/:id", authMiddleware(s.modelHandler.Update()))
 	}
 
 	cars := s.e.Group("/cars")

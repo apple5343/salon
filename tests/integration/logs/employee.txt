@@ -9,62 +9,77 @@
 [Fx] PROVIDE	repository.EmployeeRepository <= salon/internal/repository/employee/postgres.NewRepository() from module "employee"
 [Fx] PROVIDE	repository.SupplierRepository <= salon/internal/repository/supplier/postgres.NewRepository() from module "supplier"
 [Fx] PROVIDE	repository.ClientRepository <= salon/internal/repository/client/postgres.NewRepository() from module "client"
+[Fx] PROVIDE	repository.BrandRepository <= salon/internal/repository/brand/postgres.NewRepository() from module "brand"
+[Fx] PROVIDE	repository.ModelRepository <= salon/internal/repository/model/postgres.NewRepository() from module "model"
 [Fx] PROVIDE	repository.CarRepository <= salon/internal/repository/car/postgres.NewRepository() from module "car"
 [Fx] PROVIDE	repository.EventRepository <= salon/internal/repository/event/postgres.NewRepository() from module "event"
 [Fx] PROVIDE	repository.SaleRepository <= salon/internal/repository/sale/postgres.NewRepository() from module "sale"
 [Fx] PROVIDE	service.EmployeeService <= salon/internal/service/employee.NewService() from module "service"
 [Fx] PROVIDE	service.SupplierService <= salon/internal/service/supplier.NewService() from module "supplier"
 [Fx] PROVIDE	service.ClientService <= salon/internal/service/client.NewService() from module "client"
+[Fx] PROVIDE	service.BrandService <= salon/internal/service/brand.NewService() from module "brand"
+[Fx] PROVIDE	service.ModelService <= salon/internal/service/model.NewService() from module "model"
 [Fx] PROVIDE	service.CarService <= salon/internal/service/car.NewService() from module "car"
 [Fx] PROVIDE	service.EventService <= salon/internal/service/event.NewService() from module "event"
 [Fx] PROVIDE	service.SaleService <= salon/internal/service/sale.NewService() from module "sale"
 [Fx] PROVIDE	*config.HttpServer <= salon/internal/config.HttpServerConfig() from module "http"
 [Fx] PROVIDE	*http.Server <= salon/internal/transport/http.NewServer() from module "http"
+[Fx] PROVIDE	clock.Clock <= fx.Annotate(salon/pkg/clock.ClockModule.func1(), fx.As([[clock.Clock]]) from module "clock"
 [Fx] INVOKE		salon/internal/infrastructure/postgres.NewModule.func1() from module "postgres"
 [Fx] BEFORE RUN	provide: go.uber.org/fx.New.func1()
-[Fx] RUN	provide: go.uber.org/fx.New.func1() in 29.971µs
+[Fx] RUN	provide: go.uber.org/fx.New.func1() in 12.005µs
 [Fx] BEFORE RUN	provide: salon/internal/config.PostgresConfig() from module "postgres"
-[Fx] RUN	provide: salon/internal/config.PostgresConfig() in 131.412µs from module "postgres"
+[Fx] RUN	provide: salon/internal/config.PostgresConfig() in 96.574µs from module "postgres"
 [Fx] BEFORE RUN	provide: salon/internal/infrastructure/postgres.NewClient() from module "postgres"
-[Fx] RUN	provide: salon/internal/infrastructure/postgres.NewClient() in 9.277977ms from module "postgres"
+[Fx] RUN	provide: salon/internal/infrastructure/postgres.NewClient() in 8.849247ms from module "postgres"
 [Fx] INVOKE		salon/internal/service/event.NewModule.func1() from module "event"
 [Fx] BEFORE RUN	provide: salon/internal/repository/event/postgres.NewRepository() from module "event"
-[Fx] RUN	provide: salon/internal/repository/event/postgres.NewRepository() in 8.546µs from module "event"
+[Fx] RUN	provide: salon/internal/repository/event/postgres.NewRepository() in 13.491µs from module "event"
 [Fx] BEFORE RUN	provide: salon/internal/service/event.NewService() from module "event"
-[Fx] RUN	provide: salon/internal/service/event.NewService() in 4.363µs from module "event"
+[Fx] RUN	provide: salon/internal/service/event.NewService() in 9.006µs from module "event"
 [Fx] INVOKE		salon/internal/transport/http.NewModule.func1() from module "http"
 [Fx] BEFORE RUN	provide: salon/internal/config.HttpServerConfig() from module "http"
-[Fx] RUN	provide: salon/internal/config.HttpServerConfig() in 25.033µs from module "http"
+[Fx] RUN	provide: salon/internal/config.HttpServerConfig() in 15.048µs from module "http"
 [Fx] BEFORE RUN	provide: salon/internal/config.JWTConfig() from module "config"
-[Fx] RUN	provide: salon/internal/config.JWTConfig() in 25.305µs from module "config"
+[Fx] RUN	provide: salon/internal/config.JWTConfig() in 24.451µs from module "config"
 [Fx] BEFORE RUN	provide: salon/internal/config.LoggerConfig() from module "zap"
-[Fx] RUN	provide: salon/internal/config.LoggerConfig() in 7.148µs from module "zap"
+[Fx] RUN	provide: salon/internal/config.LoggerConfig() in 24.37µs from module "zap"
 [Fx] BEFORE RUN	provide: salon/pkg/logger.NewLogger() from module "zap"
-[Fx] RUN	provide: salon/pkg/logger.NewLogger() in 42.124µs from module "zap"
+[Fx] RUN	provide: salon/pkg/logger.NewLogger() in 48.045µs from module "zap"
 [Fx] BEFORE RUN	provide: salon/internal/repository/employee/postgres.NewRepository() from module "employee"
-[Fx] RUN	provide: salon/internal/repository/employee/postgres.NewRepository() in 5.426µs from module "employee"
+[Fx] RUN	provide: salon/internal/repository/employee/postgres.NewRepository() in 9.517µs from module "employee"
+[Fx] BEFORE RUN	provide: fx.Annotate(salon/pkg/clock.ClockModule.func1(), fx.As([[clock.Clock]]) from module "clock"
+[Fx] RUN	provide: fx.Annotate(salon/pkg/clock.ClockModule.func1(), fx.As([[clock.Clock]]) in 19.308µs from module "clock"
 [Fx] BEFORE RUN	provide: salon/internal/service/employee.NewService() from module "service"
-[Fx] RUN	provide: salon/internal/service/employee.NewService() in 18.256µs from module "service"
+[Fx] RUN	provide: salon/internal/service/employee.NewService() in 13.231µs from module "service"
 [Fx] BEFORE RUN	provide: salon/internal/repository/supplier/postgres.NewRepository() from module "supplier"
-[Fx] RUN	provide: salon/internal/repository/supplier/postgres.NewRepository() in 4.904µs from module "supplier"
+[Fx] RUN	provide: salon/internal/repository/supplier/postgres.NewRepository() in 4.252µs from module "supplier"
 [Fx] BEFORE RUN	provide: salon/internal/service/supplier.NewService() from module "supplier"
-[Fx] RUN	provide: salon/internal/service/supplier.NewService() in 7.825µs from module "supplier"
+[Fx] RUN	provide: salon/internal/service/supplier.NewService() in 5.722µs from module "supplier"
 [Fx] BEFORE RUN	provide: salon/internal/repository/client/postgres.NewRepository() from module "client"
-[Fx] RUN	provide: salon/internal/repository/client/postgres.NewRepository() in 4.2µs from module "client"
+[Fx] RUN	provide: salon/internal/repository/client/postgres.NewRepository() in 14.214µs from module "client"
 [Fx] BEFORE RUN	provide: salon/internal/service/client.NewService() from module "client"
-[Fx] RUN	provide: salon/internal/service/client.NewService() in 6.555µs from module "client"
+[Fx] RUN	provide: salon/internal/service/client.NewService() in 5.308µs from module "client"
 [Fx] BEFORE RUN	provide: salon/internal/repository/car/postgres.NewRepository() from module "car"
-[Fx] RUN	provide: salon/internal/repository/car/postgres.NewRepository() in 4.702µs from module "car"
+[Fx] RUN	provide: salon/internal/repository/car/postgres.NewRepository() in 4.451µs from module "car"
 [Fx] BEFORE RUN	provide: salon/internal/service/car.NewService() from module "car"
-[Fx] RUN	provide: salon/internal/service/car.NewService() in 15.701µs from module "car"
+[Fx] RUN	provide: salon/internal/service/car.NewService() in 6.324µs from module "car"
+[Fx] BEFORE RUN	provide: salon/internal/repository/brand/postgres.NewRepository() from module "brand"
+[Fx] RUN	provide: salon/internal/repository/brand/postgres.NewRepository() in 4.523µs from module "brand"
+[Fx] BEFORE RUN	provide: salon/internal/service/brand.NewService() from module "brand"
+[Fx] RUN	provide: salon/internal/service/brand.NewService() in 5.791µs from module "brand"
+[Fx] BEFORE RUN	provide: salon/internal/repository/model/postgres.NewRepository() from module "model"
+[Fx] RUN	provide: salon/internal/repository/model/postgres.NewRepository() in 7.104µs from module "model"
+[Fx] BEFORE RUN	provide: salon/internal/service/model.NewService() from module "model"
+[Fx] RUN	provide: salon/internal/service/model.NewService() in 8.265µs from module "model"
 [Fx] BEFORE RUN	provide: salon/internal/repository/sale/postgres.NewRepository() from module "sale"
-[Fx] RUN	provide: salon/internal/repository/sale/postgres.NewRepository() in 4.634µs from module "sale"
+[Fx] RUN	provide: salon/internal/repository/sale/postgres.NewRepository() in 4.427µs from module "sale"
 [Fx] BEFORE RUN	provide: salon/internal/service/sale.NewService() from module "sale"
-[Fx] RUN	provide: salon/internal/service/sale.NewService() in 4.812µs from module "sale"
+[Fx] RUN	provide: salon/internal/service/sale.NewService() in 4.987µs from module "sale"
 [Fx] BEFORE RUN	provide: salon/internal/transport/http.NewServer() from module "http"
-[Fx] RUN	provide: salon/internal/transport/http.NewServer() in 43.128µs from module "http"
+[Fx] RUN	provide: salon/internal/transport/http.NewServer() in 46.208µs from module "http"
 [Fx] HOOK OnStart		salon/internal/transport/http.NewModule.func1.1() executing (caller: salon/internal/transport/http.NewModule.func1)
-[Fx] HOOK OnStart		salon/internal/transport/http.NewModule.func1.1() called by salon/internal/transport/http.NewModule.func1 ran successfully in 1.391µs
+[Fx] HOOK OnStart		salon/internal/transport/http.NewModule.func1.1() called by salon/internal/transport/http.NewModule.func1 ran successfully in 1.012µs
 [Fx] RUNNING
 
    ____    __
@@ -76,105 +91,103 @@ https://echo.labstack.com
 ____________________________________O/_______
                                     O\
 ⇨ http server started on [::]:8080
-{"level":"error","ts":1771076363.839631,"caller":"logger/logger.go:62","msg":"create brand: Key: 'Brand.Name' Error:Field validation for 'Name' failed on the 'required' tag"}
-{"level":"error","ts":1771076363.8412986,"caller":"logger/logger.go:62","msg":"create brand: Key: 'Brand.Description' Error:Field validation for 'Description' failed on the 'required' tag"}
-{"level":"error","ts":1771076363.8426473,"caller":"logger/logger.go:62","msg":"create brand: Key: 'Brand.CountryCode' Error:Field validation for 'CountryCode' failed on the 'iso3166_1_alpha2' tag"}
-{"level":"error","ts":1771076363.8439915,"caller":"logger/logger.go:62","msg":"forbidden"}
-{"level":"error","ts":1771076363.8448477,"caller":"logger/logger.go:62","msg":"token is empty"}
-{"level":"error","ts":1771076363.89671,"caller":"logger/logger.go:62","msg":"invalid id"}
-{"level":"error","ts":1771076363.898877,"caller":"logger/logger.go:62","msg":"brand not found"}
-{"level":"error","ts":1771076364.0309665,"caller":"logger/logger.go:62","msg":"update brand: Key: 'Brand.Name' Error:Field validation for 'Name' failed on the 'required' tag"}
-{"level":"error","ts":1771076364.032339,"caller":"logger/logger.go:62","msg":"update brand: Key: 'Brand.CountryCode' Error:Field validation for 'CountryCode' failed on the 'iso3166_1_alpha2' tag"}
-{"level":"error","ts":1771076364.0335517,"caller":"logger/logger.go:62","msg":"update brand: Key: 'Brand.Description' Error:Field validation for 'Description' failed on the 'required' tag"}
-{"level":"error","ts":1771076364.0354202,"caller":"logger/logger.go:62","msg":"brand not found"}
-{"level":"error","ts":1771076364.0367236,"caller":"logger/logger.go:62","msg":"forbidden"}
-{"level":"error","ts":1771076364.037685,"caller":"logger/logger.go:62","msg":"token is empty"}
-{"level":"error","ts":1771076394.7321203,"caller":"logger/logger.go:62","msg":"invalid id"}
-{"level":"error","ts":1771076394.7340143,"caller":"logger/logger.go:62","msg":"client not found"}
-{"level":"error","ts":1771076394.7352855,"caller":"logger/logger.go:62","msg":"token is empty"}
-{"level":"error","ts":1771076416.0228164,"caller":"logger/logger.go:62","msg":"register client: Key: 'Client.FullName' Error:Field validation for 'FullName' failed on the 'required' tag"}
-{"level":"error","ts":1771076416.0249176,"caller":"logger/logger.go:62","msg":"register client: Key: 'Client.Phone' Error:Field validation for 'Phone' failed on the 'phone' tag"}
-{"level":"error","ts":1771076416.0260694,"caller":"logger/logger.go:62","msg":"register client: Key: 'Client.Email' Error:Field validation for 'Email' failed on the 'email' tag"}
-{"level":"error","ts":1771076416.0271604,"caller":"logger/logger.go:62","msg":"register client: Key: 'Client.Passport.Series' Error:Field validation for 'Series' failed on the 'len' tag"}
-{"level":"error","ts":1771076416.0523725,"caller":"logger/logger.go:62","msg":"register client: Key: 'Client.Passport.Number' Error:Field validation for 'Number' failed on the 'len' tag"}
-{"level":"error","ts":1771076416.0546107,"caller":"logger/logger.go:62","msg":"register client: Key: 'Client.Passport.IssuedBy' Error:Field validation for 'IssuedBy' failed on the 'required' tag"}
-{"level":"error","ts":1771076416.0561516,"caller":"logger/logger.go:62","msg":"register client: password must be at least 8 characters"}
-{"level":"error","ts":1771076416.0576165,"caller":"logger/logger.go:62","msg":"parsing time \"08-09-1915\" as \"02.01.2006\": cannot parse \"-09-1915\" as \".\""}
-{"level":"error","ts":1771076416.0589745,"caller":"logger/logger.go:62","msg":"token is empty"}
-{"level":"error","ts":1771076418.207076,"caller":"logger/logger.go:62","msg":"update client: invalid id"}
-{"level":"error","ts":1771076420.351501,"caller":"logger/logger.go:62","msg":"client not found"}
-{"level":"error","ts":1771076420.353772,"caller":"logger/logger.go:62","msg":"update client: Key: 'Client.FullName' Error:Field validation for 'FullName' failed on the 'required' tag"}
-{"level":"error","ts":1771076420.355221,"caller":"logger/logger.go:62","msg":"update client: Key: 'Client.Phone' Error:Field validation for 'Phone' failed on the 'phone' tag"}
-{"level":"error","ts":1771076420.356625,"caller":"logger/logger.go:62","msg":"update client: Key: 'Client.Email' Error:Field validation for 'Email' failed on the 'email' tag"}
-{"level":"error","ts":1771076420.358433,"caller":"logger/logger.go:62","msg":"update client: Key: 'Client.Passport.Series' Error:Field validation for 'Series' failed on the 'numeric' tag"}
-{"level":"error","ts":1771076420.359893,"caller":"logger/logger.go:62","msg":"update client: Key: 'Client.Passport.Number' Error:Field validation for 'Number' failed on the 'numeric' tag"}
-{"level":"error","ts":1771076420.361491,"caller":"logger/logger.go:62","msg":"update client: Key: 'Client.Passport.IssuedBy' Error:Field validation for 'IssuedBy' failed on the 'required' tag"}
-{"level":"error","ts":1771076420.3633416,"caller":"logger/logger.go:62","msg":"client already exists"}
-{"level":"error","ts":1771076420.3657067,"caller":"logger/logger.go:62","msg":"client already exists"}
-{"level":"error","ts":1771076420.3676784,"caller":"logger/logger.go:62","msg":"client already exists"}
-{"level":"error","ts":1771076420.3685675,"caller":"logger/logger.go:62","msg":"token is empty"}
-{"level":"error","ts":1771076420.369419,"caller":"logger/logger.go:62","msg":"invalid token"}
-{"level":"error","ts":1771076448.8287425,"caller":"logger/logger.go:62","msg":"invalid credentials"}
-{"level":"error","ts":1771076450.9205937,"caller":"logger/logger.go:62","msg":"invalid credentials"}
-{"level":"error","ts":1771076452.9967945,"caller":"logger/logger.go:62","msg":"invalid credentials"}
-{"level":"error","ts":1771076455.1009665,"caller":"logger/logger.go:62","msg":"invalid credentials"}
-{"level":"error","ts":1771076457.2154756,"caller":"logger/logger.go:62","msg":"invalid credentials"}
-{"level":"error","ts":1771076457.2167966,"caller":"logger/logger.go:62","msg":"token is empty"}
-{"level":"error","ts":1771076457.217653,"caller":"logger/logger.go:62","msg":"invalid token"}
-{"level":"error","ts":1771076457.2184467,"caller":"logger/logger.go:62","msg":"token is empty"}
-{"level":"error","ts":1771076457.2192996,"caller":"logger/logger.go:62","msg":"invalid token"}
-{"level":"error","ts":1771076457.2200868,"caller":"logger/logger.go:62","msg":"token is empty"}
-{"level":"error","ts":1771076457.2208927,"caller":"logger/logger.go:62","msg":"invalid token"}
-{"level":"error","ts":1771076478.4595344,"caller":"logger/logger.go:62","msg":"employee not found"}
-{"level":"error","ts":1771076478.460415,"caller":"logger/logger.go:62","msg":"invalid id"}
-{"level":"error","ts":1771076478.4611754,"caller":"logger/logger.go:62","msg":"token is empty"}
-{"level":"error","ts":1771076478.461799,"caller":"logger/logger.go:62","msg":"token is empty"}
-{"level":"error","ts":1771076478.4623241,"caller":"logger/logger.go:62","msg":"token is empty"}
-{"level":"error","ts":1771076478.463325,"caller":"logger/logger.go:62","msg":"token is empty"}
-{"level":"error","ts":1771076478.4642,"caller":"logger/logger.go:62","msg":"token is empty"}
-{"level":"error","ts":1771076489.1829927,"caller":"logger/logger.go:62","msg":"forbidden"}
-{"level":"error","ts":1771076489.1843402,"caller":"logger/logger.go:62","msg":"forbidden"}
-{"level":"error","ts":1771076489.1853635,"caller":"logger/logger.go:62","msg":"forbidden"}
-{"level":"error","ts":1771076489.1863558,"caller":"logger/logger.go:62","msg":"forbidden"}
-{"level":"error","ts":1771076489.187089,"caller":"logger/logger.go:62","msg":"forbidden"}
-{"level":"error","ts":1771076500.0792253,"caller":"logger/logger.go:62","msg":"register employee: Key: 'Employee.FullName' Error:Field validation for 'FullName' failed on the 'required' tag"}
-{"level":"error","ts":1771076500.0804784,"caller":"logger/logger.go:62","msg":"register employee: Key: 'Employee.Phone' Error:Field validation for 'Phone' failed on the 'required' tag"}
-{"level":"error","ts":1771076500.081583,"caller":"logger/logger.go:62","msg":"register employee: Key: 'Employee.Passport.Series' Error:Field validation for 'Series' failed on the 'required' tag"}
-{"level":"error","ts":1771076500.083118,"caller":"logger/logger.go:62","msg":"register employee: Key: 'Employee.Passport.Number' Error:Field validation for 'Number' failed on the 'required' tag"}
-{"level":"error","ts":1771076500.0844584,"caller":"logger/logger.go:62","msg":"register employee: Key: 'Employee.Passport.IssuedBy' Error:Field validation for 'IssuedBy' failed on the 'required' tag"}
-{"level":"error","ts":1771076500.0853798,"caller":"logger/logger.go:62","msg":"register employee: password must be at least 8 characters"}
-{"level":"error","ts":1771076500.0864098,"caller":"logger/logger.go:62","msg":"register employee: Key: 'Employee.Email' Error:Field validation for 'Email' failed on the 'required' tag"}
-{"level":"error","ts":1771076500.0872674,"caller":"logger/logger.go:62","msg":"invalid role"}
-{"level":"error","ts":1771076500.0880044,"caller":"logger/logger.go:62","msg":"token is empty"}
-{"level":"error","ts":1771076520.9826186,"caller":"logger/logger.go:62","msg":"only admin can register employee"}
-{"level":"error","ts":1771076520.9841816,"caller":"logger/logger.go:62","msg":"admin cannot be registered"}
-{"level":"error","ts":1771076563.0750737,"caller":"logger/logger.go:62","msg":"employee not found"}
-{"level":"error","ts":1771076563.0764875,"caller":"logger/logger.go:62","msg":"invalid id"}
-{"level":"error","ts":1771076563.0780134,"caller":"logger/logger.go:62","msg":"update employee: Key: 'Employee.Email' Error:Field validation for 'Email' failed on the 'email' tag"}
-{"level":"error","ts":1771076563.079994,"caller":"logger/logger.go:62","msg":"employee alredy exists"}
-{"level":"error","ts":1771076563.0815442,"caller":"logger/logger.go:62","msg":"update employee: Key: 'Employee.Phone' Error:Field validation for 'Phone' failed on the 'phone' tag"}
-{"level":"error","ts":1771076563.0835705,"caller":"logger/logger.go:62","msg":"employee alredy exists"}
-{"level":"error","ts":1771076563.0850854,"caller":"logger/logger.go:62","msg":"update employee: Key: 'Employee.Passport.Series' Error:Field validation for 'Series' failed on the 'len' tag"}
-{"level":"error","ts":1771076563.0865185,"caller":"logger/logger.go:62","msg":"update employee: Key: 'Employee.Passport.Number' Error:Field validation for 'Number' failed on the 'len' tag"}
-{"level":"error","ts":1771076563.0885782,"caller":"logger/logger.go:62","msg":"employee alredy exists"}
-{"level":"error","ts":1771076563.0902193,"caller":"logger/logger.go:62","msg":"update employee: Key: 'Employee.FullName' Error:Field validation for 'FullName' failed on the 'required' tag"}
-{"level":"error","ts":1771076563.0911992,"caller":"logger/logger.go:62","msg":"token is empty"}
-{"level":"error","ts":1771076563.0920086,"caller":"logger/logger.go:62","msg":"token is empty"}
-{"level":"error","ts":1771076563.112068,"caller":"logger/logger.go:62","msg":"token is empty"}
-{"level":"error","ts":1771076563.1146839,"caller":"logger/logger.go:62","msg":"token is empty"}
-{"level":"error","ts":1771076563.1164384,"caller":"logger/logger.go:62","msg":"token is empty"}
-{"level":"error","ts":1771076563.1177716,"caller":"logger/logger.go:62","msg":"token is empty"}
-{"level":"error","ts":1771076563.118915,"caller":"logger/logger.go:62","msg":"token is empty"}
-{"level":"error","ts":1771076563.1197908,"caller":"logger/logger.go:62","msg":"token is empty"}
-{"level":"error","ts":1771076563.1207943,"caller":"logger/logger.go:62","msg":"token is empty"}
-{"level":"error","ts":1771076563.121692,"caller":"logger/logger.go:62","msg":"token is empty"}
-{"level":"error","ts":1771076565.2070117,"caller":"logger/logger.go:62","msg":"forbidden"}
-{"level":"error","ts":1771076565.208478,"caller":"logger/logger.go:62","msg":"forbidden"}
-{"level":"error","ts":1771076565.2095068,"caller":"logger/logger.go:62","msg":"forbidden"}
-{"level":"error","ts":1771076565.210487,"caller":"logger/logger.go:62","msg":"forbidden"}
-{"level":"error","ts":1771076565.2114944,"caller":"logger/logger.go:62","msg":"forbidden"}
-{"level":"error","ts":1771076565.2126513,"caller":"logger/logger.go:62","msg":"forbidden"}
-{"level":"error","ts":1771076565.2137794,"caller":"logger/logger.go:62","msg":"forbidden"}
-{"level":"error","ts":1771076565.21481,"caller":"logger/logger.go:62","msg":"forbidden"}
-{"level":"error","ts":1771076565.2157896,"caller":"logger/logger.go:62","msg":"forbidden"}
-{"level":"error","ts":1771076565.2167273,"caller":"logger/logger.go:62","msg":"forbidden"}
+{"level":"error","ts":1771755528.5083795,"caller":"logger/logger.go:62","msg":"create brand: Key: 'Brand.Name' Error:Field validation for 'Name' failed on the 'required' tag"}
+{"level":"error","ts":1771755528.5097198,"caller":"logger/logger.go:62","msg":"create brand: Key: 'Brand.Description' Error:Field validation for 'Description' failed on the 'required' tag"}
+{"level":"error","ts":1771755528.5109692,"caller":"logger/logger.go:62","msg":"create brand: Key: 'Brand.CountryCode' Error:Field validation for 'CountryCode' failed on the 'iso3166_1_alpha2' tag"}
+{"level":"error","ts":1771755528.512133,"caller":"logger/logger.go:62","msg":"forbidden"}
+{"level":"error","ts":1771755528.5653107,"caller":"logger/logger.go:62","msg":"invalid id"}
+{"level":"error","ts":1771755528.5670443,"caller":"logger/logger.go:62","msg":"brand not found"}
+{"level":"error","ts":1771755528.707647,"caller":"logger/logger.go:62","msg":"update brand: Key: 'Brand.Name' Error:Field validation for 'Name' failed on the 'required' tag"}
+{"level":"error","ts":1771755528.7089038,"caller":"logger/logger.go:62","msg":"update brand: Key: 'Brand.CountryCode' Error:Field validation for 'CountryCode' failed on the 'iso3166_1_alpha2' tag"}
+{"level":"error","ts":1771755528.7103412,"caller":"logger/logger.go:62","msg":"update brand: Key: 'Brand.Description' Error:Field validation for 'Description' failed on the 'required' tag"}
+{"level":"error","ts":1771755528.712204,"caller":"logger/logger.go:62","msg":"brand not found"}
+{"level":"error","ts":1771755528.7134697,"caller":"logger/logger.go:62","msg":"forbidden"}
+{"level":"error","ts":1771755531.204928,"caller":"logger/logger.go:62","msg":"invalid id"}
+{"level":"error","ts":1771755531.206845,"caller":"logger/logger.go:62","msg":"client not found"}
+{"level":"error","ts":1771755531.2080345,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1771755532.5153766,"caller":"logger/logger.go:62","msg":"register client: Key: 'Client.FullName' Error:Field validation for 'FullName' failed on the 'required' tag"}
+{"level":"error","ts":1771755532.51679,"caller":"logger/logger.go:62","msg":"register client: Key: 'Client.Phone' Error:Field validation for 'Phone' failed on the 'phone' tag"}
+{"level":"error","ts":1771755532.518105,"caller":"logger/logger.go:62","msg":"register client: Key: 'Client.Email' Error:Field validation for 'Email' failed on the 'email' tag"}
+{"level":"error","ts":1771755532.5189824,"caller":"logger/logger.go:62","msg":"register client: Key: 'Client.Passport.Series' Error:Field validation for 'Series' failed on the 'len' tag"}
+{"level":"error","ts":1771755532.5199306,"caller":"logger/logger.go:62","msg":"register client: Key: 'Client.Passport.Number' Error:Field validation for 'Number' failed on the 'len' tag"}
+{"level":"error","ts":1771755532.5209572,"caller":"logger/logger.go:62","msg":"register client: Key: 'Client.Passport.IssuedBy' Error:Field validation for 'IssuedBy' failed on the 'required' tag"}
+{"level":"error","ts":1771755532.545061,"caller":"logger/logger.go:62","msg":"register client: password must be at least 8 characters"}
+{"level":"error","ts":1771755532.5464506,"caller":"logger/logger.go:62","msg":"parsing time \"05-11-1914\" as \"02.01.2006\": cannot parse \"-11-1914\" as \".\""}
+{"level":"error","ts":1771755532.5478005,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1771755532.724255,"caller":"logger/logger.go:62","msg":"update client: invalid id"}
+{"level":"error","ts":1771755532.8454666,"caller":"logger/logger.go:62","msg":"client not found"}
+{"level":"error","ts":1771755532.8478494,"caller":"logger/logger.go:62","msg":"update client: Key: 'Client.FullName' Error:Field validation for 'FullName' failed on the 'required' tag"}
+{"level":"error","ts":1771755532.8494194,"caller":"logger/logger.go:62","msg":"update client: Key: 'Client.Phone' Error:Field validation for 'Phone' failed on the 'phone' tag"}
+{"level":"error","ts":1771755532.8510876,"caller":"logger/logger.go:62","msg":"update client: Key: 'Client.Email' Error:Field validation for 'Email' failed on the 'email' tag"}
+{"level":"error","ts":1771755532.8525841,"caller":"logger/logger.go:62","msg":"update client: Key: 'Client.Passport.Series' Error:Field validation for 'Series' failed on the 'numeric' tag"}
+{"level":"error","ts":1771755532.8545833,"caller":"logger/logger.go:62","msg":"update client: Key: 'Client.Passport.Number' Error:Field validation for 'Number' failed on the 'numeric' tag"}
+{"level":"error","ts":1771755532.8561332,"caller":"logger/logger.go:62","msg":"update client: Key: 'Client.Passport.IssuedBy' Error:Field validation for 'IssuedBy' failed on the 'required' tag"}
+{"level":"error","ts":1771755532.8581398,"caller":"logger/logger.go:62","msg":"client already exists"}
+{"level":"error","ts":1771755532.8598459,"caller":"logger/logger.go:62","msg":"client already exists"}
+{"level":"error","ts":1771755532.8623385,"caller":"logger/logger.go:62","msg":"client already exists"}
+{"level":"error","ts":1771755532.8634615,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1771755532.8645096,"caller":"logger/logger.go:62","msg":"invalid token"}
+{"level":"error","ts":1771755535.1675441,"caller":"logger/logger.go:62","msg":"invalid credentials"}
+{"level":"error","ts":1771755535.2951946,"caller":"logger/logger.go:62","msg":"invalid credentials"}
+{"level":"error","ts":1771755535.4186568,"caller":"logger/logger.go:62","msg":"invalid credentials"}
+{"level":"error","ts":1771755535.5490594,"caller":"logger/logger.go:62","msg":"invalid credentials"}
+{"level":"error","ts":1771755535.6709864,"caller":"logger/logger.go:62","msg":"invalid credentials"}
+{"level":"error","ts":1771755535.6722047,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1771755535.6861706,"caller":"logger/logger.go:62","msg":"invalid token"}
+{"level":"error","ts":1771755535.6884444,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1771755535.690264,"caller":"logger/logger.go:62","msg":"invalid token"}
+{"level":"error","ts":1771755535.6917903,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1771755535.6927965,"caller":"logger/logger.go:62","msg":"invalid token"}
+{"level":"error","ts":1771755536.9957612,"caller":"logger/logger.go:62","msg":"employee not found"}
+{"level":"error","ts":1771755536.99723,"caller":"logger/logger.go:62","msg":"invalid id"}
+{"level":"error","ts":1771755536.9986873,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1771755536.9999754,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1771755537.0013492,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1771755537.0025973,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1771755537.0037854,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1771755537.7125542,"caller":"logger/logger.go:62","msg":"forbidden"}
+{"level":"error","ts":1771755537.7137618,"caller":"logger/logger.go:62","msg":"forbidden"}
+{"level":"error","ts":1771755537.714718,"caller":"logger/logger.go:62","msg":"forbidden"}
+{"level":"error","ts":1771755537.715701,"caller":"logger/logger.go:62","msg":"forbidden"}
+{"level":"error","ts":1771755537.7166553,"caller":"logger/logger.go:62","msg":"forbidden"}
+{"level":"error","ts":1771755538.3923905,"caller":"logger/logger.go:62","msg":"register employee: Key: 'Employee.FullName' Error:Field validation for 'FullName' failed on the 'required' tag"}
+{"level":"error","ts":1771755538.3939219,"caller":"logger/logger.go:62","msg":"register employee: Key: 'Employee.Phone' Error:Field validation for 'Phone' failed on the 'required' tag"}
+{"level":"error","ts":1771755538.3952982,"caller":"logger/logger.go:62","msg":"register employee: Key: 'Employee.Passport.Series' Error:Field validation for 'Series' failed on the 'required' tag"}
+{"level":"error","ts":1771755538.3961794,"caller":"logger/logger.go:62","msg":"register employee: Key: 'Employee.Passport.Number' Error:Field validation for 'Number' failed on the 'required' tag"}
+{"level":"error","ts":1771755538.3971303,"caller":"logger/logger.go:62","msg":"register employee: Key: 'Employee.Passport.IssuedBy' Error:Field validation for 'IssuedBy' failed on the 'required' tag"}
+{"level":"error","ts":1771755538.3983147,"caller":"logger/logger.go:62","msg":"register employee: password must be at least 8 characters"}
+{"level":"error","ts":1771755538.3994417,"caller":"logger/logger.go:62","msg":"register employee: Key: 'Employee.Email' Error:Field validation for 'Email' failed on the 'required' tag"}
+{"level":"error","ts":1771755538.4012172,"caller":"logger/logger.go:62","msg":"invalid role"}
+{"level":"error","ts":1771755538.4030814,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1771755539.6646953,"caller":"logger/logger.go:62","msg":"only admin can register employee"}
+{"level":"error","ts":1771755539.66608,"caller":"logger/logger.go:62","msg":"admin cannot be registered"}
+{"level":"error","ts":1771755542.3092613,"caller":"logger/logger.go:62","msg":"employee not found"}
+{"level":"error","ts":1771755542.3104525,"caller":"logger/logger.go:62","msg":"invalid id"}
+{"level":"error","ts":1771755542.3120923,"caller":"logger/logger.go:62","msg":"update employee: Key: 'Employee.Email' Error:Field validation for 'Email' failed on the 'email' tag"}
+{"level":"error","ts":1771755542.3145268,"caller":"logger/logger.go:62","msg":"employee alredy exists"}
+{"level":"error","ts":1771755542.3164234,"caller":"logger/logger.go:62","msg":"update employee: Key: 'Employee.Phone' Error:Field validation for 'Phone' failed on the 'phone' tag"}
+{"level":"error","ts":1771755542.3188663,"caller":"logger/logger.go:62","msg":"employee alredy exists"}
+{"level":"error","ts":1771755542.3205283,"caller":"logger/logger.go:62","msg":"update employee: Key: 'Employee.Passport.Series' Error:Field validation for 'Series' failed on the 'len' tag"}
+{"level":"error","ts":1771755542.3221164,"caller":"logger/logger.go:62","msg":"update employee: Key: 'Employee.Passport.Number' Error:Field validation for 'Number' failed on the 'len' tag"}
+{"level":"error","ts":1771755542.3242602,"caller":"logger/logger.go:62","msg":"employee alredy exists"}
+{"level":"error","ts":1771755542.3262165,"caller":"logger/logger.go:62","msg":"update employee: Key: 'Employee.FullName' Error:Field validation for 'FullName' failed on the 'required' tag"}
+{"level":"error","ts":1771755542.3272445,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1771755542.3282917,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1771755542.329298,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1771755542.3301563,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1771755542.351023,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1771755542.3532205,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1771755542.3549623,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1771755542.356182,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1771755542.3573995,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1771755542.3582826,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1771755542.491513,"caller":"logger/logger.go:62","msg":"forbidden"}
+{"level":"error","ts":1771755542.4926727,"caller":"logger/logger.go:62","msg":"forbidden"}
+{"level":"error","ts":1771755542.493548,"caller":"logger/logger.go:62","msg":"forbidden"}
+{"level":"error","ts":1771755542.4946394,"caller":"logger/logger.go:62","msg":"forbidden"}
+{"level":"error","ts":1771755542.4956005,"caller":"logger/logger.go:62","msg":"forbidden"}
+{"level":"error","ts":1771755542.4964707,"caller":"logger/logger.go:62","msg":"forbidden"}
+{"level":"error","ts":1771755542.4974267,"caller":"logger/logger.go:62","msg":"forbidden"}
+{"level":"error","ts":1771755542.4984422,"caller":"logger/logger.go:62","msg":"forbidden"}
+{"level":"error","ts":1771755542.499259,"caller":"logger/logger.go:62","msg":"forbidden"}
+{"level":"error","ts":1771755542.5001118,"caller":"logger/logger.go:62","msg":"forbidden"}

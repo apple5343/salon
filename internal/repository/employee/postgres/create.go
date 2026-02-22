@@ -15,8 +15,8 @@ func (r *employeeRepository) Create(ctx context.Context, e *service.Employee) (*
 	id := uuid.New().String()
 	repoE.ID = id
 	_, err := r.db.NamedExecContext(ctx, `INSERT INTO employees
-		(id, full_name, phone, email, password_hash, passport_series, passport_number, passport_issued_by, role, status, hire_date)
-		VALUES (:id, :full_name, :phone, :email, :password_hash, :passport_series, :passport_number, :passport_issued_by, :role, :status, :hire_date)`,
+		(id, full_name, phone, email, password_hash, passport_series, passport_number, passport_issued_by, role, status, hire_date, created_at, updated_at)
+		VALUES (:id, :full_name, :phone, :email, :password_hash, :passport_series, :passport_number, :passport_issued_by, :role, :status, :hire_date, :created_at, :updated_at)`,
 		repoE)
 
 	if err != nil {

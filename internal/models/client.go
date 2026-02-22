@@ -3,6 +3,7 @@ package models
 import (
 	"errors"
 	"salon/internal/utils/password"
+	"salon/pkg/clock"
 	"time"
 
 	"github.com/google/uuid"
@@ -25,7 +26,7 @@ type Client struct {
 	UpdatedAt    time.Time
 }
 
-func (c *Client) BeforeCreate() error {
+func (c *Client) BeforeCreate(cl clock.Clock) error {
 	if err := c.Validate(); err != nil {
 		return err
 	}
@@ -33,7 +34,7 @@ func (c *Client) BeforeCreate() error {
 	if c.PasswordHash == "" || len(c.PasswordHash) < 8 {
 		return ErrPasswordTooShort
 	}
-	now := time.Now()
+	now := cl.Now()
 	c.CreatedAt = now
 	c.UpdatedAt = now
 
@@ -45,14 +46,14 @@ func (c *Client) BeforeCreate() error {
 	return nil
 }
 
-func (c *Client) BeforeUpdate() error {
+func (c *Client) BeforeUpdate(cl clock.Clock) error {
 	if err := c.Validate(); err != nil {
 		return err
 	}
 	if _, err := uuid.Parse(c.ID); err != nil {
 		return ErrInvalidID
 	}
-	c.UpdatedAt = time.Now()
+	c.UpdatedAt = cl.Now()
 	return nil
 }
 

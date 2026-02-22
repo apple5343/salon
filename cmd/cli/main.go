@@ -8,6 +8,7 @@ import (
 	employeeRepo "salon/internal/repository/employee"
 	"salon/internal/service/employee"
 	"salon/internal/transport/cli"
+	"salon/pkg/clock"
 	"time"
 
 	"go.uber.org/fx"
@@ -18,6 +19,7 @@ func main() {
 
 	app := fx.New(
 		fx.Provide(config.JWTConfig),
+		clock.ClockModule(),
 		postgres.NewModule(),
 		employeeRepo.NewModule(),
 		employee.NewModule(),

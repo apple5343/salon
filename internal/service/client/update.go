@@ -30,7 +30,7 @@ func (s *clientService) Update(ctx context.Context, c *models.Client) (*models.C
 		}
 		c.PasswordHash = hashed
 	}
-	if err := c.BeforeUpdate(); err != nil {
+	if err := c.BeforeUpdate(s.clock); err != nil {
 		return nil, errorx.NewError("update client: "+err.Error(), errorx.BadRequest)
 	}
 	client, err := s.repo.Update(ctx, c)
@@ -42,5 +42,6 @@ func (s *clientService) Update(ctx context.Context, c *models.Client) (*models.C
 		}
 		return nil, errorx.NewError("update client: "+err.Error(), errorx.Internal)
 	}
+	//TODO добавить логи
 	return client, nil
 }

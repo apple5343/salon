@@ -1,6 +1,8 @@
 package app
 
 import (
+	"salon/pkg/clock"
+
 	"go.uber.org/fx"
 )
 
@@ -12,5 +14,6 @@ func NewApp() *fx.App {
 		RepositoryModules(),
 		ServiceModules(),
 		TransportModules(),
+		clock.ClockModule(),
 	)
 }

@@ -6,7 +6,6 @@ import (
 	"salon/internal/models"
 	repo "salon/internal/repository/errors"
 	ctxutil "salon/internal/utils/context"
-	"time"
 
 	"github.com/apple5343/errorx"
 )
@@ -16,7 +15,7 @@ func (s *carService) CreateBrand(ctx context.Context, b *models.Brand) (*models.
 	if role != string(models.EmployeeRoleAdmin) {
 		return nil, ErrForbidden
 	}
-	if err := b.BeforeCreate(); err != nil {
+	if err := b.BeforeCreate(s.clock); err != nil {
 		return nil, errorx.NewError("create brand: "+err.Error(), errorx.BadRequest)
 	}
 	b, err := s.repo.CreateBrand(ctx, b)
@@ -33,7 +32,7 @@ func (s *carService) CreateBrand(ctx context.Context, b *models.Brand) (*models.
 		ActorID:    ctxutil.UserIDFromContext(ctx),
 		ActorRole:  role,
 		Payload:    models.BrandPayload(b),
-		CreatedAt:  time.Now(),
+		CreatedAt:  s.clock.Now(),
 	})
 	return b, nil
 }
@@ -43,7 +42,7 @@ func (s *carService) CreateModel(ctx context.Context, m *models.Model) (*models.
 	if role != string(models.EmployeeRoleAdmin) {
 		return nil, nil, ErrForbidden
 	}
-	if err := m.BeforeCreate(); err != nil {
+	if err := m.BeforeCreate(s.clock); err != nil {
 		return nil, nil, errorx.NewError("create model: "+err.Error(), errorx.BadRequest)
 	}
 	m, err := s.repo.CreateModel(ctx, m)
@@ -62,7 +61,7 @@ func (s *carService) CreateModel(ctx context.Context, m *models.Model) (*models.
 		ActorID:    ctxutil.UserIDFromContext(ctx),
 		ActorRole:  role,
 		Payload:    models.ModelPayload(m),
-		CreatedAt:  time.Now(),
+		CreatedAt:  s.clock.Now(),
 	})
 	b, err := s.getBrandByID(ctx, m.BrandID)
 	if err != nil {
@@ -76,7 +75,7 @@ func (s *carService) CreateCar(ctx context.Context, c *models.Car) (*models.Car,
 	if role != string(models.EmployeeRoleAdmin) {
 		return nil, nil, nil, nil, ErrForbidden
 	}
-	if err := c.BeforeCreate(); err != nil {
+	if err := c.BeforeCreate(s.clock); err != nil {
 		return nil, nil, nil, nil, errorx.NewError("create car: "+err.Error(), errorx.BadRequest)
 	}
 	c, err := s.repo.CreateCar(ctx, c)
@@ -95,7 +94,7 @@ func (s *carService) CreateCar(ctx context.Context, c *models.Car) (*models.Car,
 		ActorID:    ctxutil.UserIDFromContext(ctx),
 		ActorRole:  role,
 		Payload:    models.CarPayload(c),
-		CreatedAt:  time.Now(),
+		CreatedAt:  s.clock.Now(),
 	})
 	return s.getCarByID(ctx, c.ID)
 }

@@ -1,6 +1,9 @@
 package models
 
-import "time"
+import (
+	"salon/pkg/clock"
+	"time"
+)
 
 type Brand struct {
 	ID          string
@@ -11,21 +14,21 @@ type Brand struct {
 	UpdatedAt   time.Time
 }
 
-func (b *Brand) BeforeCreate() error {
+func (b *Brand) BeforeCreate(c clock.Clock) error {
 	if err := b.Validate(); err != nil {
 		return err
 	}
-	now := time.Now()
+	now := c.Now()
 	b.CreatedAt = now
 	b.UpdatedAt = now
 	return nil
 }
 
-func (b *Brand) BeforeUpdate() error {
+func (b *Brand) BeforeUpdate(c clock.Clock) error {
 	if err := b.Validate(); err != nil {
 		return err
 	}
-	b.UpdatedAt = time.Now()
+	b.UpdatedAt = c.Now()
 	return nil
 }
 

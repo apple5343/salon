@@ -10,6 +10,6 @@ CREATE TABLE IF NOT EXISTS cars (
     price NUMERIC(14,2) NOT NULL CHECK (price >= 0),
     status VARCHAR(32) NOT NULL,
     options JSONB,
-    created_at TIMESTAMP NOT NULL DEFAULT now(),
-    updated_at TIMESTAMP NOT NULL DEFAULT now()
+    created_at TIMESTAMP NOT NULL,
+    updated_at TIMESTAMP NOT NULL
 )

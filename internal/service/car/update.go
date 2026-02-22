@@ -6,7 +6,6 @@ import (
 	"salon/internal/models"
 	repo "salon/internal/repository/errors"
 	ctxutil "salon/internal/utils/context"
-	"time"
 
 	"github.com/apple5343/errorx"
 )
@@ -16,7 +15,7 @@ func (s *carService) UpdateBrand(ctx context.Context, b *models.Brand) (*models.
 	if role != string(models.EmployeeRoleAdmin) {
 		return nil, ErrForbidden
 	}
-	if err := b.BeforeUpdate(); err != nil {
+	if err := b.BeforeUpdate(s.clock); err != nil {
 		return nil, errorx.NewError("update brand: "+err.Error(), errorx.BadRequest)
 	}
 	b, err := s.repo.UpdateBrand(ctx, b)
@@ -35,7 +34,7 @@ func (s *carService) UpdateBrand(ctx context.Context, b *models.Brand) (*models.
 		ActorID:    ctxutil.UserIDFromContext(ctx),
 		ActorRole:  role,
 		Payload:    models.BrandPayload(b),
-		CreatedAt:  time.Now(),
+		CreatedAt:  s.clock.Now(),
 	})
 	return b, nil
 }
@@ -45,7 +44,7 @@ func (s *carService) UpdateModel(ctx context.Context, m *models.Model) (*models.
 	if role != string(models.EmployeeRoleAdmin) {
 		return nil, nil, ErrForbidden
 	}
-	if err := m.BeforeUpdate(); err != nil {
+	if err := m.BeforeUpdate(s.clock); err != nil {
 		return nil, nil, errorx.NewError("update model: "+err.Error(), errorx.BadRequest)
 	}
 	m, err := s.repo.UpdateModel(ctx, m)
@@ -66,7 +65,7 @@ func (s *carService) UpdateModel(ctx context.Context, m *models.Model) (*models.
 		ActorID:    ctxutil.UserIDFromContext(ctx),
 		ActorRole:  role,
 		Payload:    models.ModelPayload(m),
-		CreatedAt:  time.Now(),
+		CreatedAt:  s.clock.Now(),
 	})
 	b, err := s.getBrandByID(ctx, m.BrandID)
 	if err != nil {
@@ -80,7 +79,7 @@ func (s *carService) UpdateCar(ctx context.Context, c *models.Car) (*models.Car,
 	if role != string(models.EmployeeRoleAdmin) {
 		return nil, nil, nil, nil, ErrForbidden
 	}
-	if err := c.BeforeUpdate(); err != nil {
+	if err := c.BeforeUpdate(s.clock); err != nil {
 		return nil, nil, nil, nil, errorx.NewError("update car: "+err.Error(), errorx.BadRequest)
 	}
 	car, _, _, _, err := s.getCarByID(ctx, c.ID)
@@ -107,7 +106,7 @@ func (s *carService) UpdateCar(ctx context.Context, c *models.Car) (*models.Car,
 		ActorID:    ctxutil.UserIDFromContext(ctx),
 		ActorRole:  role,
 		Payload:    models.CarPayload(c),
-		CreatedAt:  time.Now(),
+		CreatedAt:  s.clock.Now(),
 	})
 	return s.getCarByID(ctx, c.ID)
 }
