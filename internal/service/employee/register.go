@@ -68,6 +68,7 @@ func (s *employeeService) RegisterAdmin(ctx context.Context, e *models.Employee)
 		return nil, errorx.NewError("register employee: "+err.Error(), errorx.BadRequest)
 	}
 	e.HireDate = e.CreatedAt
+	e.Status = models.EmployeeStatusActive
 	e, err := s.repo.Create(ctx, e)
 	if err != nil {
 		if errors.Is(err, repo.ErrAlreadyExists) {

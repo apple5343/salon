@@ -28,7 +28,10 @@ func (s *ClientSuite) SetupSuite() {
 
 	manager := models.GenerateEmployee()
 	password := manager.Password
-	_, code, err = s.base.client.RegisterEmployee(s.base.ctx, s.adminToken.AccessToken, manager)
+	manager, code, err = s.base.client.RegisterEmployee(s.base.ctx, s.adminToken.AccessToken, manager)
+	s.Require().NoError(err)
+	s.Require().Equal(http.StatusOK, code)
+	manager, code, err = s.base.client.HireEmployee(s.base.ctx, s.adminToken.AccessToken, manager.ID)
 	s.Require().NoError(err)
 	s.Require().Equal(http.StatusOK, code)
 	token, code, err = s.base.client.LoginEmployee(s.base.ctx, manager.Email, password)
