@@ -93,7 +93,9 @@ func (suite *BaseTestSuite) SetupSuite() {
 
 	suite.MustInitConfig(envPath)
 	suite.MustInitCompose(composePath)
+	println("!")
 	suite.compose.Up(ctx)
+	println("up")
 	suite.MustInitDB()
 	suite.composePath = composePath
 	suite.client = httpclient.NewClient(suite.config.ServerAddr)

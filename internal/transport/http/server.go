@@ -89,7 +89,7 @@ func (s *Server) routes() {
 		{
 			me.GET("", authMiddleware(s.employeeHandler.Profile()))
 		}
-
+		employees.POST("/:id/hire", authMiddleware(s.employeeHandler.Hire()))
 		employees.GET("/:id", authMiddleware(s.employeeHandler.GetByID()))
 		employees.PUT("/:id", authMiddleware(s.employeeHandler.Update()))
 	}

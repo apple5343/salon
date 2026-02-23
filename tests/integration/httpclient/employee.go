@@ -128,6 +128,28 @@ func (c *Client) UpdateEmployee(ctx context.Context, token string, e *httpModels
 	return &r, resp.StatusCode, nil
 }
 
+func (c *Client) HireEmployee(ctx context.Context, token, id string) (*httpModels.Employee, int, error) {
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, c.BaseUrl+"/employees/"+id+"/hire", nil)
+	if err != nil {
+		return nil, 0, err
+	}
+	if token != "" {
+		req.Header.Set("Authorization", "Bearer "+token)
+	}
+	resp, err := c.C.Do(req)
+	if err != nil {
+		return nil, 0, err
+	}
+	if resp.StatusCode != http.StatusOK {
+		return nil, resp.StatusCode, nil
+	}
+	var r httpModels.Employee
+	if err := json.NewDecoder(resp.Body).Decode(&r); err != nil {
+		return nil, 0, err
+	}
+	return &r, resp.StatusCode, nil
+}
+
 func (c *Client) GetRefreshToken(ctx context.Context, token string) (string, int, error) {
 	type respBody struct {
 		RefreshToken string `json:"refresh_token"`

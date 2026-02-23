@@ -30,3 +30,17 @@ func (h *Handler) Update() echo.HandlerFunc {
 		return c.JSON(http.StatusOK, models.EmployeeToHttp(serviceE))
 	}
 }
+
+func (h *Handler) Hire() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		id := c.Param("id")
+		if id == "" {
+			return errorx.NewError("id is empty", errorx.BadRequest)
+		}
+		e, err := h.service.Hire(c.Request().Context(), id)
+		if err != nil {
+			return err
+		}
+		return c.JSON(http.StatusOK, models.EmployeeToHttp(e))
+	}
+}

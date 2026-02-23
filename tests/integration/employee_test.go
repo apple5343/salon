@@ -12,6 +12,11 @@ import (
 	"github.com/stretchr/testify/suite"
 )
 
+const (
+	EmployeeSatausActive   = "active"
+	EmployeeSatausInactive = "inactive"
+)
+
 type EmployeeSuite struct {
 	suite.Suite
 	base            *BaseTestSuite
@@ -48,10 +53,14 @@ func (s *EmployeeSuite) TestUpdate() {
 }
 
 func (s *EmployeeSuite) TestAuth() {
+	s.T().Run("hire", s.Hire)
 	s.T().Run("login", s.Login)
+	s.T().Run("update", s.Update)
+	s.T().Run("login after update password", s.GetByID)
 	s.T().Run("get refresh token", s.GetRefreshToken)
 	s.T().Run("get access token", s.GetAccessToken)
 	s.T().Run("get profile", s.Profile)
+	s.T().Run("register", s.Register)
 	s.T().Run("invalid", s.AuthInvalid)
 }
 
@@ -59,6 +68,84 @@ func (s *EmployeeSuite) TestRegister() {
 	s.T().Run("register", s.Register)
 	s.T().Run("invalid", s.RegisterInvalidData)
 	s.T().Run("forbidden", s.RegisterForbidden)
+}
+
+func (s *EmployeeSuite) TestHire() {
+	s.T().Run("hire", s.Hire)
+	s.T().Run("invalid", s.HireInvalid)
+	s.T().Run("forbidden", s.HireForbidden)
+}
+
+func (s *EmployeeSuite) Hire(t *testing.T) {
+	for id := range s.employees {
+		if s.employees[id].Status == EmployeeSatausActive {
+			continue
+		}
+
+		e, code, err := s.base.client.HireEmployee(s.base.ctx, s.adminToken.AccessToken, id)
+		require.NoError(t, err)
+		require.Equal(t, http.StatusOK, code)
+		s.employees[id] = e
+	}
+}
+
+func (s *EmployeeSuite) HireInvalid(t *testing.T) {
+	t.Run("invalid id", func(t *testing.T) {
+		_, code, err := s.base.client.HireEmployee(s.base.ctx, s.adminToken.AccessToken, "invalid")
+		require.NoError(t, err)
+		require.Equal(t, http.StatusBadRequest, code)
+	})
+
+	t.Run("not existing", func(t *testing.T) {
+		_, code, err := s.base.client.HireEmployee(s.base.ctx, s.adminToken.AccessToken, gofakeit.UUID())
+		require.NoError(t, err)
+		require.Equal(t, http.StatusBadRequest, code)
+	})
+
+	t.Run("already hired", func(t *testing.T) {
+		found := false
+		for id := range s.employees {
+			if s.employees[id].Status == EmployeeSatausInactive {
+				continue
+			}
+
+			_, code, err := s.base.client.HireEmployee(s.base.ctx, s.adminToken.AccessToken, id)
+			require.NoError(t, err)
+			require.Equal(t, http.StatusBadRequest, code)
+			found = true
+			break
+		}
+		require.True(t, found, "Can't find active employee")
+	})
+}
+
+func (s *EmployeeSuite) HireForbidden(t *testing.T) {
+	var token *models.EmployeeToken
+	for id := range s.employees {
+		tk, code, err := s.base.client.LoginEmployee(s.base.ctx, s.employeesCreds[id].Email, s.employeesCreds[id].Password)
+		require.NoError(t, err)
+		require.Equal(t, http.StatusOK, code)
+		token = tk
+	}
+
+	require.NotNil(t, token)
+	t.Run("manager hire employee", func(t *testing.T) {
+		_, code, err := s.base.client.HireEmployee(s.base.ctx, token.AccessToken, gofakeit.UUID())
+		require.NoError(t, err)
+		require.Equal(t, http.StatusForbidden, code)
+	})
+
+	t.Run("hire without token", func(t *testing.T) {
+		_, code, err := s.base.client.HireEmployee(s.base.ctx, "", gofakeit.UUID())
+		require.NoError(t, err)
+		require.Equal(t, http.StatusUnauthorized, code)
+	})
+
+	t.Run("hire with invalid token", func(t *testing.T) {
+		_, code, err := s.base.client.HireEmployee(s.base.ctx, "invalid", gofakeit.UUID())
+		require.NoError(t, err)
+		require.Equal(t, http.StatusUnauthorized, code)
+	})
 }
 
 func (s *EmployeeSuite) Register(t *testing.T) {
@@ -452,6 +539,20 @@ func (s *EmployeeSuite) AuthInvalid(t *testing.T) {
 			require.NoError(t, err)
 			require.Equal(t, http.StatusUnauthorized, code)
 		}
+	})
+
+	t.Run("login inactive employee", func(t *testing.T) {
+		count := 0
+		for id := range s.employees {
+			if s.employees[id].Status == EmployeeSatausActive {
+				continue
+			}
+			count++
+			_, code, err := s.base.client.LoginEmployee(s.base.ctx, s.employeesCreds[id].Email, s.employeesCreds[id].Password)
+			require.NoError(t, err)
+			require.Equal(t, http.StatusUnauthorized, code)
+		}
+		require.Greater(t, count, 0, "Count of inactive employees must be greater than 0")
 	})
 
 	t.Run("get refresh token without token", func(t *testing.T) {
