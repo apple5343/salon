@@ -14,6 +14,8 @@ const (
 
 	ModelCreated EventType = "model_created"
 
+	SupplierCreated EventType = "supplier_created"
+
 	CarCreated EventType = "car_created"
 	CarUpdated EventType = "car_updated"
 
@@ -77,6 +79,8 @@ func (s *Simulation) handleEvent(e *Event, t time.Time) {
 		s.ProcessBrandCreatedEvent(e, t)
 	case ModelCreated:
 		s.ProcessModelCreatedEvent(e, t)
+	case SupplierCreated:
+		s.ProcessSupplierCreatedEvent(e, t)
 	case CarCreated:
 		s.ProcessCarCreatedEvent(e, t)
 	case CarUpdated:

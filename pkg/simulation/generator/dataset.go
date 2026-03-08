@@ -39,3 +39,19 @@ func (g *Generator) LoadModelsDataset() error {
 	}
 	return nil
 }
+
+func (g *Generator) LoadSuppliersDataset() error {
+	data, err := os.ReadFile("datasets/suppliers.json") //TODO parse path from env
+	if err != nil {
+		return err
+	}
+	var suppliers []*repo.Supplier
+	err = json.Unmarshal(data, &suppliers)
+	if err != nil {
+		return err
+	}
+	for _, supplier := range suppliers {
+		g.supplierStorage.AddAvailable(supplier.ID, repo.SupplierToService(supplier))
+	}
+	return nil
+}

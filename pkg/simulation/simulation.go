@@ -32,12 +32,15 @@ type Simulation struct {
 	brandService    service.BrandService
 	carService      service.CarService
 	employeeService service.EmployeeService
+	supplierService service.SupplierService
 
 	generator *generator.Generator
 	clock     clock.MockClock
 }
 
-func NewSimulation(carService service.CarService, modelService service.ModelService, brandService service.BrandService, employeeService service.EmployeeService, clock clock.MockClock, cfg *Config) *Simulation {
+func NewSimulation(carService service.CarService, modelService service.ModelService,
+	brandService service.BrandService, employeeService service.EmployeeService,
+	supplierService service.SupplierService, clock clock.MockClock, cfg *Config) *Simulation {
 	return &Simulation{
 		cfg:             cfg,
 		eventNodeQueue:  make(map[string][]*EventNode),
@@ -50,6 +53,7 @@ func NewSimulation(carService service.CarService, modelService service.ModelServ
 		employeeService: employeeService,
 		brandService:    brandService,
 		modelService:    modelService,
+		supplierService: supplierService,
 		generator:       generator.NewGenerator(),
 		clock:           clock,
 	}
@@ -62,7 +66,9 @@ func (s *Simulation) Run() {
 		s.ProcessDay()
 		s.currendDay = s.currendDay.AddDate(0, 0, 1)
 	}
-	println("Employees total: ", len(s.employees), " Admins total: ", len(s.admins), " Cars total: ", len(s.cars), " Brands total: ", s.generator.CreatedBrandsCount(), " Models total: ", s.generator.CreatedModelsCount())
+	println("Employees total: ", len(s.employees), " Admins total: ", len(s.admins), " Cars total: ", len(s.cars),
+		" Brands total: ", s.generator.CreatedBrandsCount(), " Models total: ", s.generator.CreatedModelsCount(),
+		" Suppliers total: ", s.generator.CreatedSuppliersCount())
 }
 
 func (s *Simulation) ProcessDay() {
@@ -143,12 +149,18 @@ func (s *Simulation) PlanDay() {
 	for i := 0; i < newModels; i++ {
 		s.CreateModel()
 	}
+	newSuppliers := Poisson(0.04)
+	for i := 0; i < newSuppliers; i++ {
+		s.CreateSupplier()
+	}
 }
 
 func (s *Simulation) RandomDayTime() time.Time {
 	hour := 8 + rand.IntN(12)
 	minute := rand.IntN(60)
-	return s.currendDay.Add(time.Duration(hour)*time.Hour + time.Duration(minute)*time.Minute)
+	seconds := rand.IntN(60)
+	milliseconds := rand.IntN(1000)
+	return s.currendDay.Add(time.Duration(hour)*time.Hour + time.Duration(minute)*time.Minute + time.Duration(seconds)*time.Second + time.Duration(milliseconds)*time.Millisecond)
 }
 
 func (s *Simulation) RandomDurationMinutes(minMinutes int, maxMinutes int) time.Duration {
