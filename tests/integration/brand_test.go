@@ -217,6 +217,14 @@ func (s *BrandSuite) UpdateInvalid(t *testing.T) {
 		s.Require().NoError(err)
 		s.Require().Equal(http.StatusBadRequest, code)
 	})
+
+	t.Run("invalid id", func(t *testing.T) {
+		b := models.GenerateBrand()
+		b.ID = gofakeit.Word()
+		_, code, err := s.base.client.UpdateBrand(s.base.ctx, s.adminToken.AccessToken, b)
+		s.Require().NoError(err)
+		s.Require().Equal(http.StatusBadRequest, code)
+	})
 }
 
 func (s *BrandSuite) UpdateForbidden(t *testing.T) {

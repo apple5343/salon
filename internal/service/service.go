@@ -49,6 +49,7 @@ type BrandService interface {
 	GetBrands(ctx context.Context, filters *models.BrandFilters) ([]*models.Brand, error)
 	Create(ctx context.Context, b *models.Brand) (*models.Brand, error)
 	Update(ctx context.Context, b *models.Brand) (*models.Brand, error)
+	Delete(ctx context.Context, id string) error
 }
 
 type ModelService interface {

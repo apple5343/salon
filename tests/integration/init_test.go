@@ -5,13 +5,15 @@ import (
 	"database/sql"
 	"flag"
 	"fmt"
-	"io"
 	"os"
 	"salon/tests/integration/httpclient"
 	"salon/tests/integration/models"
 	"testing"
 	"time"
 
+	dockercontainer "github.com/docker/docker/api/types/container"
+	"github.com/docker/docker/client"
+	"github.com/docker/docker/pkg/stdcopy"
 	"github.com/ilyakaznacheev/cleanenv"
 	_ "github.com/lib/pq"
 	"github.com/stretchr/testify/suite"
@@ -57,27 +59,61 @@ func TestBaseSuite(t *testing.T) {
 }
 
 func (s *BaseTestSuite) TestClient() {
-	t := &ClientSuite{base: s}
-	suite.Run(s.T(), t)
-	s.SaveAppLogs("client")
+	s.RunGroupWithLogs("client", func() {
+		t := &ClientSuite{base: s}
+		suite.Run(s.T(), t)
+	})
 }
 
 func (s *BaseTestSuite) TestEmployee() {
-	t := &EmployeeSuite{base: s}
-	suite.Run(s.T(), t)
-	s.SaveAppLogs("employee")
+	s.RunGroupWithLogs("employee", func() {
+		t := &EmployeeSuite{base: s}
+		suite.Run(s.T(), t)
+	})
 }
 
 func (s *BaseTestSuite) TestSupplier() {
-	t := &SupplierSuite{base: s}
-	suite.Run(s.T(), t)
-	s.SaveAppLogs("supplier")
+	s.RunGroupWithLogs("supplier", func() {
+		t := &SupplierSuite{base: s}
+		suite.Run(s.T(), t)
+	})
 }
 
 func (s *BaseTestSuite) TestBrand() {
-	t := &BrandSuite{base: s}
-	suite.Run(s.T(), t)
-	s.SaveAppLogs("brand")
+	s.RunGroupWithLogs("brand", func() {
+		t := &BrandSuite{base: s}
+		suite.Run(s.T(), t)
+	})
+}
+
+func (s *BaseTestSuite) TestModel() {
+	s.RunGroupWithLogs("model", func() {
+		t := &ModelSuite{base: s}
+		suite.Run(s.T(), t)
+	})
+}
+
+func (suite *BaseTestSuite) RunGroupWithLogs(testGroup string, run func()) {
+	suite.MustRestartApp()
+	since := time.Now()
+
+	run()
+
+	suite.SaveAppLogs(testGroup, since)
+}
+
+func (suite *BaseTestSuite) MustRestartApp() {
+	c, err := suite.compose.ServiceContainer(suite.ctx, "app-test")
+	suite.Require().NoError(err)
+
+	err = c.Stop(suite.ctx, nil)
+	suite.Require().NoError(err)
+
+	err = c.Start(suite.ctx)
+	suite.Require().NoError(err)
+
+	err = wait.NewHealthStrategy().WaitUntilReady(suite.ctx, c)
+	suite.Require().NoError(err)
 }
 
 func (suite *BaseTestSuite) SetupSuite() {
@@ -167,16 +203,26 @@ func (suite *BaseTestSuite) GetEnv() map[string]string {
 	}
 }
 
-func (suite *BaseTestSuite) SaveAppLogs(testGroup string) {
+func (suite *BaseTestSuite) SaveAppLogs(testGroup string, since time.Time) {
 	logFile, err := os.Create(fmt.Sprintf("logs/%s.txt", testGroup))
 	suite.Require().NoError(err)
 	defer logFile.Close()
-	container, err := suite.compose.ServiceContainer(suite.ctx, "app-test")
+
+	c, err := suite.compose.ServiceContainer(suite.ctx, "app-test")
 	suite.Require().NoError(err)
 
-	reader, err := container.Logs(suite.ctx)
+	cli, err := client.NewClientWithOpts(client.FromEnv, client.WithAPIVersionNegotiation())
 	suite.Require().NoError(err)
+	defer cli.Close()
 
-	_, err = io.Copy(logFile, reader)
+	reader, err := cli.ContainerLogs(suite.ctx, c.GetContainerID(), dockercontainer.LogsOptions{
+		ShowStdout: true,
+		ShowStderr: true,
+		Since:      fmt.Sprintf("%d.%09d", since.Unix(), int64(since.Nanosecond())),
+	})
+	suite.Require().NoError(err)
+	defer reader.Close()
+
+	_, err = stdcopy.StdCopy(logFile, logFile, reader)
 	suite.Require().NoError(err)
 }

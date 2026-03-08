@@ -8,9 +8,13 @@ import (
 	repo "salon/internal/repository/errors"
 
 	"github.com/apple5343/errorx"
+	"github.com/docker/distribution/uuid"
 )
 
 func (s *modelService) getModelByID(ctx context.Context, id string) (*models.Model, error) {
+	if _, err := uuid.Parse(id); err != nil {
+		return nil, ErrInvalidID
+	}
 	//TODO кеширование
 	m, err := s.repo.GetByID(ctx, id)
 	if err != nil {

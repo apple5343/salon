@@ -20,7 +20,7 @@ var BodyTypeMap = map[string]models.BodyType{
 }
 
 var TransmissionTypeMap = map[string]models.TransmissionType{
-	"auto":         models.TransmissionTypeAutomatic,
+	"automatic":         models.TransmissionTypeAutomatic,
 	"manual":       models.TransmissionTypeManual,
 	"cvt":          models.TransmissionTypeCVT,
 	"dct":          models.TransmissionTypeDCT,

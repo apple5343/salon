@@ -40,6 +40,7 @@ type BrandRepository interface {
 	GetBrandsByFilter(ctx context.Context, filter *models.BrandFilters) ([]*models.Brand, error)
 	Create(ctx context.Context, b *models.Brand) (*models.Brand, error)
 	Update(ctx context.Context, b *models.Brand) (*models.Brand, error)
+	Delete(ctx context.Context, id string) error
 }
 
 type ModelRepository interface {
@@ -62,6 +63,7 @@ type SupplierRepository interface {
 	GetSuppliersByFilter(ctx context.Context, filter *models.SupplierFilters) ([]*models.Supplier, error)
 	Create(ctx context.Context, s *models.Supplier) (*models.Supplier, error)
 	Update(ctx context.Context, s *models.Supplier) (*models.Supplier, error)
+	Delete(ctx context.Context, id string) error
 }
 
 type EventRepository interface {

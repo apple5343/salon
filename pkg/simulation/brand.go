@@ -32,7 +32,7 @@ func (s *Simulation) ProcessBrandCreatedEvent(e *Event, t time.Time) {
 		log.Println("create brand: " + err.Error())
 		return
 	}
-	err = s.generator.BrandCreated(b.ID, brand.ID)
+	err = s.generator.BrandCreated(b.ID, brand)
 	if err != nil {
 		log.Println("create brand: " + err.Error())
 		return

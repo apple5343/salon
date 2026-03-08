@@ -4,6 +4,8 @@ import (
 	"errors"
 	"salon/pkg/clock"
 	"time"
+
+	"github.com/google/uuid"
 )
 
 type BodyType string
@@ -60,10 +62,10 @@ type Model struct {
 	BodyType               BodyType         `validate:"required"`
 	TransmissionType       TransmissionType `validate:"required"`
 	FuelType               FuelType         `validate:"required"`
-	EngineDisplacement     int              `validate:"required"`
-	PowerHP                int              `validate:"required"`
+	EngineDisplacement     int              `validate:"min=0"`
+	PowerHP                int              `validate:"min=0"`
 	DriveType              DriveType        `validate:"required"`
-	BasePrice              int              `validate:"required"`
+	BasePrice              int              `validate:"min=0"`
 	TechnicCharacteristics map[string]interface{}
 	CreatedAt              time.Time
 	UpdatedAt              time.Time
@@ -72,6 +74,9 @@ type Model struct {
 func (m *Model) BeforeCreate(c clock.Clock) error {
 	if err := m.Validate(); err != nil {
 		return err
+	}
+	if _, err := uuid.Parse(m.BrandID); err != nil {
+		return ErrInvalidID
 	}
 	now := c.Now()
 	m.CreatedAt = now
@@ -82,6 +87,12 @@ func (m *Model) BeforeCreate(c clock.Clock) error {
 func (m *Model) BeforeUpdate(c clock.Clock) error {
 	if err := m.Validate(); err != nil {
 		return err
+	}
+	if _, err := uuid.Parse(m.ID); err != nil {
+		return ErrInvalidID
+	}
+	if _, err := uuid.Parse(m.BrandID); err != nil {
+		return ErrInvalidID
 	}
 	m.UpdatedAt = c.Now()
 	return nil

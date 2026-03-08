@@ -29,7 +29,12 @@ func (s *Simulation) ProcessModelCreatedEvent(e *Event, t time.Time) {
 	}
 	ctx := ctxutil.ContextWithUserID(context.TODO(), adminID)
 	ctx = ctxutil.ContextWithUserRole(ctx, string(models.EmployeeRoleAdmin))
-	_, _, err = s.modelService.Create(ctx, &model)
+	m, _, err := s.modelService.Create(ctx, &model)
+	if err != nil {
+		log.Println("create model: " + err.Error())
+		return
+	}
+	err = s.generator.ModelCreated(model.ID, m)
 	if err != nil {
 		log.Println("create model: " + err.Error())
 		return

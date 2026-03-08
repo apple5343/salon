@@ -17,7 +17,7 @@ func (g *Generator) LoadBrandsDataset() error {
 		return err
 	}
 	for _, brand := range brands {
-		g.brandsAvailable[brand.ID] = repo.BrandToService(brand)
+		g.brandStorage.AddAvailable(brand.ID, repo.BrandToService(brand))
 	}
 	return nil
 }
@@ -33,7 +33,9 @@ func (g *Generator) LoadModelsDataset() error {
 		return err
 	}
 	for _, model := range models {
-		g.modelsByBrand[model.BrandID] = append(g.modelsByBrand[model.BrandID], repo.ModelToService(model))
+		m := repo.ModelToService(model)
+		g.modelStorage.AddPending(model.ID, m)
+		g.modelsByBrand[model.BrandID] = append(g.modelsByBrand[model.BrandID], m)
 	}
 	return nil
 }

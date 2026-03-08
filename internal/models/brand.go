@@ -3,6 +3,8 @@ package models
 import (
 	"salon/pkg/clock"
 	"time"
+
+	"github.com/google/uuid"
 )
 
 type Brand struct {
@@ -27,6 +29,9 @@ func (b *Brand) BeforeCreate(c clock.Clock) error {
 func (b *Brand) BeforeUpdate(c clock.Clock) error {
 	if err := b.Validate(); err != nil {
 		return err
+	}
+	if _, err := uuid.Parse(b.ID); err != nil {
+		return ErrInvalidID
 	}
 	b.UpdatedAt = c.Now()
 	return nil

@@ -62,7 +62,7 @@ func (s *Simulation) Run() {
 		s.ProcessDay()
 		s.currendDay = s.currendDay.AddDate(0, 0, 1)
 	}
-	println("Employees total: ", len(s.employees), " Admins total: ", len(s.admins), " Cars total: ", len(s.cars))
+	println("Employees total: ", len(s.employees), " Admins total: ", len(s.admins), " Cars total: ", len(s.cars), " Brands total: ", s.generator.CreatedBrandsCount(), " Models total: ", s.generator.CreatedModelsCount())
 }
 
 func (s *Simulation) ProcessDay() {

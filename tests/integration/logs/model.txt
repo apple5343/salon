@@ -1,0 +1,38 @@
+{"level":"error","ts":1772983915.7951121,"caller":"logger/logger.go:62","msg":"create model: Key: 'Model.Name' Error:Field validation for 'Name' failed on the 'required' tag"}
+{"level":"error","ts":1772983915.7969527,"caller":"logger/logger.go:62","msg":"create model: invalid id"}
+{"level":"error","ts":1772983915.799844,"caller":"logger/logger.go:62","msg":"foreign key, entity not found"}
+{"level":"error","ts":1772983915.8013475,"caller":"logger/logger.go:62","msg":"create model: Key: 'Model.BrandID' Error:Field validation for 'BrandID' failed on the 'required' tag"}
+{"level":"error","ts":1772983915.802509,"caller":"logger/logger.go:62","msg":"create model: Key: 'Model.Generation' Error:Field validation for 'Generation' failed on the 'required' tag"}
+{"level":"error","ts":1772983915.8036027,"caller":"logger/logger.go:62","msg":"invalid body type"}
+{"level":"error","ts":1772983915.8044677,"caller":"logger/logger.go:62","msg":"invalid transmission type"}
+{"level":"error","ts":1772983915.8055444,"caller":"logger/logger.go:62","msg":"create model: Key: 'Model.Name' Error:Field validation for 'Name' failed on the 'required' tag"}
+{"level":"error","ts":1772983915.8066747,"caller":"logger/logger.go:62","msg":"create model: Key: 'Model.EngineDisplacement' Error:Field validation for 'EngineDisplacement' failed on the 'min' tag"}
+{"level":"error","ts":1772983915.8076074,"caller":"logger/logger.go:62","msg":"create model: Key: 'Model.PowerHP' Error:Field validation for 'PowerHP' failed on the 'min' tag"}
+{"level":"error","ts":1772983915.8087795,"caller":"logger/logger.go:62","msg":"invalid drive type"}
+{"level":"error","ts":1772983915.8097506,"caller":"logger/logger.go:62","msg":"create model: Key: 'Model.BasePrice' Error:Field validation for 'BasePrice' failed on the 'min' tag"}
+{"level":"error","ts":1772983915.8107007,"caller":"logger/logger.go:62","msg":"invalid body type"}
+{"level":"error","ts":1772983915.8117354,"caller":"logger/logger.go:62","msg":"invalid transmission type"}
+{"level":"error","ts":1772983915.8130696,"caller":"logger/logger.go:62","msg":"invalid fuel type"}
+{"level":"error","ts":1772983915.814279,"caller":"logger/logger.go:62","msg":"invalid drive type"}
+{"level":"error","ts":1772983915.815353,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1772983915.8163838,"caller":"logger/logger.go:62","msg":"invalid token"}
+{"level":"error","ts":1772983915.8376667,"caller":"logger/logger.go:62","msg":"invalid id"}
+{"level":"error","ts":1772983915.8396604,"caller":"logger/logger.go:62","msg":"model not found"}
+{"level":"error","ts":1772983915.8891687,"caller":"logger/logger.go:62","msg":"update model: invalid id"}
+{"level":"error","ts":1772983915.8913105,"caller":"logger/logger.go:62","msg":"model not found"}
+{"level":"error","ts":1772983915.8925784,"caller":"logger/logger.go:62","msg":"update model: invalid id"}
+{"level":"error","ts":1772983915.8943725,"caller":"logger/logger.go:62","msg":"foreign key, entity not found"}
+{"level":"error","ts":1772983915.8954682,"caller":"logger/logger.go:62","msg":"update model: Key: 'Model.Name' Error:Field validation for 'Name' failed on the 'required' tag"}
+{"level":"error","ts":1772983915.8965228,"caller":"logger/logger.go:62","msg":"update model: Key: 'Model.Generation' Error:Field validation for 'Generation' failed on the 'required' tag"}
+{"level":"error","ts":1772983915.897605,"caller":"logger/logger.go:62","msg":"invalid body type"}
+{"level":"error","ts":1772983915.8988943,"caller":"logger/logger.go:62","msg":"invalid transmission type"}
+{"level":"error","ts":1772983915.9001331,"caller":"logger/logger.go:62","msg":"invalid fuel type"}
+{"level":"error","ts":1772983915.9014897,"caller":"logger/logger.go:62","msg":"invalid drive type"}
+{"level":"error","ts":1772983915.9028041,"caller":"logger/logger.go:62","msg":"update model: Key: 'Model.EngineDisplacement' Error:Field validation for 'EngineDisplacement' failed on the 'min' tag"}
+{"level":"error","ts":1772983915.9041321,"caller":"logger/logger.go:62","msg":"update model: Key: 'Model.PowerHP' Error:Field validation for 'PowerHP' failed on the 'min' tag"}
+{"level":"error","ts":1772983915.9054422,"caller":"logger/logger.go:62","msg":"update model: Key: 'Model.BasePrice' Error:Field validation for 'BasePrice' failed on the 'min' tag"}
+{"level":"error","ts":1772983915.90669,"caller":"logger/logger.go:62","msg":"update model: Key: 'Model.BrandID' Error:Field validation for 'BrandID' failed on the 'required' tag"}
+{"level":"error","ts":1772983915.90807,"caller":"logger/logger.go:62","msg":"invalid transmission type"}
+{"level":"error","ts":1772983915.909176,"caller":"logger/logger.go:62","msg":"invalid fuel type"}
+{"level":"error","ts":1772983915.9102674,"caller":"logger/logger.go:62","msg":"invalid drive type"}
+{"level":"error","ts":1772983915.9115396,"caller":"logger/logger.go:62","msg":"invalid body type"}
