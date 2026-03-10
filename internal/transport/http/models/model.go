@@ -20,7 +20,7 @@ var BodyTypeMap = map[string]models.BodyType{
 }
 
 var TransmissionTypeMap = map[string]models.TransmissionType{
-	"automatic":         models.TransmissionTypeAutomatic,
+	"automatic":    models.TransmissionTypeAutomatic,
 	"manual":       models.TransmissionTypeManual,
 	"cvt":          models.TransmissionTypeCVT,
 	"dct":          models.TransmissionTypeDCT,
@@ -48,7 +48,9 @@ var ModelOrderByMap = map[string]models.ModelOrderBy{
 	"name":                models.ModelOrderByName,
 	"base_price":          models.ModelOrderByBasePrice,
 	"engine_displacement": models.ModelOrderByEngineDisplacement,
-	"power_hp":            models.ModelOrderByPowerHP, //TODO add created_at & updated_at
+	"power_hp":            models.ModelOrderByPowerHP,
+	"created_at":          models.ModelOrderByCreatedAt,
+	"updated_at":          models.ModelOrderByUpdatedAt,
 }
 
 type Model struct {

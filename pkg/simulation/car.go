@@ -2,10 +2,11 @@ package simulation
 
 import (
 	"context"
+	"errors"
 	"log"
-	"math/rand/v2"
 	"salon/internal/models"
 	ctxutil "salon/internal/utils/context"
+	"salon/pkg/simulation/generator"
 	"time"
 
 	"github.com/brianvoe/gofakeit"
@@ -27,17 +28,25 @@ func (s *Simulation) ProcessCarCreatedEvent(e *Event, t time.Time) {
 	adminID, ok := s.RandomAdmin()
 	if !ok {
 		log.Println("create car: " + ErrNoAvailableAdmins.Error())
+		return
 	}
 	ctx := ctxutil.ContextWithUserID(context.TODO(), adminID)
 	ctx = ctxutil.ContextWithUserRole(ctx, string(models.EmployeeRoleAdmin))
-	car := s.generator.GenerateCar()
-	// car, _, _, _, err := s.carService.CreateCar(ctx, car)
-	// if err != nil {
-	// 	log.Println("create car: " + err.Error())
-	// 	return
-	// }
-	s.cars[car.ID] = &car
-	s.GenerateCarAvailableFlow(&car, t.AddDate(0, 0, s.RandomInt(7, 20)))
+	car, err := s.generator.GenerateCar()
+	if err != nil {
+		if errors.Is(err, generator.ErrNoItems) {
+			return
+		}
+		log.Println("create car: " + err.Error())
+		return
+	}
+	created, _, _, _, err := s.carService.CreateCar(ctx, &car)
+	if err != nil {
+		log.Println("create car with id " + car.ID + ":" + err.Error())
+		return
+	}
+	s.generator.CarCreated(created)
+	s.GenerateCarAvailableFlow(created, t.AddDate(0, 0, s.RandomInt(7, 20)))
 }
 
 func (s *Simulation) GenerateCarAvailableFlow(car *models.Car, startTime time.Time) {
@@ -79,6 +88,11 @@ func (s *Simulation) GenerateCarAvailableFlow(car *models.Car, startTime time.Ti
 }
 
 func (s *Simulation) ProcessCarUpdateEvent(e *Event, t time.Time) {
+	adminID, ok := s.RandomAdmin()
+	if !ok {
+		log.Println("update car: " + ErrNoAvailableAdmins.Error())
+		return
+	}
 	data, ok := e.Data.(CarUpdateStatusEvent)
 	if !ok {
 		log.Println("invalid event data")
@@ -90,24 +104,27 @@ func (s *Simulation) ProcessCarUpdateEvent(e *Event, t time.Time) {
 	if data.Status == models.CarStatusAvailable {
 		s.availableCars[data.CarID] = true
 	}
-	// ctx := ctxutil.ContextWithUserID(context.TODO(), adminID)
-	// ctx = ctxutil.ContextWithUserRole(ctx, string(models.EmployeeRoleAdmin))
-	// car, ok := s.cars[data.CarID]
-	// if !ok {
-	// 	log.Println("update car: car not found")
-	// 	return
-	// }
-	// car, err := s.carService.UpdateCar(ctx)
-	// s.carService.UpdateCar()
+	car, ok := s.generator.GetCreatedCar(data.CarID)
+	if !ok {
+		log.Println("update car: car not found")
+		return
+	}
+	ctx := ctxutil.ContextWithUserID(context.TODO(), adminID)
+	ctx = ctxutil.ContextWithUserRole(ctx, string(models.EmployeeRoleAdmin))
+	car.Status = data.Status
+	car, _, _, _, err := s.carService.UpdateCar(ctx, car)
+	if err != nil {
+		log.Println("update car: " + err.Error())
+		return
+	}
+	s.generator.CarUpdated(car)
 }
 
-func (s *Simulation) RandomAvailableCar() *models.Car {
-	if len(s.availableCars) == 0 {
-		return nil
+func (s *Simulation) RandomAvailableCar() (*models.Car, bool) {
+	for id, available := range s.availableCars {
+		if available {
+			return s.generator.GetCreatedCar(id)
+		}
 	}
-	keys := make([]string, 0, len(s.availableCars))
-	for k := range s.availableCars {
-		keys = append(keys, k)
-	}
-	return s.cars[keys[rand.IntN(len(keys))]]
+	return nil, false
 }

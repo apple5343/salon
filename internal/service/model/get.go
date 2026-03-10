@@ -50,5 +50,9 @@ func (s *modelService) GetModels(ctx context.Context, filter *models.ModelFilter
 		offset := 0
 		filter.Offset = &offset
 	}
+	if filter.OrderBy == nil {
+		orderBy := models.ModelOrderByCreatedAt
+		filter.OrderBy = &orderBy
+	}
 	return s.repo.GetModelsByFilter(ctx, filter)
 }

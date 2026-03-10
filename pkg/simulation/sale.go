@@ -1,111 +1,181 @@
 package simulation
 
 import (
+	"context"
 	"log"
 	"math/rand/v2"
-	"salon/internal/models"
+	ctxutil "salon/internal/utils/context"
 	"time"
 )
 
-type CreateSaleEvent struct {
-	CarID string
+type SaleCreatedEvent struct {
+	CarID       string
+	ClientID    string
+	EmployeeID  string
+	IsCompleted bool
 }
 
 type SaleCompletedEvent struct {
-	CarID string
+	EmployeeID string
+	SaleID     string
 }
 
 type SaleCanceledEvent struct {
-	CarID string
+	EmployeeID string
+	SaleID     string
 }
 
-func (s *Simulation) GenerateSaleCompletedFlow(car *models.Car, startDay time.Time) {
-	date := startDay
-	var head, node *EventNode
-	addNode := func(event *Event, executionTime time.Duration) {
-		n := &EventNode{e: event, executionTime: executionTime}
-		if head == nil {
-			head = n
-			node = head
-		} else {
-			node.next = n
-			node = node.next
-		}
-	}
-
-	event := &Event{
-		Type: SaleCreated,
-		Data: CreateSaleEvent{
-			CarID: car.ID,
-		},
-		Date: date.Format(timeLayout),
-	}
-	addNode(event, 0)
-
-	event = &Event{
-		Type: SaleCompleted,
-		Data: SaleCompletedEvent{
-			CarID: car.ID,
-		},
-		Date: date.Format(timeLayout),
-	}
-	addNode(event, time.Duration(rand.IntN(30))*time.Minute)
-	s.AddEventNode(head)
+func (s *Simulation) CreateSale() {
+	s.AddEvent(&Event{
+		Type: ClientCreated,
+		Date: s.currendDay.Format(timeLayout),
+	})
 }
 
-func (s *Simulation) GenerateSaleCanceledFlow(car *models.Car, startDay time.Time) {
-	date := startDay
-	var head, node *EventNode
-	addNode := func(event *Event, executionTime time.Duration) {
-		n := &EventNode{e: event, executionTime: executionTime}
-		if head == nil {
-			head = n
-			node = head
-		} else {
-			node.next = n
-			node = node.next
-		}
+func (s *Simulation) ProcessClientCreatedEvent(e *Event, t time.Time) {
+	employeeID, ok := s.RandomEmployee()
+	if !ok {
+		log.Println("create sale: " + ErrNoAvailableEmployees.Error())
+		return
 	}
-
-	event := &Event{
+	car, ok := s.RandomAvailableCar()
+	if !ok {
+		log.Println("create sale: " + ErrNoAvailableCars.Error())
+		return
+	}
+	ctx := ctxutil.ContextWithUserID(context.TODO(), employeeID)
+	ctx = ctxutil.ContextWithUserRole(ctx, string(s.employees[employeeID].Role))
+	client, err := s.clientService.Register(ctx, s.generator.GenerateClient())
+	if err != nil {
+		log.Println("register client: " + err.Error())
+		return
+	}
+	s.clients[client.ID] = client
+	s.availableCars[car.ID] = false
+	saleCreatedTime := t.Add(s.RandomDurationMinutes(15, 120))
+	isCompleted := true
+	if rand.IntN(10) < 3 {
+		isCompleted = false
+	}
+	s.AddEvent(&Event{
 		Type: SaleCreated,
-		Data: CreateSaleEvent{
-			CarID: car.ID,
+		Data: SaleCreatedEvent{
+			CarID:       car.ID,
+			ClientID:    client.ID,
+			EmployeeID:  employeeID,
+			IsCompleted: isCompleted,
 		},
-		Date: date.Format(timeLayout),
-	}
-	addNode(event, 0)
-
-	event = &Event{
-		Type: SaleCancled,
-		Data: SaleCanceledEvent{
-			CarID: car.ID,
-		},
-		Date: date.Format(timeLayout),
-	}
-	addNode(event, time.Duration(rand.IntN(30))*time.Minute)
-	s.AddEventNode(head)
+		Date: t.Format(timeLayout),
+		Time: &saleCreatedTime,
+	})
 }
 
 func (s *Simulation) ProcessSaleCreatedEvent(e *Event, t time.Time) {
-	data, ok := e.Data.(CreateSaleEvent)
+	data, ok := e.Data.(SaleCreatedEvent)
 	if !ok {
 		log.Println("invalid event data")
+		return
 	}
-	delete(s.availableCars, data.CarID)
+	employee, ok := s.employees[data.EmployeeID]
+	if !ok {
+		log.Println("create sale: employee not found")
+		return
+	}
+	ctx := ctxutil.ContextWithUserID(context.TODO(), employee.ID)
+	ctx = ctxutil.ContextWithUserRole(ctx, string(employee.Role))
+	car, ok := s.generator.GetCreatedCar(data.CarID)
+	if !ok {
+		log.Println("create sale: car not found")
+		return
+	}
+	client, ok := s.clients[data.ClientID]
+	if !ok {
+		log.Println("create sale: client not found")
+		return
+	}
+	sale, err := s.saleService.Create(ctx, s.generator.GenerateSale(car, client.ID, employee.ID))
+	if err != nil {
+		log.Println("create sale: " + err.Error())
+		return
+	}
+	s.sales[sale.ID] = sale
+	nextTime := t.Add(s.RandomDurationMinutes(15, 120))
+	if data.IsCompleted {
+		s.AddEvent(&Event{
+			Type: SaleCompleted,
+			Data: SaleCompletedEvent{
+				EmployeeID: data.EmployeeID,
+				SaleID:     sale.ID,
+			},
+			Date: t.Format(timeLayout),
+			Time: &nextTime,
+		})
+	} else {
+		s.AddEvent(&Event{
+			Type: SaleCanceled,
+			Data: SaleCanceledEvent{
+				EmployeeID: data.EmployeeID,
+				SaleID:     sale.ID,
+			},
+			Date: t.Format(timeLayout),
+			Time: &nextTime,
+		})
+	}
 }
 
-func (s *Simulation) ProcessSaleCancledEvent(e *Event, t time.Time) {
+func (s *Simulation) ProcessSaleCanceledEvent(e *Event, t time.Time) {
 	data, ok := e.Data.(SaleCanceledEvent)
 	if !ok {
 		log.Println("invalid event data")
+		return
 	}
-	s.availableCars[data.CarID] = true
+	employee, ok := s.employees[data.EmployeeID]
+	if !ok {
+		log.Println("cancel sale: employee not found")
+		return
+	}
+	sale, ok := s.sales[data.SaleID]
+	if !ok {
+		log.Println("cancel sale: sale not found")
+		return
+	}
+	ctx := ctxutil.ContextWithUserID(context.TODO(), employee.ID)
+	ctx = ctxutil.ContextWithUserRole(ctx, string(employee.Role))
+	if err := s.saleService.Cancel(ctx, data.SaleID); err != nil {
+		log.Println("cancel sale: " + err.Error())
+		return
+	}
+	sale, err := s.saleService.GetByID(ctx, data.SaleID)
+	if err != nil {
+		log.Println("cancel sale: " + err.Error())
+		return
+	}
+	s.availableCars[sale.CarID] = true
+	s.sales[data.SaleID] = sale
 }
 
 func (s *Simulation) ProcessSaleCompletedEvent(e *Event, t time.Time) {
-	_, ok := e.Data.(SaleCompletedEvent)
+	data, ok := e.Data.(SaleCompletedEvent)
 	if !ok {
 		log.Println("invalid event data")
+		return
 	}
+	employee, ok := s.employees[data.EmployeeID]
+	if !ok {
+		log.Println("complete sale: employee not found")
+		return
+	}
+	_, ok = s.sales[data.SaleID]
+	if !ok {
+		log.Println("complete sale: sale not found")
+		return
+	}
+	ctx := ctxutil.ContextWithUserID(context.TODO(), employee.ID)
+	ctx = ctxutil.ContextWithUserRole(ctx, string(employee.Role))
+	sale, err := s.saleService.Complete(ctx, data.SaleID)
+	if err != nil {
+		log.Println("complete sale: " + err.Error())
+		return
+	}
+	s.sales[data.SaleID] = sale
 }

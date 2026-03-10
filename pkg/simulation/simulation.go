@@ -12,26 +12,34 @@ import (
 )
 
 var (
-	ErrNoAvailableAdmins = errors.New("no available admins")
+	ErrNoAvailableAdmins    = errors.New("no available admins")
+	ErrNoAvailableEmployees = errors.New("no available employees")
+	ErrNoAvailableCars      = errors.New("no available cars")
 )
 
 type Simulation struct {
-	cfg              *Config
-	currendDay       time.Time
+	cfg        *Config
+	currendDay time.Time
+
 	activeEmployees  []string
 	activeAdmins     []string
 	availableClients []string
-	availableCars    map[string]bool
-	eventNodeQueue   map[string][]*EventNode
-	eventQueue       map[string][]*Event
-	employees        map[string]*models.Employee
-	admins           map[string]*models.Employee
-	cars             map[string]*models.Car
+
+	availableCars  map[string]bool
+	eventNodeQueue map[string][]*EventNode
+	eventQueue     map[string][]*Event
+
+	employees map[string]*models.Employee
+	clients   map[string]*models.Client
+	admins    map[string]*models.Employee
+	sales     map[string]*models.Sale
 
 	modelService    service.ModelService
 	brandService    service.BrandService
 	carService      service.CarService
 	employeeService service.EmployeeService
+	clientService   service.ClientService
+	saleService     service.SaleService
 	supplierService service.SupplierService
 
 	generator *generator.Generator
@@ -40,20 +48,25 @@ type Simulation struct {
 
 func NewSimulation(carService service.CarService, modelService service.ModelService,
 	brandService service.BrandService, employeeService service.EmployeeService,
-	supplierService service.SupplierService, clock clock.MockClock, cfg *Config) *Simulation {
+	supplierService service.SupplierService, clientService service.ClientService,
+	saleService service.SaleService,
+	clock clock.MockClock, cfg *Config) *Simulation {
 	return &Simulation{
 		cfg:             cfg,
 		eventNodeQueue:  make(map[string][]*EventNode),
 		eventQueue:      make(map[string][]*Event),
 		employees:       make(map[string]*models.Employee),
 		admins:          make(map[string]*models.Employee),
-		cars:            make(map[string]*models.Car),
+		clients:         make(map[string]*models.Client),
+		sales:           make(map[string]*models.Sale),
 		availableCars:   make(map[string]bool),
 		carService:      carService,
 		employeeService: employeeService,
 		brandService:    brandService,
 		modelService:    modelService,
+		clientService:   clientService,
 		supplierService: supplierService,
+		saleService:     saleService,
 		generator:       generator.NewGenerator(),
 		clock:           clock,
 	}
@@ -61,14 +74,69 @@ func NewSimulation(carService service.CarService, modelService service.ModelServ
 
 func (s *Simulation) Run() {
 	s.Init()
-	for i := 0; i < s.cfg.DaysCount; i++ {
+	for i := 0; i < 40; i++ {
 		s.PlanDay()
 		s.ProcessDay()
 		s.currendDay = s.currendDay.AddDate(0, 0, 1)
 	}
-	println("Employees total: ", len(s.employees), " Admins total: ", len(s.admins), " Cars total: ", len(s.cars),
+	println("Employees total: ", len(s.employees), " Admins total: ", len(s.admins), " Cars total: ", s.generator.CreatedCarsCount(),
 		" Brands total: ", s.generator.CreatedBrandsCount(), " Models total: ", s.generator.CreatedModelsCount(),
-		" Suppliers total: ", s.generator.CreatedSuppliersCount())
+		" Suppliers total: ", s.generator.CreatedSuppliersCount(), " Clients total: ", len(s.clients), " Sales total: ", len(s.sales))
+}
+
+func (s *Simulation) Init() {
+	s.currendDay = s.cfg.StartDate
+	for i := 0; i < s.cfg.AdminsCount; i++ {
+		s.CreateAdmin(s.currendDay)
+	}
+	for i := 0; i < s.cfg.EmployeesCount; i++ {
+		s.CreateEmployee()
+	}
+	suppliersCount := s.generator.AvailableSuppliersCount() * s.cfg.SuppliersPercent / 100
+	for i := 0; i < suppliersCount; i++ {
+		s.CreateSupplier()
+	}
+	brandsCount := s.generator.AvailableBrandsCount() * s.cfg.BrandsPercent / 100
+	for i := 0; i < brandsCount; i++ {
+		s.CreateBrand()
+	}
+	modelsCount := s.generator.PendingModelsCount() * s.cfg.ModelsPercent / 100
+	for i := 0; i < modelsCount; i++ {
+		s.CreateModel()
+	}
+	s.ProcessDay()
+	s.currendDay = s.currendDay.AddDate(0, 0, 1)
+}
+
+func (s *Simulation) PlanDay() {
+	//TODO move poisson ratio to config
+	if s.currendDay.Weekday() == time.Saturday || s.currendDay.Weekday() == time.Sunday {
+		return
+	}
+	newEmployees := Poisson(0.01)
+	for i := 0; i < newEmployees; i++ {
+		s.CreateEmployee()
+	}
+	newCars := Poisson(0.3)
+	for i := 0; i < newCars; i++ {
+		s.CreateCar()
+	}
+	newBrands := Poisson(0.07)
+	for i := 0; i < newBrands; i++ {
+		s.CreateBrand()
+	}
+	newModels := Poisson(0.07)
+	for i := 0; i < newModels; i++ {
+		s.CreateModel()
+	}
+	newSuppliers := Poisson(0.04)
+	for i := 0; i < newSuppliers; i++ {
+		s.CreateSupplier()
+	}
+	newSales := Poisson(0.5)
+	for i := 0; i < newSales; i++ {
+		s.CreateSale()
+	}
 }
 
 func (s *Simulation) ProcessDay() {
@@ -115,44 +183,6 @@ func (s *Simulation) ProcessDay() {
 	}
 	delete(s.eventNodeQueue, dateKey)
 	delete(s.eventQueue, dateKey)
-}
-
-func (s *Simulation) Init() {
-	s.currendDay = s.cfg.StartDate
-	for i := 0; i < 3; i++ {
-		s.CreateAdmin(s.currendDay)
-	}
-	for i := 0; i < 5; i++ {
-		s.CreateEmployee()
-	}
-	s.ProcessDay()
-	s.currendDay = s.currendDay.AddDate(0, 0, 1)
-}
-
-func (s *Simulation) PlanDay() {
-	if s.currendDay.Weekday() == time.Saturday || s.currendDay.Weekday() == time.Sunday {
-		return
-	}
-	newEmployees := Poisson(0.01)
-	for i := 0; i < newEmployees; i++ {
-		s.CreateEmployee()
-	}
-	newCars := Poisson(0.01)
-	for i := 0; i < newCars; i++ {
-		s.CreateCar()
-	}
-	newBrands := Poisson(0.07)
-	for i := 0; i < newBrands; i++ {
-		s.CreateBrand()
-	}
-	newModels := Poisson(0.07)
-	for i := 0; i < newModels; i++ {
-		s.CreateModel()
-	}
-	newSuppliers := Poisson(0.04)
-	for i := 0; i < newSuppliers; i++ {
-		s.CreateSupplier()
-	}
 }
 
 func (s *Simulation) RandomDayTime() time.Time {

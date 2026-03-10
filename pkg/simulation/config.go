@@ -10,6 +10,12 @@ import (
 type Config struct {
 	StartDate time.Time `env:"SIMULATION_START_DATE" env-default:"2022-01-01" env-layout:"2006-01-02"`
 	DaysCount int       `env:"SIMULATION_DAYS_COUNT" env-default:"365"`
+
+	BrandsPercent    int `env:"SIMULATION_BRANDS_PERCENT" env-default:"50"`
+	ModelsPercent    int `env:"SIMULATION_MODELS_PERCENT" env-default:"50"`
+	SuppliersPercent int `env:"SIMULATION_SUPPLIERS_PERCENT" env-default:"50"`
+	AdminsCount      int `env:"SIMULATION_ADMINS_COUNT" env-default:"3"`
+	EmployeesCount   int `env:"SIMULATION_EMPLOYEES_COUNT" env-default:"5"`
 }
 
 func NewConfig() (*Config, error) {

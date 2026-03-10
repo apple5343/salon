@@ -39,6 +39,12 @@ func (r *modelRepository) GetModelsByFilter(ctx context.Context, filter *service
 	if filter.BodyType != nil {
 		addCondition("m.body_type =", *filter.BodyType)
 	}
+	if filter.TransmissionType != nil {
+		addCondition("m.transmission_type =", *filter.TransmissionType)
+	}
+	if filter.FuelType != nil {
+		addCondition("m.fuel_type =", *filter.FuelType)
+	}
 	if filter.DriveType != nil {
 		addCondition("m.drive_type =", *filter.DriveType)
 	}
@@ -75,6 +81,8 @@ func (r *modelRepository) GetModelsByFilter(ctx context.Context, filter *service
 			service.ModelOrderByEngineDisplacement: "m.engine_displacement",
 			service.ModelOrderByPowerHP:            "m.power_hp",
 			service.ModelOrderByName:               "m.name",
+			service.ModelOrderByCreatedAt:          "m.created_at",
+			service.ModelOrderByUpdatedAt:          "m.updated_at",
 		}
 		direction := "ASC"
 		if filter.OrderDirection != nil && *filter.OrderDirection == service.OrderDirectionDESC {

@@ -56,7 +56,7 @@ const (
 
 type Model struct {
 	ID                     string
-	BrandID                string           `validate:"required"`
+	BrandID                string           `validate:"required,uuid"`
 	Name                   string           `validate:"required"`
 	Generation             string           `validate:"required"`
 	BodyType               BodyType         `validate:"required"`
@@ -75,9 +75,6 @@ func (m *Model) BeforeCreate(c clock.Clock) error {
 	if err := m.Validate(); err != nil {
 		return err
 	}
-	if _, err := uuid.Parse(m.BrandID); err != nil {
-		return ErrInvalidID
-	}
 	now := c.Now()
 	m.CreatedAt = now
 	m.UpdatedAt = now
@@ -89,9 +86,6 @@ func (m *Model) BeforeUpdate(c clock.Clock) error {
 		return err
 	}
 	if _, err := uuid.Parse(m.ID); err != nil {
-		return ErrInvalidID
-	}
-	if _, err := uuid.Parse(m.BrandID); err != nil {
 		return ErrInvalidID
 	}
 	m.UpdatedAt = c.Now()
@@ -116,10 +110,12 @@ type ModelShort struct {
 type ModelOrderBy string
 
 const (
-	ModelOrderByEngineDisplacement = "engine_displacement"
-	ModelOrderByPowerHP            = "power_hp"
-	ModelOrderByBasePrice          = "base_price"
-	ModelOrderByName               = "name"
+	ModelOrderByEngineDisplacement ModelOrderBy = "engine_displacement"
+	ModelOrderByPowerHP            ModelOrderBy = "power_hp"
+	ModelOrderByBasePrice          ModelOrderBy = "base_price"
+	ModelOrderByName               ModelOrderBy = "name"
+	ModelOrderByCreatedAt          ModelOrderBy = "created_at"
+	ModelOrderByUpdatedAt          ModelOrderBy = "updated_at"
 )
 
 type ModelFilters struct {

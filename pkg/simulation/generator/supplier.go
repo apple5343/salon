@@ -11,6 +11,15 @@ func (g *Generator) GenerateSupplier() (models.Supplier, error) {
 }
 
 func (g *Generator) SupplierCreated(id string, serviceSupplier *models.Supplier) error {
+	for _, carID := range g.carsBySupplier[id] {
+		state, ok := g.carStates[carID]
+		if !ok {
+			continue
+		}
+		state.supplierServiceID = serviceSupplier.ID
+		g.carStates[carID] = state
+		g.checkCarState(carID)
+	}
 	return g.supplierStorage.MoveToCreated(id, serviceSupplier.ID, serviceSupplier)
 }
 

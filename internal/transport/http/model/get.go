@@ -94,6 +94,20 @@ func modelFiltersFromRequest(c echo.Context) (*service.ModelFilters, error) {
 		}
 		filter.MaxEngineDisplacement = &maxEngineDisplacementInt
 	}
+	if minPower := c.QueryParam("min_power"); minPower != "" {
+		minPowerInt, err := strconv.Atoi(minPower)
+		if err != nil {
+			return nil, errorx.NewError(err.Error(), errorx.BadRequest)
+		}
+		filter.MinPowerHP = &minPowerInt
+	}
+	if maxPower := c.QueryParam("max_power"); maxPower != "" {
+		maxPowerInt, err := strconv.Atoi(maxPower)
+		if err != nil {
+			return nil, errorx.NewError(err.Error(), errorx.BadRequest)
+		}
+		filter.MaxPowerHP = &maxPowerInt
+	}
 	if driveType := c.QueryParam("drive_type"); driveType != "" {
 		d, ok := models.DriveTypeMap[driveType]
 		if !ok {

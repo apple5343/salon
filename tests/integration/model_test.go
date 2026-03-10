@@ -3,6 +3,7 @@ package integration
 import (
 	"fmt"
 	"net/http"
+	serviceModels "salon/internal/models"
 	httpModels "salon/internal/transport/http/models"
 	"salon/tests/integration/models"
 	"testing"
@@ -82,6 +83,7 @@ func (s *ModelSuite) TestGet() {
 func (s *ModelSuite) TestUpdate() {
 	s.T().Run("update", s.Update)
 	s.T().Run("invalid", s.UpdateInvalid)
+	s.T().Run("forbidden", s.UpdateForbidden)
 }
 
 func (s *ModelSuite) Create(t *testing.T) {
@@ -236,6 +238,12 @@ func (s *ModelSuite) CreateForbidden(t *testing.T) {
 		_, code, err := s.base.client.CreateModel(s.base.ctx, gofakeit.Word(), models.GenerateModel(s.RandomBrandId()))
 		require.NoError(t, err)
 		require.Equal(t, http.StatusUnauthorized, code)
+	})
+
+	t.Run("with manager token", func(t *testing.T) {
+		_, code, err := s.base.client.CreateModel(s.base.ctx, s.managerToken.AccessToken, models.GenerateModel(s.RandomBrandId()))
+		require.NoError(t, err)
+		require.Equal(t, http.StatusForbidden, code)
 	})
 }
 
@@ -462,4 +470,63 @@ func (s *ModelSuite) UpdateInvalid(t *testing.T) {
 			require.Equal(t, http.StatusBadRequest, code)
 		})
 	}
+}
+
+func (s *ModelSuite) UpdateForbidden(t *testing.T) {
+	t.Run("without token", func(t *testing.T) {
+		model := s.RandomModel()
+		_, code, err := s.base.client.UpdateModel(s.base.ctx, "", model)
+		require.NoError(t, err)
+		require.Equal(t, http.StatusUnauthorized, code)
+	})
+
+	t.Run("with invalid token", func(t *testing.T) {
+		model := s.RandomModel()
+		_, code, err := s.base.client.UpdateModel(s.base.ctx, gofakeit.Word(), model)
+		require.NoError(t, err)
+		require.Equal(t, http.StatusUnauthorized, code)
+	})
+
+	t.Run("with manager token", func(t *testing.T) {
+		model := s.RandomModel()
+		_, code, err := s.base.client.UpdateModel(s.base.ctx, s.managerToken.AccessToken, model)
+		require.NoError(t, err)
+		require.Equal(t, http.StatusForbidden, code)
+	})
+}
+
+func (s *ModelSuite) CheckList(t *testing.T, token string, filter *serviceModels.ModelFilters, expected []string) (map[string]*httpModels.ModelShort, []string) {
+	all := make(map[string]*httpModels.ModelShort)
+	sorted := []string{}
+	for true {
+		models, code, err := s.base.client.GetModels(s.base.ctx, token, filter)
+		require.NoError(t, err)
+		require.Equal(t, http.StatusOK, code)
+		require.LessOrEqual(t, len(models), *filter.Limit)
+		for _, model := range models {
+			id := model.ID
+			if _, ok := all[id]; !ok {
+				t.Errorf("invalid model id: %s", id)
+				continue
+			}
+			if _, ok := all[id]; ok {
+				t.Errorf("duplicate model id: %s", id)
+				continue
+			}
+			all[id] = model
+			sorted = append(sorted, id)
+		}
+		if len(models) < *filter.Limit {
+			break
+		}
+		*filter.Offset += *filter.Limit
+	}
+
+	for _, id := range expected {
+		if _, ok := all[id]; !ok {
+			t.Errorf("not checked model id: %s", id)
+		}
+	}
+	require.Equal(t, len(expected), len(all))
+	return all, sorted
 }

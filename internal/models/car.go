@@ -5,6 +5,7 @@ import (
 	"salon/pkg/clock"
 	"time"
 
+	"github.com/google/uuid"
 	"github.com/shopspring/decimal"
 )
 
@@ -27,7 +28,7 @@ type Car struct {
 	Year          int             `validate:"required,min=1900"`
 	Color         string          `validate:"required"`
 	InteriorColor string          `validate:"required"`
-	Mileage       int             `validate:"required,min=0"`
+	Mileage       int             `validate:"min=0"`
 	Price         decimal.Decimal `validate:"required"`
 	Status        CarStatus       `validate:"required"`
 	Options       map[string]interface{}
@@ -49,6 +50,9 @@ func (c *Car) BeforeCreate(cl clock.Clock) error {
 func (c *Car) BeforeUpdate(cl clock.Clock) error {
 	if err := c.Validate(); err != nil {
 		return err
+	}
+	if _, err := uuid.Parse(c.ID); err != nil {
+		return ErrInvalidID
 	}
 	c.Price = c.Price.Round(2)
 	c.UpdatedAt = cl.Now()

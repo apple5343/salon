@@ -5,6 +5,10 @@ import (
 	"math/rand/v2"
 )
 
+var (
+	ErrNoItems = errors.New("no items")
+)
+
 type Storage[T any] struct {
 	available map[string]T
 	pending   map[string]T
@@ -27,6 +31,10 @@ func (s *Storage[T]) AddPending(id string, item T) {
 	s.pending[id] = item
 }
 
+func (s *Storage[T]) AddCreated(id string, item T) {
+	s.created[id] = item
+}
+
 func (s *Storage[T]) GetAvailable(id string) (T, bool) {
 	item, ok := s.available[id]
 	return item, ok
@@ -43,21 +51,22 @@ func (s *Storage[T]) GetCreated(id string) (T, bool) {
 }
 
 func (s *Storage[T]) GetOneCreated() (T, error) {
-	if len(s.created) == 0 {
-		return *new(T), errors.New("no available items")
+	for _, item := range s.created {
+		return item, nil
 	}
-	keys := make([]string, 0, len(s.created))
-	for k := range s.created {
-		keys = append(keys, k)
+	return *new(T), ErrNoItems
+}
+
+func (s *Storage[T]) GetOneAvailable() (T, error) {
+	for _, item := range s.available {
+		return item, nil
 	}
-	id := keys[rand.IntN(len(keys))]
-	item := s.created[id]
-	return item, nil
+	return *new(T), ErrNoItems
 }
 
 func (s *Storage[T]) PickOne() (T, error) {
 	if len(s.available) == 0 {
-		return *new(T), errors.New("no available items")
+		return *new(T), ErrNoItems
 	}
 	keys := make([]string, 0, len(s.available))
 	for k := range s.available {
@@ -90,6 +99,10 @@ func (s *Storage[T]) MoveToAvailable(id string, serviceID string, serviceItem T)
 
 func (s *Storage[T]) AvaliableCount() int {
 	return len(s.available)
+}
+
+func (s *Storage[T]) PendingCount() int {
+	return len(s.pending)
 }
 
 func (s *Storage[T]) CreatedCount() int {

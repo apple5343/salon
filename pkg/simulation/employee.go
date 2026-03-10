@@ -93,4 +93,5 @@ func (s *Simulation) CreateAdmin(t time.Time) {
 
 	s.activeAdmins = append(s.activeAdmins, e.ID)
 	s.admins[e.ID] = e
+	s.employees[e.ID] = e
 }

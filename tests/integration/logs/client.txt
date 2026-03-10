@@ -1,25 +1,25 @@
-{"level":"error","ts":1772983890.066506,"caller":"logger/logger.go:62","msg":"invalid id"}
-{"level":"error","ts":1772983890.068217,"caller":"logger/logger.go:62","msg":"client not found"}
-{"level":"error","ts":1772983890.069393,"caller":"logger/logger.go:62","msg":"token is empty"}
-{"level":"error","ts":1772983891.4170334,"caller":"logger/logger.go:62","msg":"register client: Key: 'Client.FullName' Error:Field validation for 'FullName' failed on the 'required' tag"}
-{"level":"error","ts":1772983891.4198678,"caller":"logger/logger.go:62","msg":"register client: Key: 'Client.Phone' Error:Field validation for 'Phone' failed on the 'phone' tag"}
-{"level":"error","ts":1772983891.421202,"caller":"logger/logger.go:62","msg":"register client: Key: 'Client.Email' Error:Field validation for 'Email' failed on the 'email' tag"}
-{"level":"error","ts":1772983891.4223552,"caller":"logger/logger.go:62","msg":"register client: Key: 'Client.Passport.Series' Error:Field validation for 'Series' failed on the 'len' tag"}
-{"level":"error","ts":1772983891.4234505,"caller":"logger/logger.go:62","msg":"register client: Key: 'Client.Passport.Number' Error:Field validation for 'Number' failed on the 'len' tag"}
-{"level":"error","ts":1772983891.4245641,"caller":"logger/logger.go:62","msg":"register client: Key: 'Client.Passport.IssuedBy' Error:Field validation for 'IssuedBy' failed on the 'required' tag"}
-{"level":"error","ts":1772983891.425884,"caller":"logger/logger.go:62","msg":"register client: password must be at least 8 characters"}
-{"level":"error","ts":1772983891.4270911,"caller":"logger/logger.go:62","msg":"parsing time \"27-03-1908\" as \"02.01.2006\": cannot parse \"-03-1908\" as \".\""}
-{"level":"error","ts":1772983891.428326,"caller":"logger/logger.go:62","msg":"token is empty"}
-{"level":"error","ts":1772983891.6160378,"caller":"logger/logger.go:62","msg":"update client: invalid id"}
-{"level":"error","ts":1772983891.7486043,"caller":"logger/logger.go:62","msg":"client not found"}
-{"level":"error","ts":1772983891.7506244,"caller":"logger/logger.go:62","msg":"update client: Key: 'Client.FullName' Error:Field validation for 'FullName' failed on the 'required' tag"}
-{"level":"error","ts":1772983891.7521062,"caller":"logger/logger.go:62","msg":"update client: Key: 'Client.Phone' Error:Field validation for 'Phone' failed on the 'phone' tag"}
-{"level":"error","ts":1772983891.7534761,"caller":"logger/logger.go:62","msg":"update client: Key: 'Client.Email' Error:Field validation for 'Email' failed on the 'email' tag"}
-{"level":"error","ts":1772983891.7551596,"caller":"logger/logger.go:62","msg":"update client: Key: 'Client.Passport.Series' Error:Field validation for 'Series' failed on the 'numeric' tag"}
-{"level":"error","ts":1772983891.7567189,"caller":"logger/logger.go:62","msg":"update client: Key: 'Client.Passport.Number' Error:Field validation for 'Number' failed on the 'numeric' tag"}
-{"level":"error","ts":1772983891.7598677,"caller":"logger/logger.go:62","msg":"update client: Key: 'Client.Passport.IssuedBy' Error:Field validation for 'IssuedBy' failed on the 'required' tag"}
-{"level":"error","ts":1772983891.778162,"caller":"logger/logger.go:62","msg":"client already exists"}
-{"level":"error","ts":1772983891.7814329,"caller":"logger/logger.go:62","msg":"client already exists"}
-{"level":"error","ts":1772983891.7843435,"caller":"logger/logger.go:62","msg":"client already exists"}
-{"level":"error","ts":1772983891.7856762,"caller":"logger/logger.go:62","msg":"token is empty"}
-{"level":"error","ts":1772983891.7866971,"caller":"logger/logger.go:62","msg":"invalid token"}
+{"level":"error","ts":1773169175.2473729,"caller":"logger/logger.go:62","msg":"invalid id"}
+{"level":"error","ts":1773169175.2488885,"caller":"logger/logger.go:62","msg":"client not found"}
+{"level":"error","ts":1773169175.24994,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1773169176.6823976,"caller":"logger/logger.go:62","msg":"register client: Key: 'Client.FullName' Error:Field validation for 'FullName' failed on the 'required' tag"}
+{"level":"error","ts":1773169176.6842327,"caller":"logger/logger.go:62","msg":"register client: Key: 'Client.Phone' Error:Field validation for 'Phone' failed on the 'phone' tag"}
+{"level":"error","ts":1773169176.6857142,"caller":"logger/logger.go:62","msg":"register client: Key: 'Client.Email' Error:Field validation for 'Email' failed on the 'email' tag"}
+{"level":"error","ts":1773169176.687063,"caller":"logger/logger.go:62","msg":"register client: Key: 'Client.Passport.Series' Error:Field validation for 'Series' failed on the 'len' tag"}
+{"level":"error","ts":1773169176.6884995,"caller":"logger/logger.go:62","msg":"register client: Key: 'Client.Passport.Number' Error:Field validation for 'Number' failed on the 'len' tag"}
+{"level":"error","ts":1773169176.6897862,"caller":"logger/logger.go:62","msg":"register client: Key: 'Client.Passport.IssuedBy' Error:Field validation for 'IssuedBy' failed on the 'required' tag"}
+{"level":"error","ts":1773169176.6910238,"caller":"logger/logger.go:62","msg":"register client: password must be at least 8 characters"}
+{"level":"error","ts":1773169176.6922371,"caller":"logger/logger.go:62","msg":"parsing time \"03-06-1998\" as \"02.01.2006\": cannot parse \"-06-1998\" as \".\""}
+{"level":"error","ts":1773169176.6933157,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1773169176.890788,"caller":"logger/logger.go:62","msg":"update client: invalid id"}
+{"level":"error","ts":1773169177.0240152,"caller":"logger/logger.go:62","msg":"client not found"}
+{"level":"error","ts":1773169177.0261972,"caller":"logger/logger.go:62","msg":"update client: Key: 'Client.FullName' Error:Field validation for 'FullName' failed on the 'required' tag"}
+{"level":"error","ts":1773169177.027938,"caller":"logger/logger.go:62","msg":"update client: Key: 'Client.Phone' Error:Field validation for 'Phone' failed on the 'phone' tag"}
+{"level":"error","ts":1773169177.029727,"caller":"logger/logger.go:62","msg":"update client: Key: 'Client.Email' Error:Field validation for 'Email' failed on the 'email' tag"}
+{"level":"error","ts":1773169177.0315006,"caller":"logger/logger.go:62","msg":"update client: Key: 'Client.Passport.Series' Error:Field validation for 'Series' failed on the 'numeric' tag"}
+{"level":"error","ts":1773169177.0331547,"caller":"logger/logger.go:62","msg":"update client: Key: 'Client.Passport.Number' Error:Field validation for 'Number' failed on the 'numeric' tag"}
+{"level":"error","ts":1773169177.0345929,"caller":"logger/logger.go:62","msg":"update client: Key: 'Client.Passport.IssuedBy' Error:Field validation for 'IssuedBy' failed on the 'required' tag"}
+{"level":"error","ts":1773169177.0553453,"caller":"logger/logger.go:62","msg":"client already exists"}
+{"level":"error","ts":1773169177.058593,"caller":"logger/logger.go:62","msg":"client already exists"}
+{"level":"error","ts":1773169177.0612512,"caller":"logger/logger.go:62","msg":"client already exists"}
+{"level":"error","ts":1773169177.062405,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1773169177.0634425,"caller":"logger/logger.go:62","msg":"invalid token"}

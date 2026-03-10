@@ -3,7 +3,6 @@ package simulation
 import (
 	"fmt"
 	"log"
-	"math/rand/v2"
 	"time"
 )
 
@@ -19,9 +18,11 @@ const (
 	CarCreated EventType = "car_created"
 	CarUpdated EventType = "car_updated"
 
+	ClientCreated EventType = "client_created"
+
 	SaleCreated   EventType = "sale_created"
 	SaleCompleted EventType = "sale_completed"
-	SaleCancled   EventType = "sale_cancled"
+	SaleCanceled  EventType = "sale_canceled"
 
 	EmployeeCreated EventType = "employee_created"
 	EmployeeUpdated EventType = "employee_updated"
@@ -52,9 +53,7 @@ func (s *Simulation) AddEvent(e *Event) {
 }
 
 func (s *Simulation) handleEventNode(head *EventNode) {
-	startHour := 8 + rand.IntN(2)
-	startMinute := rand.IntN(60)
-	t := s.currendDay.Add(time.Duration(startHour)*time.Hour + time.Duration(startMinute)*time.Minute)
+	t := s.RandomDayTime()
 	s.handleEvent(head.e, t)
 	node := head.next
 	for node != nil && node.executionTime > 0 {
@@ -85,12 +84,14 @@ func (s *Simulation) handleEvent(e *Event, t time.Time) {
 		s.ProcessCarCreatedEvent(e, t)
 	case CarUpdated:
 		s.ProcessCarUpdateEvent(e, t)
+	case ClientCreated:
+		s.ProcessClientCreatedEvent(e, t)
 	case SaleCreated:
 		s.ProcessSaleCreatedEvent(e, t)
 	case SaleCompleted:
 		s.ProcessSaleCompletedEvent(e, t)
-	case SaleCancled:
-		s.ProcessSaleCancledEvent(e, t)
+	case SaleCanceled:
+		s.ProcessSaleCanceledEvent(e, t)
 	default:
 		log.Println("invalid event type")
 	}

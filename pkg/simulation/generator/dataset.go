@@ -55,3 +55,22 @@ func (g *Generator) LoadSuppliersDataset() error {
 	}
 	return nil
 }
+
+func (g *Generator) LoadCarsDataset() error {
+	data, err := os.ReadFile("datasets/cars.json") //TODO parse path from env
+	if err != nil {
+		return err
+	}
+	var cars []*repo.Car
+	err = json.Unmarshal(data, &cars)
+	if err != nil {
+		return err
+	}
+	for _, car := range cars {
+		g.carsByModel[car.ModelID] = append(g.carsByModel[car.ModelID], car.ID)
+		g.carsBySupplier[car.SupplierID] = append(g.carsBySupplier[car.SupplierID], car.ID)
+		g.carStates[car.ID] = CarState{}
+		g.carStorage.AddPending(car.ID, repo.CarToService(car))
+	}
+	return nil
+}
