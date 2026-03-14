@@ -115,7 +115,7 @@ func (s *Server) routes() {
 	models := s.e.Group("/models")
 	{
 		models.POST("", authMiddleware(s.modelHandler.Create()))
-		models.GET("", s.carHandler.GetModels())
+		models.GET("", s.modelHandler.GetModels())
 		models.GET("/:id", softAuthMiddleware(s.modelHandler.GetByID()))
 		models.PUT("/:id", authMiddleware(s.modelHandler.Update()))
 	}

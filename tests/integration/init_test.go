@@ -40,6 +40,8 @@ type TestConfig struct {
 	AdminPassportSeries   string `env:"ADMIN_PASSPORT_SERIES" required:"true"`
 	AdminPassportNumber   string `env:"ADMIN_PASSPORT_NUMBER" required:"true"`
 	AdminPassportIssuedBy string `env:"ADMIN_PASSPORT_ISSUED_BY" required:"true"`
+	RefreshSecret         string `env:"REFRESH_SECRET" required:"true"`
+	AccessSecret          string `env:"ACCESS_SECRET" required:"true"`
 }
 
 type BaseTestSuite struct {
@@ -200,6 +202,8 @@ func (suite *BaseTestSuite) GetEnv() map[string]string {
 		"ADMIN_PASSPORT_SERIES":    suite.config.AdminPassportSeries,
 		"ADMIN_PASSPORT_NUMBER":    suite.config.AdminPassportNumber,
 		"ADMIN_PASSPORT_ISSUED_BY": suite.config.AdminPassportIssuedBy,
+		"REFRESH_SECRET":           suite.config.RefreshSecret,
+		"ACCESS_SECRET":            suite.config.AccessSecret,
 	}
 }
 

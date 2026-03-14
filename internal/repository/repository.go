@@ -19,16 +19,6 @@ type ClientRepository interface {
 }
 
 type CarRepository interface {
-	GetBrandByID(ctx context.Context, id string) (*models.Brand, error)
-	GetBrandsByFilter(ctx context.Context, filter *models.BrandFilters) ([]*models.Brand, error)
-	CreateBrand(ctx context.Context, b *models.Brand) (*models.Brand, error)
-	UpdateBrand(ctx context.Context, b *models.Brand) (*models.Brand, error)
-
-	GetModelByID(ctx context.Context, id string) (*models.Model, error)
-	GetModelsByFilter(ctx context.Context, filter *models.ModelFilters) ([]*models.ModelShort, error)
-	CreateModel(ctx context.Context, m *models.Model) (*models.Model, error)
-	UpdateModel(ctx context.Context, m *models.Model) (*models.Model, error)
-
 	GetCarByID(ctx context.Context, id string) (*models.Car, error)
 	GetCarsByFilter(ctx context.Context, filter *models.CarFilters) ([]*models.CarShort, error)
 	CreateCar(ctx context.Context, c *models.Car) (*models.Car, error)

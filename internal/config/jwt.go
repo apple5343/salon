@@ -8,9 +8,9 @@ import (
 )
 
 type JWT struct {
-	RefreshSecret string        `env:"REFRESH_SECRET" env-default:"super-secret-refresh-jwt-key-for-dev-only"`
+	RefreshSecret string        `env:"REFRESH_SECRET" env-required:"true"`
 	RefreshTTL    time.Duration `env:"REFRESH_TTL" env-default:"24h"`
-	AccessSecret  string        `env:"ACCESS_SECRET" env-default:"super-secret-access-jwt-key-for-dev-only"`
+	AccessSecret  string        `env:"ACCESS_SECRET" env-required:"true"`
 	AccessTTL     time.Duration `env:"ACCESS_TTL" env-default:"15m"`
 }
 

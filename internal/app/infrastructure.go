@@ -10,5 +10,6 @@ func InfrastructureModules() fx.Option {
 	return fx.Module(
 		"infrastructure",
 		postgres.NewModule(),
+		//redis.NewModule(),
 	)
 }
