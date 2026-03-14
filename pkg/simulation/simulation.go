@@ -113,27 +113,27 @@ func (s *Simulation) PlanDay() {
 	if s.currendDay.Weekday() == time.Saturday || s.currendDay.Weekday() == time.Sunday {
 		return
 	}
-	newEmployees := Poisson(0.01)
+	newEmployees := Poisson(s.cfg.NewEmloyeesRatio)
 	for i := 0; i < newEmployees; i++ {
 		s.CreateEmployee()
 	}
-	newCars := Poisson(0.3)
+	newCars := Poisson(s.cfg.NewCarsRatio)
 	for i := 0; i < newCars; i++ {
 		s.CreateCar()
 	}
-	newBrands := Poisson(0.07)
+	newBrands := Poisson(s.cfg.NewBrandsRatio)
 	for i := 0; i < newBrands; i++ {
 		s.CreateBrand()
 	}
-	newModels := Poisson(0.07)
+	newModels := Poisson(s.cfg.NewModelsRatio)
 	for i := 0; i < newModels; i++ {
 		s.CreateModel()
 	}
-	newSuppliers := Poisson(0.04)
+	newSuppliers := Poisson(s.cfg.NewSuppliersRatio)
 	for i := 0; i < newSuppliers; i++ {
 		s.CreateSupplier()
 	}
-	newSales := Poisson(0.5)
+	newSales := Poisson(s.cfg.NewSalesRatio)
 	for i := 0; i < newSales; i++ {
 		s.CreateSale()
 	}

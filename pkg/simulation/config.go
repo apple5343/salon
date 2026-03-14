@@ -16,6 +16,13 @@ type Config struct {
 	SuppliersPercent int `env:"SIMULATION_SUPPLIERS_PERCENT" env-default:"50"`
 	AdminsCount      int `env:"SIMULATION_ADMINS_COUNT" env-default:"3"`
 	EmployeesCount   int `env:"SIMULATION_EMPLOYEES_COUNT" env-default:"5"`
+
+	NewEmloyeesRatio  float64 `env:"SIMULATION_NEW_EMPLOYEES_RATIO" env-default:"0.01"`
+	NewCarsRatio      float64 `env:"SIMULATION_NEW_CARS_RATIO" env-default:"0.3"`
+	NewBrandsRatio    float64 `env:"SIMULATION_NEW_BRANDS_RATIO" env-default:"0.02"`
+	NewModelsRatio    float64 `env:"SIMULATION_NEW_MODELS_RATIO" env-default:"0.07"`
+	NewSuppliersRatio float64 `env:"SIMULATION_NEW_SUPPLIERS_RATIO" env-default:"0.04"`
+	NewSalesRatio     float64 `env:"SIMULATION_NEW_SALES_RATIO" env-default:"0.5"`
 }
 
 func NewConfig() (*Config, error) {
