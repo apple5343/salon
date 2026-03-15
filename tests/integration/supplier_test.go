@@ -55,6 +55,7 @@ func (s *SupplierSuite) TestCreate() {
 
 func (s *SupplierSuite) TestUpdate() {
 	s.T().Run("update", s.Update)
+	s.T().Run("get after update", s.Get)
 	s.T().Run("invalid", s.UpdateInvalid)
 	s.T().Run("forbidden", s.UpdateForbidden)
 }

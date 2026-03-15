@@ -16,13 +16,16 @@ var (
 
 type supplierService struct {
 	repo         repository.SupplierRepository
+	cache        repository.SupplierCache
 	eventService service.EventService
 	clock        clock.Clock
 }
 
-func NewService(repo repository.SupplierRepository, eventService service.EventService, clock clock.Clock) service.SupplierService {
+func NewService(repo repository.SupplierRepository, eventService service.EventService,
+	cache repository.SupplierCache, clock clock.Clock) service.SupplierService {
 	return &supplierService{
 		repo:         repo,
+		cache:        cache,
 		eventService: eventService,
 		clock:        clock,
 	}

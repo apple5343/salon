@@ -6,6 +6,7 @@ import (
 	"salon/internal/models"
 	repo "salon/internal/repository/errors"
 	ctxutil "salon/internal/utils/context"
+	"salon/pkg/logger"
 
 	"github.com/apple5343/errorx"
 )
@@ -24,6 +25,9 @@ func (s *supplierService) Update(ctx context.Context, supplier *models.Supplier)
 			return nil, ErrSupplierNotFound
 		}
 		return nil, errorx.NewError("update supplier: "+err.Error(), errorx.Internal)
+	}
+	if err = s.cache.SetByID(ctx, supplier, ttl); err != nil {
+		logger.FromContextOrDefault(ctx).Error(ctx, "update supplier: "+err.Error())
 	}
 	s.eventService.AddEvent(ctx, &models.Event{
 		Type:       models.EventTypeUpdated,

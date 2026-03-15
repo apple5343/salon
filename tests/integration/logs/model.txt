@@ -1,42 +1,42 @@
-{"level":"error","ts":1773506997.513823,"caller":"logger/logger.go:62","msg":"create model: Key: 'Model.Name' Error:Field validation for 'Name' failed on the 'required' tag"}
-{"level":"error","ts":1773506997.5156052,"caller":"logger/logger.go:62","msg":"create model: Key: 'Model.BrandID' Error:Field validation for 'BrandID' failed on the 'uuid' tag"}
-{"level":"error","ts":1773506997.5185595,"caller":"logger/logger.go:62","msg":"foreign key, entity not found"}
-{"level":"error","ts":1773506997.519892,"caller":"logger/logger.go:62","msg":"create model: Key: 'Model.BrandID' Error:Field validation for 'BrandID' failed on the 'required' tag"}
-{"level":"error","ts":1773506997.5213296,"caller":"logger/logger.go:62","msg":"create model: Key: 'Model.Generation' Error:Field validation for 'Generation' failed on the 'required' tag"}
-{"level":"error","ts":1773506997.5228403,"caller":"logger/logger.go:62","msg":"invalid body type"}
-{"level":"error","ts":1773506997.5239708,"caller":"logger/logger.go:62","msg":"invalid transmission type"}
-{"level":"error","ts":1773506997.5250657,"caller":"logger/logger.go:62","msg":"create model: Key: 'Model.Name' Error:Field validation for 'Name' failed on the 'required' tag"}
-{"level":"error","ts":1773506997.5261977,"caller":"logger/logger.go:62","msg":"create model: Key: 'Model.EngineDisplacement' Error:Field validation for 'EngineDisplacement' failed on the 'min' tag"}
-{"level":"error","ts":1773506997.52747,"caller":"logger/logger.go:62","msg":"create model: Key: 'Model.PowerHP' Error:Field validation for 'PowerHP' failed on the 'min' tag"}
-{"level":"error","ts":1773506997.5287752,"caller":"logger/logger.go:62","msg":"invalid drive type"}
-{"level":"error","ts":1773506997.5301275,"caller":"logger/logger.go:62","msg":"create model: Key: 'Model.BasePrice' Error:Field validation for 'BasePrice' failed on the 'min' tag"}
-{"level":"error","ts":1773506997.5312543,"caller":"logger/logger.go:62","msg":"invalid body type"}
-{"level":"error","ts":1773506997.532401,"caller":"logger/logger.go:62","msg":"invalid transmission type"}
-{"level":"error","ts":1773506997.5334253,"caller":"logger/logger.go:62","msg":"invalid fuel type"}
-{"level":"error","ts":1773506997.5346928,"caller":"logger/logger.go:62","msg":"invalid drive type"}
-{"level":"error","ts":1773506997.5359068,"caller":"logger/logger.go:62","msg":"token is empty"}
-{"level":"error","ts":1773506997.5370543,"caller":"logger/logger.go:62","msg":"invalid token"}
-{"level":"error","ts":1773506997.5382957,"caller":"logger/logger.go:62","msg":"forbidden"}
-{"level":"error","ts":1773506997.5707538,"caller":"logger/logger.go:62","msg":"invalid id"}
-{"level":"error","ts":1773506997.5869977,"caller":"logger/logger.go:62","msg":"model not found"}
-{"level":"error","ts":1773506997.625141,"caller":"logger/logger.go:62","msg":"update model: invalid id"}
-{"level":"error","ts":1773506997.6270392,"caller":"logger/logger.go:62","msg":"model not found"}
-{"level":"error","ts":1773506997.6286983,"caller":"logger/logger.go:62","msg":"update model: Key: 'Model.BrandID' Error:Field validation for 'BrandID' failed on the 'uuid' tag"}
-{"level":"error","ts":1773506997.6309962,"caller":"logger/logger.go:62","msg":"foreign key, entity not found"}
-{"level":"error","ts":1773506997.6322544,"caller":"logger/logger.go:62","msg":"update model: Key: 'Model.Name' Error:Field validation for 'Name' failed on the 'required' tag"}
-{"level":"error","ts":1773506997.6336875,"caller":"logger/logger.go:62","msg":"update model: Key: 'Model.Generation' Error:Field validation for 'Generation' failed on the 'required' tag"}
-{"level":"error","ts":1773506997.6351578,"caller":"logger/logger.go:62","msg":"invalid body type"}
-{"level":"error","ts":1773506997.6365926,"caller":"logger/logger.go:62","msg":"invalid transmission type"}
-{"level":"error","ts":1773506997.6380506,"caller":"logger/logger.go:62","msg":"invalid fuel type"}
-{"level":"error","ts":1773506997.6392422,"caller":"logger/logger.go:62","msg":"invalid drive type"}
-{"level":"error","ts":1773506997.6403716,"caller":"logger/logger.go:62","msg":"update model: Key: 'Model.EngineDisplacement' Error:Field validation for 'EngineDisplacement' failed on the 'min' tag"}
-{"level":"error","ts":1773506997.641615,"caller":"logger/logger.go:62","msg":"update model: Key: 'Model.PowerHP' Error:Field validation for 'PowerHP' failed on the 'min' tag"}
-{"level":"error","ts":1773506997.6428878,"caller":"logger/logger.go:62","msg":"update model: Key: 'Model.BasePrice' Error:Field validation for 'BasePrice' failed on the 'min' tag"}
-{"level":"error","ts":1773506997.6442633,"caller":"logger/logger.go:62","msg":"update model: Key: 'Model.BrandID' Error:Field validation for 'BrandID' failed on the 'required' tag"}
-{"level":"error","ts":1773506997.6455731,"caller":"logger/logger.go:62","msg":"invalid transmission type"}
-{"level":"error","ts":1773506997.6466553,"caller":"logger/logger.go:62","msg":"invalid fuel type"}
-{"level":"error","ts":1773506997.6476333,"caller":"logger/logger.go:62","msg":"invalid drive type"}
-{"level":"error","ts":1773506997.6485934,"caller":"logger/logger.go:62","msg":"invalid body type"}
-{"level":"error","ts":1773506997.6494334,"caller":"logger/logger.go:62","msg":"token is empty"}
-{"level":"error","ts":1773506997.6503074,"caller":"logger/logger.go:62","msg":"invalid token"}
-{"level":"error","ts":1773506997.664093,"caller":"logger/logger.go:62","msg":"forbidden"}
+{"level":"error","ts":1773514003.8145416,"caller":"logger/logger.go:62","msg":"create model: Key: 'Model.Name' Error:Field validation for 'Name' failed on the 'required' tag"}
+{"level":"error","ts":1773514003.815726,"caller":"logger/logger.go:62","msg":"create model: Key: 'Model.BrandID' Error:Field validation for 'BrandID' failed on the 'uuid' tag"}
+{"level":"error","ts":1773514003.819137,"caller":"logger/logger.go:62","msg":"foreign key, entity not found"}
+{"level":"error","ts":1773514003.820566,"caller":"logger/logger.go:62","msg":"create model: Key: 'Model.BrandID' Error:Field validation for 'BrandID' failed on the 'required' tag"}
+{"level":"error","ts":1773514003.821737,"caller":"logger/logger.go:62","msg":"create model: Key: 'Model.Generation' Error:Field validation for 'Generation' failed on the 'required' tag"}
+{"level":"error","ts":1773514003.822972,"caller":"logger/logger.go:62","msg":"invalid body type"}
+{"level":"error","ts":1773514003.8240933,"caller":"logger/logger.go:62","msg":"invalid transmission type"}
+{"level":"error","ts":1773514003.825417,"caller":"logger/logger.go:62","msg":"create model: Key: 'Model.Name' Error:Field validation for 'Name' failed on the 'required' tag"}
+{"level":"error","ts":1773514003.8265839,"caller":"logger/logger.go:62","msg":"create model: Key: 'Model.EngineDisplacement' Error:Field validation for 'EngineDisplacement' failed on the 'min' tag"}
+{"level":"error","ts":1773514003.8281689,"caller":"logger/logger.go:62","msg":"create model: Key: 'Model.PowerHP' Error:Field validation for 'PowerHP' failed on the 'min' tag"}
+{"level":"error","ts":1773514003.8297267,"caller":"logger/logger.go:62","msg":"invalid drive type"}
+{"level":"error","ts":1773514003.8312614,"caller":"logger/logger.go:62","msg":"create model: Key: 'Model.BasePrice' Error:Field validation for 'BasePrice' failed on the 'min' tag"}
+{"level":"error","ts":1773514003.8324122,"caller":"logger/logger.go:62","msg":"invalid body type"}
+{"level":"error","ts":1773514003.8337636,"caller":"logger/logger.go:62","msg":"invalid transmission type"}
+{"level":"error","ts":1773514003.835135,"caller":"logger/logger.go:62","msg":"invalid fuel type"}
+{"level":"error","ts":1773514003.8362331,"caller":"logger/logger.go:62","msg":"invalid drive type"}
+{"level":"error","ts":1773514003.837262,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1773514003.8381875,"caller":"logger/logger.go:62","msg":"invalid token"}
+{"level":"error","ts":1773514003.8389976,"caller":"logger/logger.go:62","msg":"forbidden"}
+{"level":"error","ts":1773514003.857071,"caller":"logger/logger.go:62","msg":"invalid id"}
+{"level":"error","ts":1773514003.8782022,"caller":"logger/logger.go:62","msg":"model not found"}
+{"level":"error","ts":1773514003.909145,"caller":"logger/logger.go:62","msg":"update model: invalid id"}
+{"level":"error","ts":1773514003.910849,"caller":"logger/logger.go:62","msg":"model not found"}
+{"level":"error","ts":1773514003.9118958,"caller":"logger/logger.go:62","msg":"update model: Key: 'Model.BrandID' Error:Field validation for 'BrandID' failed on the 'uuid' tag"}
+{"level":"error","ts":1773514003.9136755,"caller":"logger/logger.go:62","msg":"foreign key, entity not found"}
+{"level":"error","ts":1773514003.9149883,"caller":"logger/logger.go:62","msg":"update model: Key: 'Model.Name' Error:Field validation for 'Name' failed on the 'required' tag"}
+{"level":"error","ts":1773514003.9159207,"caller":"logger/logger.go:62","msg":"update model: Key: 'Model.Generation' Error:Field validation for 'Generation' failed on the 'required' tag"}
+{"level":"error","ts":1773514003.9166853,"caller":"logger/logger.go:62","msg":"invalid body type"}
+{"level":"error","ts":1773514003.9174352,"caller":"logger/logger.go:62","msg":"invalid transmission type"}
+{"level":"error","ts":1773514003.9184182,"caller":"logger/logger.go:62","msg":"invalid fuel type"}
+{"level":"error","ts":1773514003.9192207,"caller":"logger/logger.go:62","msg":"invalid drive type"}
+{"level":"error","ts":1773514003.920342,"caller":"logger/logger.go:62","msg":"update model: Key: 'Model.EngineDisplacement' Error:Field validation for 'EngineDisplacement' failed on the 'min' tag"}
+{"level":"error","ts":1773514003.9217274,"caller":"logger/logger.go:62","msg":"update model: Key: 'Model.PowerHP' Error:Field validation for 'PowerHP' failed on the 'min' tag"}
+{"level":"error","ts":1773514003.922714,"caller":"logger/logger.go:62","msg":"update model: Key: 'Model.BasePrice' Error:Field validation for 'BasePrice' failed on the 'min' tag"}
+{"level":"error","ts":1773514003.9235368,"caller":"logger/logger.go:62","msg":"update model: Key: 'Model.BrandID' Error:Field validation for 'BrandID' failed on the 'required' tag"}
+{"level":"error","ts":1773514003.9242373,"caller":"logger/logger.go:62","msg":"invalid transmission type"}
+{"level":"error","ts":1773514003.9254005,"caller":"logger/logger.go:62","msg":"invalid fuel type"}
+{"level":"error","ts":1773514003.9265158,"caller":"logger/logger.go:62","msg":"invalid drive type"}
+{"level":"error","ts":1773514003.9272857,"caller":"logger/logger.go:62","msg":"invalid body type"}
+{"level":"error","ts":1773514003.92819,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1773514003.9289157,"caller":"logger/logger.go:62","msg":"invalid token"}
+{"level":"error","ts":1773514003.9411201,"caller":"logger/logger.go:62","msg":"forbidden"}

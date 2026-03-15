@@ -3,6 +3,7 @@ package repository
 import (
 	"context"
 	"salon/internal/models"
+	"time"
 )
 
 type EmployeeRepository interface {
@@ -54,6 +55,12 @@ type SupplierRepository interface {
 	Create(ctx context.Context, s *models.Supplier) (*models.Supplier, error)
 	Update(ctx context.Context, s *models.Supplier) (*models.Supplier, error)
 	Delete(ctx context.Context, id string) error
+}
+
+type SupplierCache interface {
+	GetByID(ctx context.Context, id string) (*models.Supplier, error)
+	SetByID(ctx context.Context, s *models.Supplier, ttl time.Duration) error
+	DeleteByID(ctx context.Context, id string) error
 }
 
 type EventRepository interface {

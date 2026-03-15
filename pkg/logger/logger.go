@@ -91,3 +91,11 @@ func FromContext(ctx context.Context) (Logger, bool) {
 
 	return nil, false
 }
+
+func FromContextOrDefault(ctx context.Context) Logger {
+	if l, ok := FromContext(ctx); ok {
+		return l
+	}
+
+	return base
+}

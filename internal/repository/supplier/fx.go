@@ -2,6 +2,7 @@ package supplier
 
 import (
 	"salon/internal/repository/supplier/postgres"
+	"salon/internal/repository/supplier/redis"
 
 	"go.uber.org/fx"
 )
@@ -11,6 +12,7 @@ func NewModule() fx.Option {
 		"supplier",
 		fx.Provide(
 			postgres.NewRepository,
+			redis.NewRepository,
 		),
 	)
 }

@@ -1,14 +1,14 @@
-{"level":"error","ts":1773506961.3913217,"caller":"logger/logger.go:62","msg":"create brand: Key: 'Brand.Name' Error:Field validation for 'Name' failed on the 'required' tag"}
-{"level":"error","ts":1773506961.393099,"caller":"logger/logger.go:62","msg":"create brand: Key: 'Brand.Description' Error:Field validation for 'Description' failed on the 'required' tag"}
-{"level":"error","ts":1773506961.394471,"caller":"logger/logger.go:62","msg":"create brand: Key: 'Brand.CountryCode' Error:Field validation for 'CountryCode' failed on the 'iso3166_1_alpha2' tag"}
-{"level":"error","ts":1773506961.3958516,"caller":"logger/logger.go:62","msg":"forbidden"}
-{"level":"error","ts":1773506961.3970847,"caller":"logger/logger.go:62","msg":"token is empty"}
-{"level":"error","ts":1773506961.455732,"caller":"logger/logger.go:62","msg":"invalid id"}
-{"level":"error","ts":1773506961.4571571,"caller":"logger/logger.go:62","msg":"brand not found"}
-{"level":"error","ts":1773506961.6192608,"caller":"logger/logger.go:62","msg":"update brand: Key: 'Brand.Name' Error:Field validation for 'Name' failed on the 'required' tag"}
-{"level":"error","ts":1773506961.6204624,"caller":"logger/logger.go:62","msg":"update brand: Key: 'Brand.CountryCode' Error:Field validation for 'CountryCode' failed on the 'iso3166_1_alpha2' tag"}
-{"level":"error","ts":1773506961.6216,"caller":"logger/logger.go:62","msg":"update brand: Key: 'Brand.Description' Error:Field validation for 'Description' failed on the 'required' tag"}
-{"level":"error","ts":1773506961.6234252,"caller":"logger/logger.go:62","msg":"brand not found"}
-{"level":"error","ts":1773506961.624879,"caller":"logger/logger.go:62","msg":"update brand: invalid id"}
-{"level":"error","ts":1773506961.625847,"caller":"logger/logger.go:62","msg":"forbidden"}
-{"level":"error","ts":1773506961.6269546,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1773513969.7364614,"caller":"logger/logger.go:62","msg":"create brand: Key: 'Brand.Name' Error:Field validation for 'Name' failed on the 'required' tag"}
+{"level":"error","ts":1773513969.738049,"caller":"logger/logger.go:62","msg":"create brand: Key: 'Brand.Description' Error:Field validation for 'Description' failed on the 'required' tag"}
+{"level":"error","ts":1773513969.7394073,"caller":"logger/logger.go:62","msg":"create brand: Key: 'Brand.CountryCode' Error:Field validation for 'CountryCode' failed on the 'iso3166_1_alpha2' tag"}
+{"level":"error","ts":1773513969.740778,"caller":"logger/logger.go:62","msg":"forbidden"}
+{"level":"error","ts":1773513969.7417693,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1773513969.7966533,"caller":"logger/logger.go:62","msg":"invalid id"}
+{"level":"error","ts":1773513969.798569,"caller":"logger/logger.go:62","msg":"brand not found"}
+{"level":"error","ts":1773513969.9241498,"caller":"logger/logger.go:62","msg":"update brand: Key: 'Brand.Name' Error:Field validation for 'Name' failed on the 'required' tag"}
+{"level":"error","ts":1773513969.9254649,"caller":"logger/logger.go:62","msg":"update brand: Key: 'Brand.CountryCode' Error:Field validation for 'CountryCode' failed on the 'iso3166_1_alpha2' tag"}
+{"level":"error","ts":1773513969.9267642,"caller":"logger/logger.go:62","msg":"update brand: Key: 'Brand.Description' Error:Field validation for 'Description' failed on the 'required' tag"}
+{"level":"error","ts":1773513969.9283006,"caller":"logger/logger.go:62","msg":"brand not found"}
+{"level":"error","ts":1773513969.9296384,"caller":"logger/logger.go:62","msg":"update brand: invalid id"}
+{"level":"error","ts":1773513969.9309278,"caller":"logger/logger.go:62","msg":"forbidden"}
+{"level":"error","ts":1773513969.9320095,"caller":"logger/logger.go:62","msg":"token is empty"}

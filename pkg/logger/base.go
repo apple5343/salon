@@ -6,6 +6,8 @@ import (
 	"go.uber.org/zap"
 )
 
+var base = NewBaseLogger()
+
 type baseLogger struct {
 	l *zap.Logger
 }

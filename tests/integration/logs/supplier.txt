@@ -1,12 +1,12 @@
-{"level":"error","ts":1773507004.509171,"caller":"logger/logger.go:62","msg":"create supplier: Key: 'Supplier.CountryCode' Error:Field validation for 'CountryCode' failed on the 'iso3166_1_alpha2' tag"}
-{"level":"error","ts":1773507004.5113125,"caller":"logger/logger.go:62","msg":"create supplier: Key: 'Supplier.Name' Error:Field validation for 'Name' failed on the 'required' tag"}
-{"level":"error","ts":1773507004.5127451,"caller":"logger/logger.go:62","msg":"token is empty"}
-{"level":"error","ts":1773507004.5145323,"caller":"logger/logger.go:62","msg":"forbidden"}
-{"level":"error","ts":1773507004.5572367,"caller":"logger/logger.go:62","msg":"invalid id"}
-{"level":"error","ts":1773507004.5604424,"caller":"logger/logger.go:62","msg":"supplier not found"}
-{"level":"error","ts":1773507004.6962292,"caller":"logger/logger.go:62","msg":"update supplier: invalid id"}
-{"level":"error","ts":1773507004.6988466,"caller":"logger/logger.go:62","msg":"supplier not found"}
-{"level":"error","ts":1773507004.7011628,"caller":"logger/logger.go:62","msg":"update supplier: Key: 'Supplier.Name' Error:Field validation for 'Name' failed on the 'required' tag"}
-{"level":"error","ts":1773507004.7025764,"caller":"logger/logger.go:62","msg":"update supplier: Key: 'Supplier.CountryCode' Error:Field validation for 'CountryCode' failed on the 'iso3166_1_alpha2' tag"}
-{"level":"error","ts":1773507004.7039268,"caller":"logger/logger.go:62","msg":"token is empty"}
-{"level":"error","ts":1773507004.705374,"caller":"logger/logger.go:62","msg":"forbidden"}
+{"level":"error","ts":1773514010.8010197,"caller":"logger/logger.go:62","msg":"create supplier: Key: 'Supplier.CountryCode' Error:Field validation for 'CountryCode' failed on the 'iso3166_1_alpha2' tag"}
+{"level":"error","ts":1773514010.8025806,"caller":"logger/logger.go:62","msg":"create supplier: Key: 'Supplier.Name' Error:Field validation for 'Name' failed on the 'required' tag"}
+{"level":"error","ts":1773514010.8038738,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1773514010.8051271,"caller":"logger/logger.go:62","msg":"forbidden"}
+{"level":"error","ts":1773514010.8502815,"caller":"logger/logger.go:62","msg":"invalid id"}
+{"level":"error","ts":1773514010.8520389,"caller":"logger/logger.go:62","msg":"supplier not found"}
+{"level":"error","ts":1773514010.9747193,"caller":"logger/logger.go:62","msg":"update supplier: invalid id"}
+{"level":"error","ts":1773514010.9761581,"caller":"logger/logger.go:62","msg":"supplier not found"}
+{"level":"error","ts":1773514010.977098,"caller":"logger/logger.go:62","msg":"update supplier: Key: 'Supplier.Name' Error:Field validation for 'Name' failed on the 'required' tag"}
+{"level":"error","ts":1773514010.977935,"caller":"logger/logger.go:62","msg":"update supplier: Key: 'Supplier.CountryCode' Error:Field validation for 'CountryCode' failed on the 'iso3166_1_alpha2' tag"}
+{"level":"error","ts":1773514010.9787104,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1773514010.9795582,"caller":"logger/logger.go:62","msg":"forbidden"}
