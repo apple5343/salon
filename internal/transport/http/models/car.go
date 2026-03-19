@@ -46,7 +46,7 @@ type CarShort struct {
 type CarPublicResponse struct {
 	ID            string                  `json:"id"`
 	Model         *ModelPublicResponse    `json:"model"`
-	SupplierID    *SupplierPublicResponse `json:"supplier"`
+	Supplier      *SupplierPublicResponse `json:"supplier"`
 	Vin           string                  `json:"vin"`
 	Year          int                     `json:"year"`
 	Color         string                  `json:"color"`
@@ -82,7 +82,7 @@ func CarPublicToHttp(c *models.Car, m *models.Model, b *models.Brand, s *models.
 	return &CarPublicResponse{
 		ID:            c.ID,
 		Model:         ModelPublicToHttp(m, b),
-		SupplierID:    SupplierPublicToHttp(s),
+		Supplier:      SupplierPublicToHttp(s),
 		Vin:           c.Vin,
 		Year:          c.Year,
 		Color:         c.Color,

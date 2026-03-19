@@ -22,11 +22,11 @@ func (s *carService) UpdateCar(ctx context.Context, c *models.Car) (*models.Car,
 	if err != nil {
 		return nil, nil, nil, nil, errorx.NewError("update car: "+err.Error(), errorx.Internal)
 	}
-	if car.Status == models.CarStatusSold {
-		return nil, nil, nil, nil, errorx.NewError("it is not possible to set the sales status directly", errorx.BadRequest)
+	if car.Status == models.CarStatusSold || car.Status == models.CarStatusBooked {
+		return nil, nil, nil, nil, errorx.NewError("it is not possible to change status directly.", errorx.BadRequest)
 	}
-	if c.Status == models.CarStatusSold {
-		return nil, nil, nil, nil, errorx.NewError("it is not possible to change the status of a sold vehicle.", errorx.BadRequest)
+	if c.Status == models.CarStatusSold || c.Status == models.CarStatusBooked {
+		return nil, nil, nil, nil, errorx.NewError("it is not possible to change the sales status directly.", errorx.BadRequest)
 	}
 	c, err = s.repo.UpdateCar(ctx, c)
 	if err != nil {

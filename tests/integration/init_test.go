@@ -102,27 +102,35 @@ func (s *BaseTestSuite) TestModel() {
 	})
 }
 
+func (s *BaseTestSuite) TestCar() {
+	s.RunGroupWithLogs("car", func() {
+		t := &CarSuite{base: s}
+		suite.Run(s.T(), t)
+	})
+}
+
 func (suite *BaseTestSuite) RunGroupWithLogs(testGroup string, run func()) {
-	suite.MustRestartApp()
-	since := time.Now()
+	since := suite.MustRestartApp()
 
 	run()
 
 	suite.SaveAppLogs(testGroup, since)
 }
 
-func (suite *BaseTestSuite) MustRestartApp() {
+func (suite *BaseTestSuite) MustRestartApp() time.Time {
 	c, err := suite.compose.ServiceContainer(suite.ctx, "app-test")
 	suite.Require().NoError(err)
 
 	err = c.Stop(suite.ctx, nil)
 	suite.Require().NoError(err)
-
+	startetAt := time.Now()
 	err = c.Start(suite.ctx)
 	suite.Require().NoError(err)
 
 	err = wait.NewHealthStrategy().WaitUntilReady(suite.ctx, c)
 	suite.Require().NoError(err)
+
+	return startetAt
 }
 
 func (suite *BaseTestSuite) SetupSuite() {

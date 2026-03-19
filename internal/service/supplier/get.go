@@ -9,7 +9,7 @@ import (
 	"time"
 
 	"github.com/apple5343/errorx"
-	"github.com/docker/distribution/uuid"
+	"github.com/google/uuid"
 )
 
 const (

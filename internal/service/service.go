@@ -62,6 +62,7 @@ type SupplierService interface {
 	GetSuppliers(ctx context.Context, filters *models.SupplierFilters) ([]*models.Supplier, error)
 	Create(ctx context.Context, s *models.Supplier) (*models.Supplier, error)
 	Update(ctx context.Context, s *models.Supplier) (*models.Supplier, error)
+	Delete(ctx context.Context, id string) error
 	//TODO stat
 }
 

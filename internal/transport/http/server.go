@@ -134,6 +134,7 @@ func (s *Server) routes() {
 		suppliers.GET("", softAuthMiddleware(s.supplierHandler.GetSuppliers()))
 		suppliers.GET("/:id", softAuthMiddleware(s.supplierHandler.GetByID()))
 		suppliers.PUT("/:id", authMiddleware(s.supplierHandler.Update()))
+		suppliers.DELETE("/:id", authMiddleware(s.supplierHandler.Delete()))
 	}
 
 	sales := s.e.Group("/sales")
