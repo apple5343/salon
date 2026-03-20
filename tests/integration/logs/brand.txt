@@ -13,6 +13,7 @@
 [Fx] PROVIDE	repository.SupplierCache <= salon/internal/repository/supplier/redis.NewRepository() from module "supplier"
 [Fx] PROVIDE	repository.ClientRepository <= salon/internal/repository/client/postgres.NewRepository() from module "client"
 [Fx] PROVIDE	repository.BrandRepository <= salon/internal/repository/brand/postgres.NewRepository() from module "brand"
+[Fx] PROVIDE	repository.BrandCache <= salon/internal/repository/brand/redis.NewCache() from module "brand"
 [Fx] PROVIDE	repository.ModelRepository <= salon/internal/repository/model/postgres.NewRepository() from module "model"
 [Fx] PROVIDE	repository.CarRepository <= salon/internal/repository/car/postgres.NewRepository() from module "car"
 [Fx] PROVIDE	repository.EventRepository <= salon/internal/repository/event/postgres.NewRepository() from module "event"
@@ -30,66 +31,68 @@
 [Fx] PROVIDE	clock.Clock <= fx.Annotate(salon/pkg/clock.ClockModule.func1(), fx.As([[clock.Clock]]) from module "clock"
 [Fx] INVOKE		salon/internal/infrastructure/postgres.NewModule.func1() from module "postgres"
 [Fx] BEFORE RUN	provide: go.uber.org/fx.New.func1()
-[Fx] RUN	provide: go.uber.org/fx.New.func1() in 8.811µs
+[Fx] RUN	provide: go.uber.org/fx.New.func1() in 8.447µs
 [Fx] BEFORE RUN	provide: salon/internal/config.PostgresConfig() from module "postgres"
-[Fx] RUN	provide: salon/internal/config.PostgresConfig() in 105.786µs from module "postgres"
+[Fx] RUN	provide: salon/internal/config.PostgresConfig() in 103.187µs from module "postgres"
 [Fx] BEFORE RUN	provide: salon/internal/infrastructure/postgres.NewClient() from module "postgres"
-[Fx] RUN	provide: salon/internal/infrastructure/postgres.NewClient() in 8.802964ms from module "postgres"
+[Fx] RUN	provide: salon/internal/infrastructure/postgres.NewClient() in 8.245276ms from module "postgres"
 [Fx] INVOKE		salon/internal/infrastructure/redis.NewModule.func1() from module "redis"
 [Fx] BEFORE RUN	provide: salon/internal/config.RedisConfig() from module "redis"
-[Fx] RUN	provide: salon/internal/config.RedisConfig() in 48.406µs from module "redis"
+[Fx] RUN	provide: salon/internal/config.RedisConfig() in 27.071µs from module "redis"
 [Fx] BEFORE RUN	provide: salon/internal/infrastructure/redis.NewClient() from module "redis"
-[Fx] RUN	provide: salon/internal/infrastructure/redis.NewClient() in 240.308µs from module "redis"
+[Fx] RUN	provide: salon/internal/infrastructure/redis.NewClient() in 109.331µs from module "redis"
 [Fx] INVOKE		salon/internal/service/event.NewModule.func1() from module "event"
 [Fx] BEFORE RUN	provide: salon/internal/repository/event/postgres.NewRepository() from module "event"
-[Fx] RUN	provide: salon/internal/repository/event/postgres.NewRepository() in 11.304µs from module "event"
+[Fx] RUN	provide: salon/internal/repository/event/postgres.NewRepository() in 5.336µs from module "event"
 [Fx] BEFORE RUN	provide: salon/internal/service/event.NewService() from module "event"
-[Fx] RUN	provide: salon/internal/service/event.NewService() in 16.207µs from module "event"
+[Fx] RUN	provide: salon/internal/service/event.NewService() in 8.246µs from module "event"
 [Fx] INVOKE		salon/internal/transport/http.NewModule.func1() from module "http"
 [Fx] BEFORE RUN	provide: salon/internal/config.HttpServerConfig() from module "http"
-[Fx] RUN	provide: salon/internal/config.HttpServerConfig() in 22.371µs from module "http"
+[Fx] RUN	provide: salon/internal/config.HttpServerConfig() in 9.474µs from module "http"
 [Fx] BEFORE RUN	provide: salon/internal/config.JWTConfig() from module "config"
-[Fx] RUN	provide: salon/internal/config.JWTConfig() in 53.596µs from module "config"
+[Fx] RUN	provide: salon/internal/config.JWTConfig() in 26.11µs from module "config"
 [Fx] BEFORE RUN	provide: salon/internal/config.LoggerConfig() from module "zap"
-[Fx] RUN	provide: salon/internal/config.LoggerConfig() in 13.52µs from module "zap"
+[Fx] RUN	provide: salon/internal/config.LoggerConfig() in 12.594µs from module "zap"
 [Fx] BEFORE RUN	provide: salon/pkg/logger.NewLogger() from module "zap"
-[Fx] RUN	provide: salon/pkg/logger.NewLogger() in 53.476µs from module "zap"
+[Fx] RUN	provide: salon/pkg/logger.NewLogger() in 92.993µs from module "zap"
 [Fx] BEFORE RUN	provide: salon/internal/repository/employee/postgres.NewRepository() from module "employee"
-[Fx] RUN	provide: salon/internal/repository/employee/postgres.NewRepository() in 14.126µs from module "employee"
+[Fx] RUN	provide: salon/internal/repository/employee/postgres.NewRepository() in 5.453µs from module "employee"
 [Fx] BEFORE RUN	provide: fx.Annotate(salon/pkg/clock.ClockModule.func1(), fx.As([[clock.Clock]]) from module "clock"
-[Fx] RUN	provide: fx.Annotate(salon/pkg/clock.ClockModule.func1(), fx.As([[clock.Clock]]) in 46.129µs from module "clock"
+[Fx] RUN	provide: fx.Annotate(salon/pkg/clock.ClockModule.func1(), fx.As([[clock.Clock]]) in 21.658µs from module "clock"
 [Fx] BEFORE RUN	provide: salon/internal/service/employee.NewService() from module "service"
-[Fx] RUN	provide: salon/internal/service/employee.NewService() in 11.222µs from module "service"
+[Fx] RUN	provide: salon/internal/service/employee.NewService() in 6.439µs from module "service"
 [Fx] BEFORE RUN	provide: salon/internal/repository/supplier/postgres.NewRepository() from module "supplier"
-[Fx] RUN	provide: salon/internal/repository/supplier/postgres.NewRepository() in 29.701µs from module "supplier"
+[Fx] RUN	provide: salon/internal/repository/supplier/postgres.NewRepository() in 20.448µs from module "supplier"
 [Fx] BEFORE RUN	provide: salon/internal/repository/supplier/redis.NewRepository() from module "supplier"
-[Fx] RUN	provide: salon/internal/repository/supplier/redis.NewRepository() in 7.616µs from module "supplier"
+[Fx] RUN	provide: salon/internal/repository/supplier/redis.NewRepository() in 4.049µs from module "supplier"
 [Fx] BEFORE RUN	provide: salon/internal/service/supplier.NewService() from module "supplier"
-[Fx] RUN	provide: salon/internal/service/supplier.NewService() in 18.181µs from module "supplier"
+[Fx] RUN	provide: salon/internal/service/supplier.NewService() in 10.205µs from module "supplier"
 [Fx] BEFORE RUN	provide: salon/internal/repository/client/postgres.NewRepository() from module "client"
-[Fx] RUN	provide: salon/internal/repository/client/postgres.NewRepository() in 7.984µs from module "client"
+[Fx] RUN	provide: salon/internal/repository/client/postgres.NewRepository() in 4.56µs from module "client"
 [Fx] BEFORE RUN	provide: salon/internal/service/client.NewService() from module "client"
-[Fx] RUN	provide: salon/internal/service/client.NewService() in 7.828µs from module "client"
+[Fx] RUN	provide: salon/internal/service/client.NewService() in 5.448µs from module "client"
 [Fx] BEFORE RUN	provide: salon/internal/repository/car/postgres.NewRepository() from module "car"
-[Fx] RUN	provide: salon/internal/repository/car/postgres.NewRepository() in 7.118µs from module "car"
+[Fx] RUN	provide: salon/internal/repository/car/postgres.NewRepository() in 7.239µs from module "car"
 [Fx] BEFORE RUN	provide: salon/internal/repository/model/postgres.NewRepository() from module "model"
-[Fx] RUN	provide: salon/internal/repository/model/postgres.NewRepository() in 15.74µs from module "model"
+[Fx] RUN	provide: salon/internal/repository/model/postgres.NewRepository() in 12.992µs from module "model"
 [Fx] BEFORE RUN	provide: salon/internal/repository/brand/postgres.NewRepository() from module "brand"
-[Fx] RUN	provide: salon/internal/repository/brand/postgres.NewRepository() in 7.277µs from module "brand"
+[Fx] RUN	provide: salon/internal/repository/brand/postgres.NewRepository() in 4.304µs from module "brand"
+[Fx] BEFORE RUN	provide: salon/internal/repository/brand/redis.NewCache() from module "brand"
+[Fx] RUN	provide: salon/internal/repository/brand/redis.NewCache() in 6.319µs from module "brand"
 [Fx] BEFORE RUN	provide: salon/internal/service/brand.NewService() from module "brand"
-[Fx] RUN	provide: salon/internal/service/brand.NewService() in 8.064µs from module "brand"
+[Fx] RUN	provide: salon/internal/service/brand.NewService() in 5.253µs from module "brand"
 [Fx] BEFORE RUN	provide: salon/internal/service/model.NewService() from module "model"
-[Fx] RUN	provide: salon/internal/service/model.NewService() in 8.426µs from module "model"
+[Fx] RUN	provide: salon/internal/service/model.NewService() in 5.347µs from module "model"
 [Fx] BEFORE RUN	provide: salon/internal/service/car.NewService() from module "car"
-[Fx] RUN	provide: salon/internal/service/car.NewService() in 129.391µs from module "car"
+[Fx] RUN	provide: salon/internal/service/car.NewService() in 24.791µs from module "car"
 [Fx] BEFORE RUN	provide: salon/internal/repository/sale/postgres.NewRepository() from module "sale"
-[Fx] RUN	provide: salon/internal/repository/sale/postgres.NewRepository() in 9.048µs from module "sale"
+[Fx] RUN	provide: salon/internal/repository/sale/postgres.NewRepository() in 9.34µs from module "sale"
 [Fx] BEFORE RUN	provide: salon/internal/service/sale.NewService() from module "sale"
-[Fx] RUN	provide: salon/internal/service/sale.NewService() in 19.966µs from module "sale"
+[Fx] RUN	provide: salon/internal/service/sale.NewService() in 5.995µs from module "sale"
 [Fx] BEFORE RUN	provide: salon/internal/transport/http.NewServer() from module "http"
-[Fx] RUN	provide: salon/internal/transport/http.NewServer() in 73.376µs from module "http"
+[Fx] RUN	provide: salon/internal/transport/http.NewServer() in 49.858µs from module "http"
 [Fx] HOOK OnStart		salon/internal/transport/http.NewModule.func1.1() executing (caller: salon/internal/transport/http.NewModule.func1)
-[Fx] HOOK OnStart		salon/internal/transport/http.NewModule.func1.1() called by salon/internal/transport/http.NewModule.func1 ran successfully in 6.13µs
+[Fx] HOOK OnStart		salon/internal/transport/http.NewModule.func1.1() called by salon/internal/transport/http.NewModule.func1 ran successfully in 10.745µs
 [Fx] RUNNING
 
    ____    __
@@ -101,17 +104,17 @@ https://echo.labstack.com
 ____________________________________O/_______
                                     O\
 ⇨ http server started on [::]:8080
-{"level":"error","ts":1773581075.9505913,"caller":"logger/logger.go:62","msg":"create brand: Key: 'Brand.Name' Error:Field validation for 'Name' failed on the 'required' tag"}
-{"level":"error","ts":1773581075.9524634,"caller":"logger/logger.go:62","msg":"create brand: Key: 'Brand.Description' Error:Field validation for 'Description' failed on the 'required' tag"}
-{"level":"error","ts":1773581075.9540036,"caller":"logger/logger.go:62","msg":"create brand: Key: 'Brand.CountryCode' Error:Field validation for 'CountryCode' failed on the 'iso3166_1_alpha2' tag"}
-{"level":"error","ts":1773581075.9554539,"caller":"logger/logger.go:62","msg":"forbidden"}
-{"level":"error","ts":1773581075.9565382,"caller":"logger/logger.go:62","msg":"token is empty"}
-{"level":"error","ts":1773581076.01349,"caller":"logger/logger.go:62","msg":"invalid id"}
-{"level":"error","ts":1773581076.0159383,"caller":"logger/logger.go:62","msg":"brand not found"}
-{"level":"error","ts":1773581076.159701,"caller":"logger/logger.go:62","msg":"update brand: Key: 'Brand.Name' Error:Field validation for 'Name' failed on the 'required' tag"}
-{"level":"error","ts":1773581076.1610224,"caller":"logger/logger.go:62","msg":"update brand: Key: 'Brand.CountryCode' Error:Field validation for 'CountryCode' failed on the 'iso3166_1_alpha2' tag"}
-{"level":"error","ts":1773581076.162019,"caller":"logger/logger.go:62","msg":"update brand: Key: 'Brand.Description' Error:Field validation for 'Description' failed on the 'required' tag"}
-{"level":"error","ts":1773581076.1633847,"caller":"logger/logger.go:62","msg":"brand not found"}
-{"level":"error","ts":1773581076.1645505,"caller":"logger/logger.go:62","msg":"update brand: invalid id"}
-{"level":"error","ts":1773581076.1658983,"caller":"logger/logger.go:62","msg":"forbidden"}
-{"level":"error","ts":1773581076.1670754,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1774030038.488959,"caller":"logger/logger.go:62","msg":"create brand: Key: 'Brand.Name' Error:Field validation for 'Name' failed on the 'required' tag"}
+{"level":"error","ts":1774030038.490522,"caller":"logger/logger.go:62","msg":"create brand: Key: 'Brand.Description' Error:Field validation for 'Description' failed on the 'required' tag"}
+{"level":"error","ts":1774030038.4919221,"caller":"logger/logger.go:62","msg":"create brand: Key: 'Brand.CountryCode' Error:Field validation for 'CountryCode' failed on the 'iso3166_1_alpha2' tag"}
+{"level":"error","ts":1774030038.4934247,"caller":"logger/logger.go:62","msg":"forbidden"}
+{"level":"error","ts":1774030038.494631,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1774030038.5375547,"caller":"logger/logger.go:62","msg":"invalid id"}
+{"level":"error","ts":1774030038.539574,"caller":"logger/logger.go:62","msg":"brand not found"}
+{"level":"error","ts":1774030038.7010453,"caller":"logger/logger.go:62","msg":"update brand: Key: 'Brand.Name' Error:Field validation for 'Name' failed on the 'required' tag"}
+{"level":"error","ts":1774030038.70236,"caller":"logger/logger.go:62","msg":"update brand: Key: 'Brand.CountryCode' Error:Field validation for 'CountryCode' failed on the 'iso3166_1_alpha2' tag"}
+{"level":"error","ts":1774030038.7034788,"caller":"logger/logger.go:62","msg":"update brand: Key: 'Brand.Description' Error:Field validation for 'Description' failed on the 'required' tag"}
+{"level":"error","ts":1774030038.7049084,"caller":"logger/logger.go:62","msg":"brand not found"}
+{"level":"error","ts":1774030038.705958,"caller":"logger/logger.go:62","msg":"update brand: invalid id"}
+{"level":"error","ts":1774030038.7070951,"caller":"logger/logger.go:62","msg":"forbidden"}
+{"level":"error","ts":1774030038.7080004,"caller":"logger/logger.go:62","msg":"token is empty"}

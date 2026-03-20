@@ -25,6 +25,7 @@ func (s *brandService) Create(ctx context.Context, b *models.Brand) (*models.Bra
 		}
 		return nil, errorx.NewError("create brand: "+err.Error(), errorx.Internal)
 	}
+	s.cache.SetByID(ctx, b, ttl)
 	s.eventService.AddEvent(ctx, &models.Event{
 		Type:       models.EventTypeCreated,
 		EntityType: models.EntityTypeBrand,

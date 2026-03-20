@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"salon/internal/models"
+	"time"
 
 	repo "salon/internal/repository/errors"
 
@@ -11,18 +12,26 @@ import (
 	"github.com/docker/distribution/uuid"
 )
 
+const (
+	ttl = 5 * time.Minute
+)
+
 func (s *brandService) getByID(ctx context.Context, id string) (*models.Brand, error) {
-	//TODO кеширование
 	if _, err := uuid.Parse(id); err != nil {
 		return nil, ErrInvalidID
 	}
-	b, err := s.repo.GetByID(ctx, id)
+	b, err := s.cache.GetByID(ctx, id)
+	if nil == err {
+		return b, nil
+	}
+	b, err = s.repo.GetByID(ctx, id)
 	if err != nil {
 		if errors.Is(err, repo.ErrNotFound) {
 			return nil, ErrBrandNotFound
 		}
 		return nil, errorx.NewError("get brand: "+err.Error(), errorx.Internal)
 	}
+	s.cache.SetByID(ctx, b, ttl) //TODO логи
 	return b, nil
 }
 

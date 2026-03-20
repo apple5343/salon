@@ -27,6 +27,7 @@ func (s *brandService) Update(ctx context.Context, b *models.Brand) (*models.Bra
 		}
 		return nil, errorx.NewError("update brand: "+err.Error(), errorx.Internal)
 	}
+	s.cache.SetByID(ctx, b, ttl)
 	s.eventService.AddEvent(ctx, &models.Event{
 		Type:       models.EventTypeUpdated,
 		EntityType: models.EntityTypeBrand,

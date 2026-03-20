@@ -17,13 +17,16 @@ var (
 
 type brandService struct {
 	repo         repository.BrandRepository
+	cache        repository.BrandCache
 	eventService service.EventService
 	clock        clock.Clock
 }
 
-func NewService(repo repository.BrandRepository, eventService service.EventService, clock clock.Clock) service.BrandService {
+func NewService(repo repository.BrandRepository, cache repository.BrandCache,
+	eventService service.EventService, clock clock.Clock) service.BrandService {
 	return &brandService{
 		repo:         repo,
+		cache:        cache,
 		eventService: eventService,
 		clock:        clock,
 	}

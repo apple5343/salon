@@ -34,6 +34,12 @@ type BrandRepository interface {
 	Delete(ctx context.Context, id string) error
 }
 
+type BrandCache interface {
+	GetByID(ctx context.Context, id string) (*models.Brand, error)
+	SetByID(ctx context.Context, b *models.Brand, ttl time.Duration) error
+	DeleteByID(ctx context.Context, id string) error
+}
+
 type ModelRepository interface {
 	GetByID(ctx context.Context, id string) (*models.Model, error)
 	GetModelsByFilter(ctx context.Context, filter *models.ModelFilters) ([]*models.ModelShort, error)

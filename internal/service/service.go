@@ -72,3 +72,7 @@ type EventService interface {
 	GetEventByID(ctx context.Context, id string) (*models.Event, error)
 	GetEvents(ctx context.Context, filters *models.EventFilters) ([]*models.Event, error)
 }
+
+type AnalyticsService interface {
+	
+}

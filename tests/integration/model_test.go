@@ -38,6 +38,8 @@ func (s *ModelSuite) SetupSuite() {
 		s.brands[brand.ID] = brand
 		s.brandsIds = append(s.brandsIds, brand.ID)
 	}
+
+	s.T().Run("create", s.Create)
 }
 
 func (s *ModelSuite) CompareModelsPublic(t *testing.T, expected, actual *httpModels.ModelInternalResponse) {
@@ -62,10 +64,12 @@ func (s *ModelSuite) CompareModelsPublic(t *testing.T, expected, actual *httpMod
 }
 
 func (s *ModelSuite) RandomModel() *httpModels.Model {
+	s.Require().GreaterOrEqual(len(s.modelsIds), 1)
 	return models.ModelInternalToModel(s.models[s.modelsIds[gofakeit.Number(0, len(s.modelsIds)-1)]])
 }
 
 func (s *ModelSuite) RandomBrandId() string {
+	s.Require().GreaterOrEqual(len(s.brandsIds), 1)
 	return s.brandsIds[gofakeit.Number(0, len(s.brandsIds)-1)]
 }
 
