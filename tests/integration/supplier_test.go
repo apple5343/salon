@@ -18,7 +18,7 @@ type SupplierSuite struct {
 	base         *BaseTestSuite
 	adminToken   *models.EmployeeToken
 	managerToken *models.EmployeeToken
-	suppliers    map[string]*httpModels.Supplier
+	suppliers    map[string]*httpModels.SupplierInternalResponse
 }
 
 func (s *SupplierSuite) SetupSuite() {
@@ -26,7 +26,7 @@ func (s *SupplierSuite) SetupSuite() {
 	s.Require().NoError(err)
 	s.Require().Equal(http.StatusOK, code)
 	s.adminToken = token
-	s.suppliers = make(map[string]*httpModels.Supplier)
+	s.suppliers = make(map[string]*httpModels.SupplierInternalResponse)
 
 	manager := models.GenerateEmployee()
 	password := manager.Password
@@ -64,12 +64,12 @@ func (s *SupplierSuite) TestList() {
 	s.T().Run("list", s.List)
 }
 
-func (s *SupplierSuite) CompareSuppliersPublic(t *testing.T, expected *httpModels.Supplier, actual *httpModels.Supplier) {
+func CompareSuppliersPublic(t *testing.T, expected *httpModels.SupplierInternalResponse, actual *httpModels.SupplierInternalResponse) {
 	require.Equal(t, expected.ID, actual.ID)
 	require.Equal(t, expected.Name, actual.Name)
 	require.Equal(t, expected.CountryCode, actual.CountryCode)
-	require.Empty(t, actual.CreatedAt)
-	require.Empty(t, actual.UpdatedAt)
+	require.Zero(t, actual.CreatedAt)
+	require.Zero(t, actual.UpdatedAt)
 }
 
 func (s *SupplierSuite) Create(t *testing.T) {
@@ -131,7 +131,7 @@ func (s *SupplierSuite) Get(t *testing.T) {
 			supplier, code, err := s.base.client.GetSupplier(s.base.ctx, "", id)
 			require.NoError(t, err)
 			require.Equal(t, http.StatusOK, code)
-			s.CompareSuppliersPublic(t, s.suppliers[id], supplier)
+			CompareSuppliersPublic(t, s.suppliers[id], supplier)
 		}
 	})
 }
@@ -153,15 +153,15 @@ func (s *SupplierSuite) GetInvalid(t *testing.T) {
 func (s *SupplierSuite) Update(t *testing.T) {
 	for id, supplier := range s.suppliers {
 		newSupplier := models.GenerateSupplier()
-		supplier.CountryCode = newSupplier.CountryCode
-		supplier.Name = newSupplier.Name
-		updated, code, err := s.base.client.UpdateSupplier(s.base.ctx, s.adminToken.AccessToken, supplier)
+		newSupplier.ID = id
+		updated, code, err := s.base.client.UpdateSupplier(s.base.ctx, s.adminToken.AccessToken, newSupplier)
 		require.NoError(t, err)
 		require.Equal(t, http.StatusOK, code)
-		require.Equal(t, supplier.ID, updated.ID)
-		require.Equal(t, supplier.Name, updated.Name)
-		require.Equal(t, supplier.CountryCode, updated.CountryCode)
+		require.Equal(t, newSupplier.ID, updated.ID)
+		require.Equal(t, newSupplier.Name, updated.Name)
+		require.Equal(t, newSupplier.CountryCode, updated.CountryCode)
 		require.Equal(t, supplier.CreatedAt, updated.CreatedAt)
+		require.NotEqual(t, supplier.UpdatedAt, updated.UpdatedAt)
 		s.suppliers[id] = updated
 	}
 }
@@ -191,7 +191,7 @@ func (s *SupplierSuite) UpdateInvalid(t *testing.T) {
 	supplier := s.suppliers[keys[0]]
 
 	t.Run("empty name", func(t *testing.T) {
-		supplierCopy := models.CopySupplier(supplier)
+		supplierCopy := models.SupplierInternalToSupplier(supplier)
 		supplierCopy.Name = ""
 		_, code, err := s.base.client.UpdateSupplier(s.base.ctx, s.adminToken.AccessToken, supplierCopy)
 		require.NoError(t, err)
@@ -199,7 +199,7 @@ func (s *SupplierSuite) UpdateInvalid(t *testing.T) {
 	})
 
 	t.Run("invalid country code", func(t *testing.T) {
-		supplierCopy := models.CopySupplier(supplier)
+		supplierCopy := models.SupplierInternalToSupplier(supplier)
 		supplierCopy.CountryCode = gofakeit.Word()
 		_, code, err := s.base.client.UpdateSupplier(s.base.ctx, s.adminToken.AccessToken, supplierCopy)
 		require.NoError(t, err)
@@ -210,7 +210,7 @@ func (s *SupplierSuite) UpdateInvalid(t *testing.T) {
 func (s *SupplierSuite) UpdateForbidden(t *testing.T) {
 	t.Run("update without token", func(t *testing.T) {
 		for _, supplier := range s.suppliers {
-			_, code, err := s.base.client.UpdateSupplier(s.base.ctx, "", supplier)
+			_, code, err := s.base.client.UpdateSupplier(s.base.ctx, "", models.SupplierInternalToSupplier(supplier))
 			require.NoError(t, err)
 			require.Equal(t, http.StatusUnauthorized, code)
 			break
@@ -219,7 +219,7 @@ func (s *SupplierSuite) UpdateForbidden(t *testing.T) {
 
 	t.Run("update with manager token", func(t *testing.T) {
 		for _, supplier := range s.suppliers {
-			_, code, err := s.base.client.UpdateSupplier(s.base.ctx, s.managerToken.AccessToken, supplier)
+			_, code, err := s.base.client.UpdateSupplier(s.base.ctx, s.managerToken.AccessToken, models.SupplierInternalToSupplier(supplier))
 			require.NoError(t, err)
 			require.Equal(t, http.StatusForbidden, code)
 			break
@@ -227,8 +227,8 @@ func (s *SupplierSuite) UpdateForbidden(t *testing.T) {
 	})
 }
 
-func (s *SupplierSuite) CheckList(t *testing.T, token string, filter *serviceModels.SupplierFilters, expected []string) (map[string]*httpModels.Supplier, []string) {
-	all := make(map[string]*httpModels.Supplier)
+func (s *SupplierSuite) CheckList(t *testing.T, token string, filter *serviceModels.SupplierFilters, expected []string) (map[string]*httpModels.SupplierInternalResponse, []string) {
+	all := make(map[string]*httpModels.SupplierInternalResponse)
 	sorted := []string{}
 	for true {
 		suppliers, code, err := s.base.client.GetSuppliers(s.base.ctx, token, filter)
@@ -291,7 +291,7 @@ func (s *SupplierSuite) List(t *testing.T) {
 	})
 
 	t.Run("all public with county code & order by updated at desc", func(t *testing.T) {
-		countries := make(map[string][]*httpModels.Supplier)
+		countries := make(map[string][]*httpModels.SupplierInternalResponse)
 		for _, s := range s.suppliers {
 			countries[s.CountryCode] = append(countries[s.CountryCode], s)
 		}
@@ -321,19 +321,19 @@ func (s *SupplierSuite) List(t *testing.T) {
 			}
 
 			for id, sup := range all {
-				s.CompareSuppliersPublic(t, s.suppliers[id], sup)
+				CompareSuppliersPublic(t, s.suppliers[id], sup)
 			}
 		}
 	})
 
 	t.Run("internal with county code and name & sorted by created at asc", func(t *testing.T) {
 		names := []string{"a", "b", "c", "d"}
-		countriesWithNames := make(map[string]map[string][]*httpModels.Supplier)
+		countriesWithNames := make(map[string]map[string][]*httpModels.SupplierInternalResponse)
 		for _, s := range s.suppliers {
 			for _, name := range names {
 				if models.MatchesPattern(name, s.Name) {
 					if _, ok := countriesWithNames[s.CountryCode]; !ok {
-						countriesWithNames[s.CountryCode] = make(map[string][]*httpModels.Supplier)
+						countriesWithNames[s.CountryCode] = make(map[string][]*httpModels.SupplierInternalResponse)
 					}
 					countriesWithNames[s.CountryCode][name] = append(countriesWithNames[s.CountryCode][name], s)
 				}

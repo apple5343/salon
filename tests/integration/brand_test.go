@@ -18,7 +18,7 @@ type BrandSuite struct {
 	base         *BaseTestSuite
 	adminToken   *models.EmployeeToken
 	managerToken *models.EmployeeToken
-	brands       map[string]*httpModels.Brand
+	brands       map[string]*httpModels.BrandInternalResponse
 }
 
 func (s *BrandSuite) SetupSuite() {
@@ -40,7 +40,7 @@ func (s *BrandSuite) SetupSuite() {
 	s.Require().Equal(http.StatusOK, code)
 	s.managerToken = token
 
-	s.brands = make(map[string]*httpModels.Brand)
+	s.brands = make(map[string]*httpModels.BrandInternalResponse)
 
 	s.T().Run("create", s.Create(5))
 }
@@ -69,12 +69,12 @@ func (s *BrandSuite) TestList() {
 	s.T().Run("list", s.List)
 }
 
-func (s *BrandSuite) CompareBrandsPublic(t *testing.T, expected, actual *httpModels.Brand) {
+func CompareBrandsPublic(t *testing.T, expected, actual *httpModels.BrandInternalResponse) {
 	require.Equal(t, expected.ID, actual.ID)
 	require.Equal(t, expected.Name, actual.Name)
 	require.Equal(t, expected.Description, actual.Description)
-	require.Empty(t, actual.CreatedAt)
-	require.Empty(t, actual.UpdatedAt)
+	require.Zero(t, actual.CreatedAt)
+	require.Zero(t, actual.UpdatedAt)
 }
 
 func (s *BrandSuite) Create(count int) func(t *testing.T) {
@@ -143,7 +143,7 @@ func (s *BrandSuite) Get(t *testing.T) {
 			brand, code, err := s.base.client.GetBrand(s.base.ctx, "", id)
 			s.Require().NoError(err)
 			s.Require().Equal(http.StatusOK, code)
-			s.CompareBrandsPublic(t, s.brands[id], brand)
+			CompareBrandsPublic(t, s.brands[id], brand)
 		}
 	})
 }
@@ -165,15 +165,13 @@ func (s *BrandSuite) GetInvalid(t *testing.T) {
 func (s *BrandSuite) Update(t *testing.T) {
 	for id, brand := range s.brands {
 		newBrand := models.GenerateBrand()
-		brand.CountryCode = newBrand.CountryCode
-		brand.Description = newBrand.Description
-		brand.Name = newBrand.Name
-		updated, code, err := s.base.client.UpdateBrand(s.base.ctx, s.adminToken.AccessToken, brand)
+		newBrand.ID = id
+		updated, code, err := s.base.client.UpdateBrand(s.base.ctx, s.adminToken.AccessToken, newBrand)
 		s.Require().NoError(err)
 		s.Require().Equal(http.StatusOK, code)
-		require.Equal(t, brand.Name, updated.Name)
-		require.Equal(t, brand.Description, updated.Description)
-		require.Equal(t, brand.CountryCode, updated.CountryCode)
+		require.Equal(t, newBrand.Name, updated.Name)
+		require.Equal(t, newBrand.Description, updated.Description)
+		require.Equal(t, newBrand.CountryCode, updated.CountryCode)
 		require.Equal(t, brand.CreatedAt, updated.CreatedAt)
 		require.NotEqual(t, brand.UpdatedAt, updated.UpdatedAt)
 		s.brands[id] = updated
@@ -183,7 +181,7 @@ func (s *BrandSuite) Update(t *testing.T) {
 func (s *BrandSuite) UpdateInvalid(t *testing.T) {
 	var brand *httpModels.Brand
 	for id := range s.brands {
-		brand = s.brands[id]
+		brand = models.BrandInternalToBrand(s.brands[id])
 		break
 	}
 	t.Run("empty name", func(t *testing.T) {
@@ -230,7 +228,7 @@ func (s *BrandSuite) UpdateInvalid(t *testing.T) {
 func (s *BrandSuite) UpdateForbidden(t *testing.T) {
 	var brand *httpModels.Brand
 	for id := range s.brands {
-		brand = s.brands[id]
+		brand = models.BrandInternalToBrand(s.brands[id])
 		break
 	}
 	t.Run("update with manager role", func(t *testing.T) {
@@ -246,8 +244,8 @@ func (s *BrandSuite) UpdateForbidden(t *testing.T) {
 	})
 }
 
-func (s *BrandSuite) CheckList(t *testing.T, token string, filter *serviceModels.BrandFilters, expected []string) (map[string]*httpModels.Brand, []string) {
-	all := make(map[string]*httpModels.Brand)
+func (s *BrandSuite) CheckList(t *testing.T, token string, filter *serviceModels.BrandFilters, expected []string) (map[string]*httpModels.BrandInternalResponse, []string) {
+	all := make(map[string]*httpModels.BrandInternalResponse)
 	sorted := []string{}
 	for true {
 		brands, code, err := s.base.client.GetBrands(s.base.ctx, token, filter)
@@ -331,12 +329,12 @@ func (s *BrandSuite) List(t *testing.T) {
 			}
 		}
 		for id, b := range all {
-			s.CompareBrandsPublic(t, s.brands[id], b)
+			CompareBrandsPublic(t, s.brands[id], b)
 		}
 	})
 
 	t.Run("all internal with country code & order by updated at desc", func(t *testing.T) {
-		countries := make(map[string][]*httpModels.Brand)
+		countries := make(map[string][]*httpModels.BrandInternalResponse)
 		for _, b := range s.brands {
 			countries[b.CountryCode] = append(countries[b.CountryCode], b)
 		}
@@ -372,12 +370,12 @@ func (s *BrandSuite) List(t *testing.T) {
 
 	t.Run("public with country code and name & order by created at asc", func(t *testing.T) {
 		names := []string{"a", "b", "c", "d"}
-		countriesWithNames := make(map[string]map[string][]*httpModels.Brand)
+		countriesWithNames := make(map[string]map[string][]*httpModels.BrandInternalResponse)
 		for _, b := range s.brands {
 			for _, name := range names {
 				if models.MatchesPattern(name, b.Name) {
 					if _, ok := countriesWithNames[b.CountryCode]; !ok {
-						countriesWithNames[b.CountryCode] = make(map[string][]*httpModels.Brand)
+						countriesWithNames[b.CountryCode] = make(map[string][]*httpModels.BrandInternalResponse)
 					}
 					countriesWithNames[b.CountryCode][name] = append(countriesWithNames[b.CountryCode][name], b)
 				}
@@ -407,7 +405,7 @@ func (s *BrandSuite) List(t *testing.T) {
 					}
 				}
 				for id, b := range all {
-					s.CompareBrandsPublic(t, s.brands[id], b)
+					CompareBrandsPublic(t, s.brands[id], b)
 				}
 			}
 		}

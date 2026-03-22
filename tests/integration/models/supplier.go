@@ -24,3 +24,13 @@ func CopySupplier(s *httpModels.Supplier) *httpModels.Supplier {
 		UpdatedAt:   s.UpdatedAt,
 	}
 }
+
+func SupplierInternalToSupplier(s *httpModels.SupplierInternalResponse) *httpModels.Supplier {
+	return &httpModels.Supplier{
+		ID:          s.ID,
+		Name:        s.Name,
+		CountryCode: s.CountryCode,
+		CreatedAt:   s.CreatedAt,
+		UpdatedAt:   s.UpdatedAt,
+	}
+}

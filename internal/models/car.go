@@ -40,6 +40,9 @@ func (c *Car) BeforeCreate(cl clock.Clock) error {
 	if err := c.Validate(); err != nil {
 		return err
 	}
+	if c.Price.IsNegative() {
+		return errors.New("price cannot be negative")
+	}
 	c.Price = c.Price.Round(2)
 	now := cl.Now()
 	c.CreatedAt = now

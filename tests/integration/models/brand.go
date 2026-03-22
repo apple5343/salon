@@ -24,3 +24,14 @@ func CopyBrand(brand *httpModels.Brand) *httpModels.Brand {
 		UpdatedAt:   brand.UpdatedAt,
 	}
 }
+
+func BrandInternalToBrand(brand *httpModels.BrandInternalResponse) *httpModels.Brand {
+	return &httpModels.Brand{
+		ID:          brand.ID,
+		Name:        brand.Name,
+		CountryCode: brand.CountryCode,
+		Description: brand.Description,
+		CreatedAt:   brand.CreatedAt,
+		UpdatedAt:   brand.UpdatedAt,
+	}
+}

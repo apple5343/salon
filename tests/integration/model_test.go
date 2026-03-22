@@ -20,13 +20,13 @@ type ModelSuite struct {
 	managerToken *models.EmployeeToken
 	models       map[string]*httpModels.ModelInternalResponse
 	modelsIds    []string
-	brands       map[string]*httpModels.Brand
+	brands       map[string]*httpModels.BrandInternalResponse
 	brandsIds    []string
 }
 
 func (s *ModelSuite) SetupSuite() {
 	s.models = make(map[string]*httpModels.ModelInternalResponse)
-	s.brands = make(map[string]*httpModels.Brand)
+	s.brands = make(map[string]*httpModels.BrandInternalResponse)
 
 	s.adminToken = s.base.LoginAdmin(s.T())
 	s.managerToken, _ = s.base.HireManager(s.T(), s.adminToken.AccessToken)
@@ -42,7 +42,7 @@ func (s *ModelSuite) SetupSuite() {
 	s.T().Run("create", s.Create)
 }
 
-func (s *ModelSuite) CompareModelsPublic(t *testing.T, expected, actual *httpModels.ModelInternalResponse) {
+func CompareModelsPublic(t *testing.T, expected, actual *httpModels.ModelInternalResponse) {
 	require.Equal(t, expected.ID, actual.ID)
 	require.Equal(t, expected.Name, actual.Name)
 	require.Equal(t, expected.Generation, actual.Generation)
@@ -53,12 +53,7 @@ func (s *ModelSuite) CompareModelsPublic(t *testing.T, expected, actual *httpMod
 	require.Equal(t, expected.PowerHP, actual.PowerHP)
 	require.Equal(t, expected.DriveType, actual.DriveType)
 	require.Equal(t, expected.BasePrice, actual.BasePrice)
-	require.Equal(t, expected.Brand.ID, actual.Brand.ID)
-	require.Equal(t, expected.Brand.Name, actual.Brand.Name)
-	require.Equal(t, expected.Brand.Description, actual.Brand.Description)
-	require.Equal(t, expected.Brand.CountryCode, actual.Brand.CountryCode)
-	require.Zero(t, actual.Brand.CreatedAt)
-	require.Zero(t, actual.Brand.UpdatedAt)
+	CompareBrandsPublic(t, expected.Brand, actual.Brand)
 	require.Zero(t, actual.CreatedAt)
 	require.Zero(t, actual.UpdatedAt)
 }
@@ -266,7 +261,7 @@ func (s *ModelSuite) Get(t *testing.T) {
 			model, code, err := s.base.client.GetModel(s.base.ctx, "", id)
 			require.NoError(t, err)
 			require.Equal(t, http.StatusOK, code)
-			s.CompareModelsPublic(t, s.models[id], model)
+			CompareModelsPublic(t, s.models[id], model)
 		}
 	})
 }

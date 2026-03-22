@@ -10,7 +10,7 @@ import (
 	"strconv"
 )
 
-func (c *Client) CreateBrand(ctx context.Context, token string, brand *httpModels.Brand) (*httpModels.Brand, int, error) {
+func (c *Client) CreateBrand(ctx context.Context, token string, brand *httpModels.Brand) (*httpModels.BrandInternalResponse, int, error) {
 	body, err := json.Marshal(brand)
 	if err != nil {
 		return nil, 0, err
@@ -30,14 +30,14 @@ func (c *Client) CreateBrand(ctx context.Context, token string, brand *httpModel
 	if resp.StatusCode != http.StatusOK {
 		return nil, resp.StatusCode, nil
 	}
-	var r httpModels.Brand
+	var r httpModels.BrandInternalResponse
 	if err := json.NewDecoder(resp.Body).Decode(&r); err != nil {
 		return nil, 0, err
 	}
 	return &r, resp.StatusCode, nil
 }
 
-func (c *Client) GetBrand(ctx context.Context, token string, id string) (*httpModels.Brand, int, error) {
+func (c *Client) GetBrand(ctx context.Context, token string, id string) (*httpModels.BrandInternalResponse, int, error) {
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, c.BaseUrl+"/brands/"+id, nil)
 	if err != nil {
 		return nil, 0, err
@@ -45,7 +45,7 @@ func (c *Client) GetBrand(ctx context.Context, token string, id string) (*httpMo
 	if token != "" {
 		req.Header.Set("Authorization", "Bearer "+token)
 	}
-	var r httpModels.Brand
+	var r httpModels.BrandInternalResponse
 	resp, err := c.C.Do(req)
 	if err != nil {
 		return nil, 0, err
@@ -59,7 +59,7 @@ func (c *Client) GetBrand(ctx context.Context, token string, id string) (*httpMo
 	return &r, resp.StatusCode, nil
 }
 
-func (c *Client) UpdateBrand(ctx context.Context, token string, brand *httpModels.Brand) (*httpModels.Brand, int, error) {
+func (c *Client) UpdateBrand(ctx context.Context, token string, brand *httpModels.Brand) (*httpModels.BrandInternalResponse, int, error) {
 	body, err := json.Marshal(brand)
 	if err != nil {
 		return nil, 0, err
@@ -79,14 +79,14 @@ func (c *Client) UpdateBrand(ctx context.Context, token string, brand *httpModel
 	if resp.StatusCode != http.StatusOK {
 		return nil, resp.StatusCode, nil
 	}
-	var r httpModels.Brand
+	var r httpModels.BrandInternalResponse
 	if err := json.NewDecoder(resp.Body).Decode(&r); err != nil {
 		return nil, 0, err
 	}
 	return &r, resp.StatusCode, nil
 }
 
-func (c *Client) GetBrands(ctx context.Context, token string, filter *serviceModels.BrandFilters) ([]*httpModels.Brand, int, error) {
+func (c *Client) GetBrands(ctx context.Context, token string, filter *serviceModels.BrandFilters) ([]*httpModels.BrandInternalResponse, int, error) {
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, c.BaseUrl+"/brands", nil)
 	if err != nil {
 		return nil, 0, err
@@ -121,11 +121,9 @@ func (c *Client) GetBrands(ctx context.Context, token string, filter *serviceMod
 	if resp.StatusCode != http.StatusOK {
 		return nil, resp.StatusCode, nil
 	}
-	var r []*httpModels.Brand
+	var r []*httpModels.BrandInternalResponse
 	if err := json.NewDecoder(resp.Body).Decode(&r); err != nil {
 		return nil, 0, err
 	}
 	return r, resp.StatusCode, nil
 }
-
-

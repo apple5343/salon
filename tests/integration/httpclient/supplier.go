@@ -10,7 +10,7 @@ import (
 	"strconv"
 )
 
-func (c *Client) CreateSupplier(ctx context.Context, token string, s *httpModels.Supplier) (*httpModels.Supplier, int, error) {
+func (c *Client) CreateSupplier(ctx context.Context, token string, s *httpModels.Supplier) (*httpModels.SupplierInternalResponse, int, error) {
 	body, err := json.Marshal(s)
 	if err != nil {
 		return nil, 0, err
@@ -31,14 +31,14 @@ func (c *Client) CreateSupplier(ctx context.Context, token string, s *httpModels
 	if resp.StatusCode != http.StatusOK {
 		return nil, resp.StatusCode, nil
 	}
-	var r httpModels.Supplier
+	var r httpModels.SupplierInternalResponse
 	if err := json.NewDecoder(resp.Body).Decode(&r); err != nil {
 		return nil, 0, err
 	}
 	return &r, resp.StatusCode, nil
 }
 
-func (c *Client) GetSupplier(ctx context.Context, token string, id string) (*httpModels.Supplier, int, error) {
+func (c *Client) GetSupplier(ctx context.Context, token string, id string) (*httpModels.SupplierInternalResponse, int, error) {
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, c.BaseUrl+"/suppliers/"+id, nil)
 	if err != nil {
 		return nil, 0, err
@@ -53,14 +53,14 @@ func (c *Client) GetSupplier(ctx context.Context, token string, id string) (*htt
 	if resp.StatusCode != http.StatusOK {
 		return nil, resp.StatusCode, nil
 	}
-	var r httpModels.Supplier
+	var r httpModels.SupplierInternalResponse
 	if err := json.NewDecoder(resp.Body).Decode(&r); err != nil {
 		return nil, 0, err
 	}
 	return &r, resp.StatusCode, nil
 }
 
-func (c *Client) UpdateSupplier(ctx context.Context, token string, s *httpModels.Supplier) (*httpModels.Supplier, int, error) {
+func (c *Client) UpdateSupplier(ctx context.Context, token string, s *httpModels.Supplier) (*httpModels.SupplierInternalResponse, int, error) {
 	body, err := json.Marshal(s)
 	if err != nil {
 		return nil, 0, err
@@ -81,14 +81,14 @@ func (c *Client) UpdateSupplier(ctx context.Context, token string, s *httpModels
 	if resp.StatusCode != http.StatusOK {
 		return nil, resp.StatusCode, nil
 	}
-	var r httpModels.Supplier
+	var r httpModels.SupplierInternalResponse
 	if err := json.NewDecoder(resp.Body).Decode(&r); err != nil {
 		return nil, 0, err
 	}
 	return &r, resp.StatusCode, nil
 }
 
-func (c *Client) GetSuppliers(ctx context.Context, token string, filter *serviceModels.SupplierFilters) ([]*httpModels.Supplier, int, error) {
+func (c *Client) GetSuppliers(ctx context.Context, token string, filter *serviceModels.SupplierFilters) ([]*httpModels.SupplierInternalResponse, int, error) {
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, c.BaseUrl+"/suppliers", nil)
 	if err != nil {
 		return nil, 0, err
@@ -123,7 +123,7 @@ func (c *Client) GetSuppliers(ctx context.Context, token string, filter *service
 	if resp.StatusCode != http.StatusOK {
 		return nil, resp.StatusCode, nil
 	}
-	var r []*httpModels.Supplier
+	var r []*httpModels.SupplierInternalResponse
 	if err := json.NewDecoder(resp.Body).Decode(&r); err != nil {
 		return nil, 0, err
 	}

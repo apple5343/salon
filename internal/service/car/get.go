@@ -5,6 +5,7 @@ import (
 	"errors"
 	"salon/internal/models"
 	repo "salon/internal/repository/errors"
+	ctxutil "salon/internal/utils/context"
 
 	"github.com/apple5343/errorx"
 )
@@ -30,5 +31,12 @@ func (s *carService) getCarByID(ctx context.Context, id string) (*models.Car, *m
 }
 
 func (s *carService) GetCarByID(ctx context.Context, id string) (*models.Car, *models.Model, *models.Brand, *models.Supplier, error) {
-	return s.getCarByID(ctx, id)
+	car, model, brand, supplier, err := s.getCarByID(ctx, id)
+	if err != nil {
+		return nil, nil, nil, nil, err
+	}
+	if role := ctxutil.UserRoleFromContext(ctx); car.Status != models.CarStatusAvailable && role != string(models.EmployeeRoleAdmin) && role != string(models.EmployeeRoleManager) {
+		return nil, nil, nil, nil, ErrCarNotFound
+	}
+	return car, model, brand, supplier, nil
 }
