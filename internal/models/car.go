@@ -25,7 +25,7 @@ type Car struct {
 	ModelID       string          `validate:"required,uuid"`
 	SupplierID    string          `validate:"required,uuid"`
 	Vin           string          `validate:"required,len=17"`
-	Year          int             `validate:"required,min=1900"`
+	Year          int             `validate:"required,min=1900,max=2050"`
 	Color         string          `validate:"required"`
 	InteriorColor string          `validate:"required"`
 	Mileage       int             `validate:"min=0"`
@@ -56,6 +56,9 @@ func (c *Car) BeforeUpdate(cl clock.Clock) error {
 	}
 	if _, err := uuid.Parse(c.ID); err != nil {
 		return ErrInvalidID
+	}
+	if c.Price.IsNegative() {
+		return errors.New("price cannot be negative")
 	}
 	c.Price = c.Price.Round(2)
 	c.UpdatedAt = cl.Now()

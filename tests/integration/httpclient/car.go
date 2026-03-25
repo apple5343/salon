@@ -60,3 +60,31 @@ func (c *Client) GetCar(ctx context.Context, token string, id string) (*httpMode
 	}
 	return &r, resp.StatusCode, nil
 }
+
+func (c *Client) UpdateCar(ctx context.Context, token string, car *httpModels.Car) (*httpModels.CarInternalResponse, int, error) {
+	body, err := json.Marshal(car)
+	if err != nil {
+		return nil, 0, err
+	}
+	req, err := http.NewRequestWithContext(ctx, http.MethodPut, c.BaseUrl+"/cars/"+car.ID, bytes.NewBuffer(body))
+	if err != nil {
+		return nil, 0, err
+	}
+
+	req.Header.Set("Content-Type", "application/json")
+	if token != "" {
+		req.Header.Set("Authorization", "Bearer "+token)
+	}
+	resp, err := c.C.Do(req)
+	if err != nil {
+		return nil, 0, err
+	}
+	if resp.StatusCode != http.StatusOK {
+		return nil, resp.StatusCode, nil
+	}
+	var r httpModels.CarInternalResponse
+	if err := json.NewDecoder(resp.Body).Decode(&r); err != nil {
+		return nil, 0, err
+	}
+	return &r, resp.StatusCode, nil
+}

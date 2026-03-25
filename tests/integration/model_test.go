@@ -1,7 +1,6 @@
 package integration
 
 import (
-	"fmt"
 	"net/http"
 	serviceModels "salon/internal/models"
 	httpModels "salon/internal/transport/http/models"
@@ -90,7 +89,6 @@ func (s *ModelSuite) Create(t *testing.T) {
 
 	for i := 0; i < modelsCount; i++ {
 		m := models.GenerateModel(s.RandomBrandId())
-		fmt.Println(m)
 		model, code, err := s.base.client.CreateModel(s.base.ctx, s.adminToken.AccessToken, m)
 		require.NoError(t, err)
 		require.Equal(t, http.StatusOK, code)

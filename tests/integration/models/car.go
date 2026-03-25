@@ -36,3 +36,21 @@ func GenerateCar(modelID string, supplierID string) *httpModels.Car {
 		Status:        string(serviceModels.CarStatusIncoming),
 	}
 }
+
+func CarInternalToCar(car *httpModels.CarInternalResponse) *httpModels.Car {
+	return &httpModels.Car{
+		ID:            car.ID,
+		ModelID:       car.Model.ID,
+		SupplierID:    car.Supplier.ID,
+		Vin:           car.Vin,
+		Year:          car.Year,
+		Color:         car.Color,
+		InteriorColor: car.InteriorColor,
+		Mileage:       car.Mileage,
+		Price:         car.Price,
+		Status:        car.Status,
+		Options:       car.Options,
+		CreatedAt:     car.CreatedAt,
+		UpdatedAt:     car.UpdatedAt,
+	}
+}

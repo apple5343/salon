@@ -20,7 +20,7 @@ func (s *carService) UpdateCar(ctx context.Context, c *models.Car) (*models.Car,
 	}
 	car, _, _, _, err := s.getCarByID(ctx, c.ID)
 	if err != nil {
-		return nil, nil, nil, nil, errorx.NewError("update car: "+err.Error(), errorx.Internal)
+		return nil, nil, nil, nil, err
 	}
 	if car.Status == models.CarStatusSold || car.Status == models.CarStatusBooked {
 		return nil, nil, nil, nil, errorx.NewError("it is not possible to change status directly.", errorx.BadRequest)
@@ -32,6 +32,10 @@ func (s *carService) UpdateCar(ctx context.Context, c *models.Car) (*models.Car,
 	if err != nil {
 		if errors.Is(err, repo.ErrNotFound) {
 			return nil, nil, nil, nil, ErrCarNotFound
+		} else if errors.Is(err, repo.ErrForeignKey) {
+			return nil, nil, nil, nil, ErrForeignKey
+		} else if errors.Is(err, repo.ErrAlreadyExists) {
+			return nil, nil, nil, nil, ErrCarExists
 		}
 		return nil, nil, nil, nil, errorx.NewError("update car: "+err.Error(), errorx.Internal)
 	}

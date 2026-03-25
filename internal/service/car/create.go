@@ -18,6 +18,9 @@ func (s *carService) CreateCar(ctx context.Context, c *models.Car) (*models.Car,
 	if err := c.BeforeCreate(s.clock); err != nil {
 		return nil, nil, nil, nil, errorx.NewError("create car: "+err.Error(), errorx.BadRequest)
 	}
+	if c.Status == models.CarStatusSold || c.Status == models.CarStatusBooked {
+		return nil, nil, nil, nil, errorx.NewError("it is not possible to create a car with the sales status.", errorx.BadRequest)
+	}
 	c, err := s.repo.CreateCar(ctx, c)
 	if err != nil {
 		if errors.Is(err, repo.ErrForeignKey) {

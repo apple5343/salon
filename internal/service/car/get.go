@@ -8,10 +8,14 @@ import (
 	ctxutil "salon/internal/utils/context"
 
 	"github.com/apple5343/errorx"
+	"github.com/google/uuid"
 )
 
 func (s *carService) getCarByID(ctx context.Context, id string) (*models.Car, *models.Model, *models.Brand, *models.Supplier, error) {
 	//TODO кеширование
+	if _, err := uuid.Parse(id); err != nil {
+		return nil, nil, nil, nil, ErrInvalidID
+	}
 	c, err := s.repo.GetCarByID(ctx, id)
 	if err != nil {
 		if errors.Is(err, repo.ErrNotFound) {
@@ -21,11 +25,11 @@ func (s *carService) getCarByID(ctx context.Context, id string) (*models.Car, *m
 	}
 	m, b, err := s.model.GetByID(ctx, c.ModelID)
 	if err != nil {
-		return nil, nil, nil, nil, errorx.NewError("create car: "+err.Error(), errorx.Internal)
+		return nil, nil, nil, nil, errorx.NewError("get car: "+err.Error(), errorx.Internal)
 	}
 	sup, err := s.supplier.GetByID(ctx, c.SupplierID)
 	if err != nil {
-		return nil, nil, nil, nil, errorx.NewError("create car: "+err.Error(), errorx.Internal)
+		return nil, nil, nil, nil, errorx.NewError("get car: "+err.Error(), errorx.Internal)
 	}
 	return c, m, b, sup, nil
 }

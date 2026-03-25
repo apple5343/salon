@@ -10,6 +10,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
 
+	serviceModels "salon/internal/models"
 	httpModels "salon/internal/transport/http/models"
 )
 
@@ -85,6 +86,16 @@ func (s *CarSuite) TestCreate() {
 	s.T().Run("forbidden", s.CreateForbidden)
 }
 
+func (s *CarSuite) TestGet() {
+	s.T().Run("get", s.Get)
+	s.T().Run("invalid", s.GetInvalid)
+}
+
+func (s *CarSuite) TestUpdate() {
+	s.T().Run("update", s.Update)
+	s.T().Run("invalid", s.UpdateInvalid)
+}
+
 func (s *CarSuite) RandomSupplier() *httpModels.SupplierInternalResponse {
 	return s.suppliers[s.suppliersIDs[rand.Intn(len(s.suppliersIDs))]]
 }
@@ -95,6 +106,10 @@ func (s *CarSuite) RandomBrand() *httpModels.BrandInternalResponse {
 
 func (s *CarSuite) RandomModel() *httpModels.ModelInternalResponse {
 	return s.models[s.modelsIDs[rand.Intn(len(s.modelsIDs))]]
+}
+
+func (s *CarSuite) RandomCar() *httpModels.CarInternalResponse {
+	return s.cars[s.carsIDs[rand.Intn(len(s.carsIDs))]]
 }
 
 func CompareCarsPublic(t *testing.T, expected, actual *httpModels.CarInternalResponse) {
@@ -136,6 +151,22 @@ func (s *CarSuite) CreateInvalid(t *testing.T) {
 	t.Run("invalid status", func(t *testing.T) {
 		car := models.GenerateCar(s.RandomModel().ID, s.RandomSupplier().ID)
 		car.Status = "invalid"
+		_, code, err := s.base.client.CreateCar(s.base.ctx, s.adminToken.AccessToken, car)
+		require.NoError(t, err)
+		require.Equal(t, http.StatusBadRequest, code)
+	})
+
+	t.Run("status sold", func(t *testing.T) {
+		car := models.GenerateCar(s.RandomModel().ID, s.RandomSupplier().ID)
+		car.Status = string(serviceModels.CarStatusSold)
+		_, code, err := s.base.client.CreateCar(s.base.ctx, s.adminToken.AccessToken, car)
+		require.NoError(t, err)
+		require.Equal(t, http.StatusBadRequest, code)
+	})
+
+	t.Run("status booked", func(t *testing.T) {
+		car := models.GenerateCar(s.RandomModel().ID, s.RandomSupplier().ID)
+		car.Status = string(serviceModels.CarStatusBooked)
 		_, code, err := s.base.client.CreateCar(s.base.ctx, s.adminToken.AccessToken, car)
 		require.NoError(t, err)
 		require.Equal(t, http.StatusBadRequest, code)
@@ -233,6 +264,29 @@ func (s *CarSuite) CreateInvalid(t *testing.T) {
 		require.Equal(t, http.StatusBadRequest, code)
 	})
 
+	t.Run("existing vin", func(t *testing.T) {
+		car := models.GenerateCar(s.RandomModel().ID, s.RandomSupplier().ID)
+		car.Vin = s.RandomCar().Vin
+		_, code, err := s.base.client.CreateCar(s.base.ctx, s.adminToken.AccessToken, car)
+		require.NoError(t, err)
+		require.Equal(t, http.StatusConflict, code)
+	})
+
+	t.Run("empty year", func(t *testing.T) {
+		car := models.GenerateCar(s.RandomModel().ID, s.RandomSupplier().ID)
+		car.Year = 0
+		_, code, err := s.base.client.CreateCar(s.base.ctx, s.adminToken.AccessToken, car)
+		require.NoError(t, err)
+		require.Equal(t, http.StatusBadRequest, code)
+	})
+
+	t.Run("invalid year", func(t *testing.T) {
+		car := models.GenerateCar(s.RandomModel().ID, s.RandomSupplier().ID)
+		car.Year = 1072
+		_, code, err := s.base.client.CreateCar(s.base.ctx, s.adminToken.AccessToken, car)
+		require.NoError(t, err)
+		require.Equal(t, http.StatusBadRequest, code)
+	})
 }
 
 func (s *CarSuite) CreateForbidden(t *testing.T) {
@@ -256,5 +310,210 @@ func (s *CarSuite) CreateForbidden(t *testing.T) {
 }
 
 func (s *CarSuite) Get(t *testing.T) {
+	t.Run("get internal", func(t *testing.T) {
+		for id := range s.cars {
+			car, code, err := s.base.client.GetCar(s.base.ctx, s.managerToken.AccessToken, id)
+			require.NoError(t, err)
+			require.Equal(t, http.StatusOK, code)
+			require.Equal(t, s.cars[id], car)
+		}
+	})
 
+	t.Run("get public", func(t *testing.T) {
+		for id := range s.cars {
+			car, code, err := s.base.client.GetCar(s.base.ctx, "", id)
+			require.NoError(t, err)
+			if s.cars[id].Status != string(serviceModels.CarStatusAvailable) {
+				require.Equal(t, http.StatusBadRequest, code)
+			} else {
+				require.Equal(t, http.StatusOK, code)
+				CompareCarsPublic(t, s.cars[id], car)
+			}
+		}
+	})
+}
+
+func (s *CarSuite) GetInvalid(t *testing.T) {
+	t.Run("invalid id", func(t *testing.T) {
+		_, code, err := s.base.client.GetCar(s.base.ctx, "", "invalid")
+		require.NoError(t, err)
+		require.Equal(t, http.StatusBadRequest, code)
+	})
+
+	t.Run("not existing", func(t *testing.T) {
+		_, code, err := s.base.client.GetCar(s.base.ctx, "", gofakeit.UUID())
+		require.NoError(t, err)
+		require.Equal(t, http.StatusBadRequest, code)
+	})
+}
+
+func (s *CarSuite) Update(t *testing.T) {
+	for id := range s.cars {
+		car := models.GenerateCar(s.RandomModel().ID, s.RandomSupplier().ID)
+		car.ID = id
+		updated, code, err := s.base.client.UpdateCar(s.base.ctx, s.adminToken.AccessToken, car)
+		require.NoError(t, err)
+		require.Equal(t, http.StatusOK, code)
+		require.Equal(t, car.ID, updated.ID)
+		require.Equal(t, car.ModelID, updated.Model.ID)
+		require.Equal(t, car.SupplierID, updated.Supplier.ID)
+		require.Equal(t, s.cars[id].CreatedAt, updated.CreatedAt)
+		require.NotEqual(t, s.cars[id].UpdatedAt, updated.UpdatedAt)
+		s.cars[id] = updated
+	}
+}
+
+func (s *CarSuite) UpdateInvalid(t *testing.T) {
+	car := s.RandomCar()
+	var car2 *httpModels.CarInternalResponse
+	for id, c := range s.cars {
+		if id != car.ID {
+			car2 = c
+			break
+		}
+	}
+	require.NotNil(t, car2)
+	t.Run("invalid id", func(t *testing.T) {
+		car := models.GenerateCar(s.RandomModel().ID, s.RandomSupplier().ID)
+		car.ID = "invalid"
+		_, code, err := s.base.client.UpdateCar(s.base.ctx, s.adminToken.AccessToken, car)
+		require.NoError(t, err)
+		require.Equal(t, http.StatusBadRequest, code)
+	})
+
+	t.Run("not existing", func(t *testing.T) {
+		car := models.GenerateCar(s.RandomModel().ID, s.RandomSupplier().ID)
+		car.ID = gofakeit.UUID()
+		_, code, err := s.base.client.UpdateCar(s.base.ctx, s.adminToken.AccessToken, car)
+		require.NoError(t, err)
+		require.Equal(t, http.StatusBadRequest, code)
+	})
+
+	t.Run("invalid model id", func(t *testing.T) {
+		c := models.CarInternalToCar(car)
+		c.ModelID = "invalid"
+		_, code, err := s.base.client.UpdateCar(s.base.ctx, s.adminToken.AccessToken, c)
+		require.NoError(t, err)
+		require.Equal(t, http.StatusBadRequest, code)
+	})
+
+	t.Run("not existing model", func(t *testing.T) {
+		c := models.CarInternalToCar(car)
+		c.ModelID = gofakeit.UUID()
+		_, code, err := s.base.client.UpdateCar(s.base.ctx, s.adminToken.AccessToken, c)
+		require.NoError(t, err)
+		require.Equal(t, http.StatusBadRequest, code)
+	})
+
+	t.Run("invalid supplier id", func(t *testing.T) {
+		c := models.CarInternalToCar(car)
+		c.SupplierID = "invalid"
+		_, code, err := s.base.client.UpdateCar(s.base.ctx, s.adminToken.AccessToken, c)
+		require.NoError(t, err)
+		require.Equal(t, http.StatusBadRequest, code)
+	})
+
+	t.Run("not existing supplier", func(t *testing.T) {
+		c := models.CarInternalToCar(car)
+		c.SupplierID = gofakeit.UUID()
+		_, code, err := s.base.client.UpdateCar(s.base.ctx, s.adminToken.AccessToken, c)
+		require.NoError(t, err)
+		require.Equal(t, http.StatusBadRequest, code)
+	})
+
+	t.Run("empty color", func(t *testing.T) {
+		c := models.CarInternalToCar(car)
+		c.Color = ""
+		_, code, err := s.base.client.UpdateCar(s.base.ctx, s.adminToken.AccessToken, c)
+		require.NoError(t, err)
+		require.Equal(t, http.StatusBadRequest, code)
+	})
+
+	t.Run("empty interior color", func(t *testing.T) {
+		c := models.CarInternalToCar(car)
+		c.InteriorColor = ""
+		_, code, err := s.base.client.UpdateCar(s.base.ctx, s.adminToken.AccessToken, c)
+		require.NoError(t, err)
+		require.Equal(t, http.StatusBadRequest, code)
+	})
+
+	t.Run("negative mileage", func(t *testing.T) {
+		c := models.CarInternalToCar(car)
+		c.Mileage = -1
+		_, code, err := s.base.client.UpdateCar(s.base.ctx, s.adminToken.AccessToken, c)
+		require.NoError(t, err)
+		require.Equal(t, http.StatusBadRequest, code)
+	})
+
+	t.Run("invalid price", func(t *testing.T) {
+		c := models.CarInternalToCar(car)
+		c.Price = "0.0.0"
+		_, code, err := s.base.client.UpdateCar(s.base.ctx, s.adminToken.AccessToken, c)
+		require.NoError(t, err)
+		require.Equal(t, http.StatusBadRequest, code)
+	})
+
+	t.Run("negative price", func(t *testing.T) {
+		c := models.CarInternalToCar(car)
+		c.Price = "-1.0"
+		_, code, err := s.base.client.UpdateCar(s.base.ctx, s.adminToken.AccessToken, c)
+		require.NoError(t, err)
+		require.Equal(t, http.StatusBadRequest, code)
+	})
+
+	t.Run("invalid status", func(t *testing.T) {
+		c := models.CarInternalToCar(car)
+		c.Status = "invalid"
+		_, code, err := s.base.client.UpdateCar(s.base.ctx, s.adminToken.AccessToken, c)
+		require.NoError(t, err)
+		require.Equal(t, http.StatusBadRequest, code)
+	})
+
+	t.Run("status sold", func(t *testing.T) {
+		c := models.CarInternalToCar(car)
+		c.Status = string(serviceModels.CarStatusSold)
+		_, code, err := s.base.client.UpdateCar(s.base.ctx, s.adminToken.AccessToken, c)
+		require.NoError(t, err)
+		require.Equal(t, http.StatusBadRequest, code)
+	})
+
+	t.Run("status booked", func(t *testing.T) {
+		c := models.CarInternalToCar(car)
+		c.Status = string(serviceModels.CarStatusBooked)
+		_, code, err := s.base.client.UpdateCar(s.base.ctx, s.adminToken.AccessToken, c)
+		require.NoError(t, err)
+		require.Equal(t, http.StatusBadRequest, code)
+	})
+
+	t.Run("empty year", func(t *testing.T) {
+		c := models.CarInternalToCar(car)
+		c.Year = 0
+		_, code, err := s.base.client.UpdateCar(s.base.ctx, s.adminToken.AccessToken, c)
+		require.NoError(t, err)
+		require.Equal(t, http.StatusBadRequest, code)
+	})
+
+	t.Run("invalid year", func(t *testing.T) {
+		c := models.CarInternalToCar(car)
+		c.Year = 12345
+		_, code, err := s.base.client.UpdateCar(s.base.ctx, s.adminToken.AccessToken, c)
+		require.NoError(t, err)
+		require.Equal(t, http.StatusBadRequest, code)
+	})
+
+	t.Run("invalid vin", func(t *testing.T) {
+		c := models.CarInternalToCar(car)
+		c.Vin = car.Vin + "1"
+		_, code, err := s.base.client.UpdateCar(s.base.ctx, s.adminToken.AccessToken, c)
+		require.NoError(t, err)
+		require.Equal(t, http.StatusBadRequest, code)
+	})
+
+	t.Run("existing vin", func(t *testing.T) {
+		c := models.CarInternalToCar(car)
+		c.Vin = car2.Vin
+		_, code, err := s.base.client.UpdateCar(s.base.ctx, s.adminToken.AccessToken, c)
+		require.NoError(t, err)
+		require.Equal(t, http.StatusConflict, code)
+	})
 }
