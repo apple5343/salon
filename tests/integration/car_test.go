@@ -549,6 +549,8 @@ func (s *CarSuite) UpdateInvalid(t *testing.T) {
 		require.NoError(t, err)
 		require.Equal(t, http.StatusConflict, code)
 	})
+
+	//TODO обноаление машины с статусом sold или booked
 }
 
 func (s *CarSuite) UpdateForbidden(t *testing.T) {
@@ -608,12 +610,13 @@ func (s *CarSuite) CheckList(t *testing.T, token string, filter *serviceModels.C
 }
 
 func (s *CarSuite) List(t *testing.T) {
-	for _, status := range []serviceModels.CarStatus{serviceModels.CarStatusAvailable, serviceModels.CarStatusIncoming,
-		serviceModels.CarStatusPending, serviceModels.CarStatusArchived} {
+	statuses := []serviceModels.CarStatus{serviceModels.CarStatusAvailable, serviceModels.CarStatusIncoming,
+		serviceModels.CarStatusPending, serviceModels.CarStatusArchived}
+	for _, status := range statuses {
 		t.Run("create "+string(status), s.Create(status, 5))
 	}
 
-	t.Run("all order by created at as asc", func(t *testing.T) {
+	t.Run("all cars & order by created at as asc", func(t *testing.T) {
 		// сортировка по created_at asc должна применяться по умолчанию
 		limit := 6
 		offset := 0
@@ -638,7 +641,7 @@ func (s *CarSuite) List(t *testing.T) {
 		}
 	})
 
-	t.Run("all available order by price desc", func(t *testing.T) {
+	t.Run("all available cars & order by price desc", func(t *testing.T) {
 		limit := 8
 		offset := 0
 		orderDirection := serviceModels.OrderDirectionDESC
@@ -681,7 +684,7 @@ func (s *CarSuite) List(t *testing.T) {
 		check checked
 	}{
 		{
-			name: "all order with min-max price & order by updated at desc",
+			name: "restricted price range & order by updated at desc",
 			list: func() (string, *serviceModels.CarFilters, []string) {
 				limit := 12
 				offset := 0
@@ -724,6 +727,83 @@ func (s *CarSuite) List(t *testing.T) {
 				}
 			},
 		},
+		{
+			name: "restricted mileage range & order by mileage asc",
+			list: func() (string, *serviceModels.CarFilters, []string) {
+				limit := 12
+				offset := 0
+				orderBy := serviceModels.CarOrderByMileage
+
+				min := 20
+				max := 60
+
+				filter := serviceModels.CarFilters{
+					BaseList: serviceModels.BaseList{
+						Limit:          &limit,
+						Offset:         &offset,
+					},
+					MinMileage: &min,
+					MaxMileage: &max,
+					OrderBy:    &orderBy,
+				}
+				expected := []string{}
+				for id, car := range s.cars {
+					if car.Mileage >= min && car.Mileage <= max {
+						expected = append(expected, id)
+					}
+				}
+				return s.adminToken.AccessToken, &filter, expected
+			},
+			check: func(t *testing.T, all map[string]*httpModels.CarShort, sorted []string) {
+				for i := 1; i < len(sorted); i++ {
+					if s.cars[sorted[i-1]].Mileage > s.cars[sorted[i]].Mileage {
+						t.Errorf("invalid order by mileage asc: %v > %v", s.cars[sorted[i-1]].Mileage, s.cars[sorted[i]].Mileage)
+					}
+				}
+				for id, c := range all {
+					CompareCarsShort(t, s.cars[id], c)
+				}
+			},
+		},
+		{
+			name: "restricted year range & order by year desc",
+			list: func() (string, *serviceModels.CarFilters, []string) {
+				limit := 12
+				offset := 0
+				orderDirection := serviceModels.OrderDirectionDESC
+				orderBy := serviceModels.CarOrderByYear
+				min := 2005
+				max := 2015
+
+				filter := serviceModels.CarFilters{
+					BaseList: serviceModels.BaseList{
+						Limit:          &limit,
+						Offset:         &offset,
+						OrderDirection: &orderDirection,
+					},
+					MinYear: &min,
+					MaxYear: &max,
+					OrderBy: &orderBy,
+				}
+				expected := []string{}
+				for id, car := range s.cars {
+					if car.Year >= min && car.Year <= max {
+						expected = append(expected, id)
+					}
+				}
+				return s.adminToken.AccessToken, &filter, expected
+			},
+			check: func(t *testing.T, all map[string]*httpModels.CarShort, sorted []string) {
+				for i := 1; i < len(sorted); i++ {
+					if s.cars[sorted[i-1]].Year < s.cars[sorted[i]].Year {
+						t.Errorf("invalid order by year desc: %v < %v", s.cars[sorted[i-1]].Year, s.cars[sorted[i]].Year)
+					}
+				}
+				for id, c := range all {
+					CompareCarsShort(t, s.cars[id], c)
+				}
+			},
+		},
 	}
 
 	for _, tt := range tests {
@@ -733,4 +813,84 @@ func (s *CarSuite) List(t *testing.T) {
 			tt.check(t, all, sorted)
 		})
 	}
+
+	for _, status := range statuses {
+		t.Run("filter by status "+string(status)+" & order by created at asc", func(t *testing.T) {
+			limit := 10
+			offset := 0
+			filter := serviceModels.CarFilters{
+				BaseList: serviceModels.BaseList{
+					Limit:  &limit,
+					Offset: &offset,
+				},
+				Status: &status,
+			}
+			expected := []string{}
+			for id := range s.cars {
+				if s.cars[id].Status == string(status) {
+					expected = append(expected, id)
+				}
+			}
+			all, sorted := s.CheckList(t, s.adminToken.AccessToken, &filter, expected)
+			for i := 1; i < len(sorted); i++ {
+				if s.cars[sorted[i-1]].CreatedAt.After(s.cars[sorted[i]].CreatedAt) {
+					t.Errorf("invalid order by created at asc: %v > %v", s.cars[sorted[i-1]].CreatedAt, s.cars[sorted[i]].CreatedAt)
+				}
+			}
+			for id, c := range all {
+				CompareCarsShort(t, s.cars[id], c)
+			}
+		})
+	}
+
+	t.Run("filter by all combinations of color and interior color & order by price asc", func(t *testing.T) {
+		colors := models.CarColors
+		limit := 50
+		orderBy := serviceModels.CarOrderByPrice
+		orderDirection := serviceModels.OrderDirectionASC
+
+		carsByColor := make(map[string]map[string][]string)
+		for _, color := range colors {
+			carsByColor[color] = make(map[string][]string)
+			for _, intCol := range colors {
+				carsByColor[color][intCol] = []string{}
+			}
+		}
+		for id, car := range s.cars {
+			carsByColor[car.Color][car.InteriorColor] = append(carsByColor[car.Color][car.InteriorColor], id)
+		}
+
+		for _, color := range colors {
+			for _, intCol := range colors {
+				expected := carsByColor[color][intCol]
+				if len(expected) == 0 {
+					continue
+				}
+				offset := 0
+				filter := serviceModels.CarFilters{
+					BaseList: serviceModels.BaseList{
+						Limit:          &limit,
+						Offset:         &offset,
+						OrderDirection: &orderDirection,
+					},
+					OrderBy:       &orderBy,
+					Color:         &color,
+					InteriorColor: &intCol,
+				}
+				all, sorted := s.CheckList(t, s.adminToken.AccessToken, &filter, expected)
+				for i := 1; i < len(sorted); i++ {
+					pricePrev, err := decimal.NewFromString(s.cars[sorted[i-1]].Price)
+					require.NoError(t, err)
+					priceCur, err := decimal.NewFromString(s.cars[sorted[i]].Price)
+					require.NoError(t, err)
+					if pricePrev.GreaterThan(priceCur) {
+						t.Errorf("Order by price asc failed for color=%s, interior_color=%s: %v > %v", color, intCol, s.cars[sorted[i-1]].Price, s.cars[sorted[i]].Price)
+					}
+				}
+				for id, c := range all {
+					CompareCarsShort(t, s.cars[id], c)
+				}
+			}
+		}
+	})
 }

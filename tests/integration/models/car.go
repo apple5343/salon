@@ -9,6 +9,16 @@ import (
 	"github.com/brianvoe/gofakeit"
 )
 
+var CarColors = []string{
+	"red",
+	"blue",
+	"green",
+	"yellow",
+	"purple",
+	"orange",
+	"brown",
+}
+
 func RandomVin() string {
 	vin := strings.Builder{}
 	vin.Grow(17)
@@ -29,8 +39,8 @@ func GenerateCar(modelID string, supplierID string) *httpModels.Car {
 		SupplierID:    supplierID,
 		Vin:           RandomVin(),
 		Year:          gofakeit.Number(2000, 2022),
-		Color:         gofakeit.Color(),
-		InteriorColor: gofakeit.Color(),
+		Color:         CarColors[gofakeit.Number(0, len(CarColors)-1)],
+		InteriorColor: CarColors[gofakeit.Number(0, len(CarColors)-1)],
 		Mileage:       gofakeit.Number(0, 100),
 		Price:         RandomPrice(),
 		Status:        string(serviceModels.CarStatusIncoming),

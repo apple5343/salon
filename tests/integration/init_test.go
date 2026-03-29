@@ -9,6 +9,7 @@ import (
 	"salon/tests/integration/httpclient"
 	"salon/tests/integration/models"
 	"strconv"
+	"strings"
 	"testing"
 	"time"
 
@@ -123,14 +124,40 @@ func (suite *BaseTestSuite) MustRestartApp() time.Time {
 
 	err = c.Stop(suite.ctx, nil)
 	suite.Require().NoError(err)
-	startetAt := time.Now()
+
+	startedAt := time.Now()
 	err = c.Start(suite.ctx)
 	suite.Require().NoError(err)
 
 	err = wait.NewHealthStrategy().WaitUntilReady(suite.ctx, c)
-	suite.Require().NoError(err)
+	if err != nil {
+		logs := suite.readContainerLogs(c.GetContainerID(), startedAt)
+		suite.Require().NoError(fmt.Errorf("%w\n--- app-test logs ---\n%s", err, logs))
+	}
 
-	return startetAt
+	return startedAt
+}
+
+func (suite *BaseTestSuite) readContainerLogs(containerID string, since time.Time) string {
+	cli, err := client.NewClientWithOpts(client.FromEnv, client.WithAPIVersionNegotiation())
+	if err != nil {
+		return "failed to create docker client: " + err.Error()
+	}
+	defer cli.Close()
+
+	reader, err := cli.ContainerLogs(suite.ctx, containerID, dockercontainer.LogsOptions{
+		ShowStdout: true,
+		ShowStderr: true,
+		Since:      fmt.Sprintf("%d.%09d", since.Unix(), int64(since.Nanosecond())),
+	})
+	if err != nil {
+		return "failed to read container logs: " + err.Error()
+	}
+	defer reader.Close()
+
+	var buf strings.Builder
+	stdcopy.StdCopy(&buf, &buf, reader)
+	return buf.String()
 }
 
 func (suite *BaseTestSuite) SetupSuite() {

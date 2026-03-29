@@ -21,78 +21,78 @@
 [Fx] PROVIDE	service.EmployeeService <= salon/internal/service/employee.NewService() from module "service"
 [Fx] PROVIDE	service.SupplierService <= salon/internal/service/supplier.NewService() from module "supplier"
 [Fx] PROVIDE	service.ClientService <= salon/internal/service/client.NewService() from module "client"
+[Fx] PROVIDE	service.CarService <= salon/internal/service/car.NewService() from module "car"
 [Fx] PROVIDE	service.BrandService <= salon/internal/service/brand.NewService() from module "brand"
 [Fx] PROVIDE	service.ModelService <= salon/internal/service/model.NewService() from module "model"
-[Fx] PROVIDE	service.CarService <= salon/internal/service/car.NewService() from module "car"
-[Fx] PROVIDE	service.EventService <= salon/internal/service/event.NewService() from module "event"
 [Fx] PROVIDE	service.SaleService <= salon/internal/service/sale.NewService() from module "sale"
+[Fx] PROVIDE	service.EventService <= salon/internal/service/event.NewService() from module "event"
 [Fx] PROVIDE	*config.HttpServer <= salon/internal/config.HttpServerConfig() from module "http"
 [Fx] PROVIDE	*http.Server <= salon/internal/transport/http.NewServer() from module "http"
 [Fx] PROVIDE	clock.Clock <= fx.Annotate(salon/pkg/clock.ClockModule.func1(), fx.As([[clock.Clock]]) from module "clock"
 [Fx] INVOKE		salon/internal/infrastructure/postgres.NewModule.func1() from module "postgres"
 [Fx] BEFORE RUN	provide: go.uber.org/fx.New.func1()
-[Fx] RUN	provide: go.uber.org/fx.New.func1() in 9.163µs
+[Fx] RUN	provide: go.uber.org/fx.New.func1() in 13.45µs
 [Fx] BEFORE RUN	provide: salon/internal/config.PostgresConfig() from module "postgres"
-[Fx] RUN	provide: salon/internal/config.PostgresConfig() in 97.579µs from module "postgres"
+[Fx] RUN	provide: salon/internal/config.PostgresConfig() in 136.571µs from module "postgres"
 [Fx] BEFORE RUN	provide: salon/internal/infrastructure/postgres.NewClient() from module "postgres"
-[Fx] RUN	provide: salon/internal/infrastructure/postgres.NewClient() in 7.819657ms from module "postgres"
+[Fx] RUN	provide: salon/internal/infrastructure/postgres.NewClient() in 12.004392ms from module "postgres"
 [Fx] INVOKE		salon/internal/infrastructure/redis.NewModule.func1() from module "redis"
 [Fx] BEFORE RUN	provide: salon/internal/config.RedisConfig() from module "redis"
-[Fx] RUN	provide: salon/internal/config.RedisConfig() in 27.704µs from module "redis"
+[Fx] RUN	provide: salon/internal/config.RedisConfig() in 31.311µs from module "redis"
 [Fx] BEFORE RUN	provide: salon/internal/infrastructure/redis.NewClient() from module "redis"
-[Fx] RUN	provide: salon/internal/infrastructure/redis.NewClient() in 79.815µs from module "redis"
+[Fx] RUN	provide: salon/internal/infrastructure/redis.NewClient() in 135.82µs from module "redis"
 [Fx] INVOKE		salon/internal/service/event.NewModule.func1() from module "event"
 [Fx] BEFORE RUN	provide: salon/internal/repository/event/postgres.NewRepository() from module "event"
-[Fx] RUN	provide: salon/internal/repository/event/postgres.NewRepository() in 14.639µs from module "event"
+[Fx] RUN	provide: salon/internal/repository/event/postgres.NewRepository() in 7.03µs from module "event"
 [Fx] BEFORE RUN	provide: salon/internal/service/event.NewService() from module "event"
-[Fx] RUN	provide: salon/internal/service/event.NewService() in 4.673µs from module "event"
+[Fx] RUN	provide: salon/internal/service/event.NewService() in 12.04µs from module "event"
 [Fx] INVOKE		salon/internal/transport/http.NewModule.func1() from module "http"
 [Fx] BEFORE RUN	provide: salon/internal/config.HttpServerConfig() from module "http"
-[Fx] RUN	provide: salon/internal/config.HttpServerConfig() in 8.472µs from module "http"
+[Fx] RUN	provide: salon/internal/config.HttpServerConfig() in 13.333µs from module "http"
 [Fx] BEFORE RUN	provide: salon/internal/config.JWTConfig() from module "config"
-[Fx] RUN	provide: salon/internal/config.JWTConfig() in 24.809µs from module "config"
+[Fx] RUN	provide: salon/internal/config.JWTConfig() in 42.48µs from module "config"
 [Fx] BEFORE RUN	provide: salon/internal/config.LoggerConfig() from module "zap"
-[Fx] RUN	provide: salon/internal/config.LoggerConfig() in 6.503µs from module "zap"
+[Fx] RUN	provide: salon/internal/config.LoggerConfig() in 13.895µs from module "zap"
 [Fx] BEFORE RUN	provide: salon/pkg/logger.NewLogger() from module "zap"
-[Fx] RUN	provide: salon/pkg/logger.NewLogger() in 108.815µs from module "zap"
+[Fx] RUN	provide: salon/pkg/logger.NewLogger() in 44.504µs from module "zap"
 [Fx] BEFORE RUN	provide: salon/internal/repository/employee/postgres.NewRepository() from module "employee"
-[Fx] RUN	provide: salon/internal/repository/employee/postgres.NewRepository() in 8.415µs from module "employee"
+[Fx] RUN	provide: salon/internal/repository/employee/postgres.NewRepository() in 7.169µs from module "employee"
 [Fx] BEFORE RUN	provide: fx.Annotate(salon/pkg/clock.ClockModule.func1(), fx.As([[clock.Clock]]) from module "clock"
-[Fx] RUN	provide: fx.Annotate(salon/pkg/clock.ClockModule.func1(), fx.As([[clock.Clock]]) in 23.328µs from module "clock"
+[Fx] RUN	provide: fx.Annotate(salon/pkg/clock.ClockModule.func1(), fx.As([[clock.Clock]]) in 30.66µs from module "clock"
 [Fx] BEFORE RUN	provide: salon/internal/service/employee.NewService() from module "service"
-[Fx] RUN	provide: salon/internal/service/employee.NewService() in 5.788µs from module "service"
+[Fx] RUN	provide: salon/internal/service/employee.NewService() in 8.603µs from module "service"
 [Fx] BEFORE RUN	provide: salon/internal/repository/supplier/postgres.NewRepository() from module "supplier"
-[Fx] RUN	provide: salon/internal/repository/supplier/postgres.NewRepository() in 9.558µs from module "supplier"
+[Fx] RUN	provide: salon/internal/repository/supplier/postgres.NewRepository() in 20.899µs from module "supplier"
 [Fx] BEFORE RUN	provide: salon/internal/repository/supplier/redis.NewRepository() from module "supplier"
-[Fx] RUN	provide: salon/internal/repository/supplier/redis.NewRepository() in 3.819µs from module "supplier"
+[Fx] RUN	provide: salon/internal/repository/supplier/redis.NewRepository() in 5.788µs from module "supplier"
 [Fx] BEFORE RUN	provide: salon/internal/service/supplier.NewService() from module "supplier"
-[Fx] RUN	provide: salon/internal/service/supplier.NewService() in 12.817µs from module "supplier"
+[Fx] RUN	provide: salon/internal/service/supplier.NewService() in 14.228µs from module "supplier"
 [Fx] BEFORE RUN	provide: salon/internal/repository/client/postgres.NewRepository() from module "client"
-[Fx] RUN	provide: salon/internal/repository/client/postgres.NewRepository() in 4.594µs from module "client"
+[Fx] RUN	provide: salon/internal/repository/client/postgres.NewRepository() in 6.018µs from module "client"
 [Fx] BEFORE RUN	provide: salon/internal/service/client.NewService() from module "client"
-[Fx] RUN	provide: salon/internal/service/client.NewService() in 5.198µs from module "client"
+[Fx] RUN	provide: salon/internal/service/client.NewService() in 6.968µs from module "client"
 [Fx] BEFORE RUN	provide: salon/internal/repository/car/postgres.NewRepository() from module "car"
-[Fx] RUN	provide: salon/internal/repository/car/postgres.NewRepository() in 4.005µs from module "car"
+[Fx] RUN	provide: salon/internal/repository/car/postgres.NewRepository() in 10.939µs from module "car"
 [Fx] BEFORE RUN	provide: salon/internal/repository/model/postgres.NewRepository() from module "model"
-[Fx] RUN	provide: salon/internal/repository/model/postgres.NewRepository() in 3.88µs from module "model"
+[Fx] RUN	provide: salon/internal/repository/model/postgres.NewRepository() in 9.561µs from module "model"
 [Fx] BEFORE RUN	provide: salon/internal/repository/brand/postgres.NewRepository() from module "brand"
-[Fx] RUN	provide: salon/internal/repository/brand/postgres.NewRepository() in 3.765µs from module "brand"
+[Fx] RUN	provide: salon/internal/repository/brand/postgres.NewRepository() in 6.132µs from module "brand"
 [Fx] BEFORE RUN	provide: salon/internal/repository/brand/redis.NewCache() from module "brand"
-[Fx] RUN	provide: salon/internal/repository/brand/redis.NewCache() in 12.766µs from module "brand"
+[Fx] RUN	provide: salon/internal/repository/brand/redis.NewCache() in 8.831µs from module "brand"
 [Fx] BEFORE RUN	provide: salon/internal/service/brand.NewService() from module "brand"
-[Fx] RUN	provide: salon/internal/service/brand.NewService() in 5.647µs from module "brand"
+[Fx] RUN	provide: salon/internal/service/brand.NewService() in 7.523µs from module "brand"
 [Fx] BEFORE RUN	provide: salon/internal/service/model.NewService() from module "model"
-[Fx] RUN	provide: salon/internal/service/model.NewService() in 5.314µs from module "model"
+[Fx] RUN	provide: salon/internal/service/model.NewService() in 7.598µs from module "model"
 [Fx] BEFORE RUN	provide: salon/internal/service/car.NewService() from module "car"
-[Fx] RUN	provide: salon/internal/service/car.NewService() in 7.837µs from module "car"
+[Fx] RUN	provide: salon/internal/service/car.NewService() in 16.181µs from module "car"
 [Fx] BEFORE RUN	provide: salon/internal/repository/sale/postgres.NewRepository() from module "sale"
-[Fx] RUN	provide: salon/internal/repository/sale/postgres.NewRepository() in 7.503µs from module "sale"
+[Fx] RUN	provide: salon/internal/repository/sale/postgres.NewRepository() in 18.38µs from module "sale"
 [Fx] BEFORE RUN	provide: salon/internal/service/sale.NewService() from module "sale"
-[Fx] RUN	provide: salon/internal/service/sale.NewService() in 5.558µs from module "sale"
+[Fx] RUN	provide: salon/internal/service/sale.NewService() in 7.056µs from module "sale"
 [Fx] BEFORE RUN	provide: salon/internal/transport/http.NewServer() from module "http"
-[Fx] RUN	provide: salon/internal/transport/http.NewServer() in 45.565µs from module "http"
+[Fx] RUN	provide: salon/internal/transport/http.NewServer() in 69.925µs from module "http"
 [Fx] HOOK OnStart		salon/internal/transport/http.NewModule.func1.1() executing (caller: salon/internal/transport/http.NewModule.func1)
-[Fx] HOOK OnStart		salon/internal/transport/http.NewModule.func1.1() called by salon/internal/transport/http.NewModule.func1 ran successfully in 3.253µs
+[Fx] HOOK OnStart		salon/internal/transport/http.NewModule.func1.1() called by salon/internal/transport/http.NewModule.func1 ran successfully in 4.642µs
 [Fx] RUNNING
 
    ____    __
@@ -104,28 +104,28 @@ https://echo.labstack.com
 ____________________________________O/_______
                                     O\
 ⇨ http server started on [::]:8080
-{"level":"error","ts":1774776150.0004568,"caller":"logger/logger.go:62","msg":"invalid id"}
-{"level":"error","ts":1774776150.0025017,"caller":"logger/logger.go:62","msg":"client not found"}
-{"level":"error","ts":1774776150.0037518,"caller":"logger/logger.go:62","msg":"token is empty"}
-{"level":"error","ts":1774776151.459501,"caller":"logger/logger.go:62","msg":"register client: Key: 'Client.FullName' Error:Field validation for 'FullName' failed on the 'required' tag"}
-{"level":"error","ts":1774776151.460873,"caller":"logger/logger.go:62","msg":"register client: Key: 'Client.Phone' Error:Field validation for 'Phone' failed on the 'phone' tag"}
-{"level":"error","ts":1774776151.461978,"caller":"logger/logger.go:62","msg":"register client: Key: 'Client.Email' Error:Field validation for 'Email' failed on the 'email' tag"}
-{"level":"error","ts":1774776151.4632351,"caller":"logger/logger.go:62","msg":"register client: Key: 'Client.Passport.Series' Error:Field validation for 'Series' failed on the 'len' tag"}
-{"level":"error","ts":1774776151.464401,"caller":"logger/logger.go:62","msg":"register client: Key: 'Client.Passport.Number' Error:Field validation for 'Number' failed on the 'len' tag"}
-{"level":"error","ts":1774776151.4655683,"caller":"logger/logger.go:62","msg":"register client: Key: 'Client.Passport.IssuedBy' Error:Field validation for 'IssuedBy' failed on the 'required' tag"}
-{"level":"error","ts":1774776151.4666889,"caller":"logger/logger.go:62","msg":"register client: password must be at least 8 characters"}
-{"level":"error","ts":1774776151.4676967,"caller":"logger/logger.go:62","msg":"parsing time \"15-10-1998\" as \"02.01.2006\": cannot parse \"-10-1998\" as \".\""}
-{"level":"error","ts":1774776151.4688487,"caller":"logger/logger.go:62","msg":"token is empty"}
-{"level":"error","ts":1774776151.6593428,"caller":"logger/logger.go:62","msg":"update client: invalid id"}
-{"level":"error","ts":1774776151.8237464,"caller":"logger/logger.go:62","msg":"client not found"}
-{"level":"error","ts":1774776151.8259783,"caller":"logger/logger.go:62","msg":"update client: Key: 'Client.FullName' Error:Field validation for 'FullName' failed on the 'required' tag"}
-{"level":"error","ts":1774776151.8275409,"caller":"logger/logger.go:62","msg":"update client: Key: 'Client.Phone' Error:Field validation for 'Phone' failed on the 'phone' tag"}
-{"level":"error","ts":1774776151.8296273,"caller":"logger/logger.go:62","msg":"update client: Key: 'Client.Email' Error:Field validation for 'Email' failed on the 'email' tag"}
-{"level":"error","ts":1774776151.8315363,"caller":"logger/logger.go:62","msg":"update client: Key: 'Client.Passport.Series' Error:Field validation for 'Series' failed on the 'numeric' tag"}
-{"level":"error","ts":1774776151.83362,"caller":"logger/logger.go:62","msg":"update client: Key: 'Client.Passport.Number' Error:Field validation for 'Number' failed on the 'numeric' tag"}
-{"level":"error","ts":1774776151.8359132,"caller":"logger/logger.go:62","msg":"update client: Key: 'Client.Passport.IssuedBy' Error:Field validation for 'IssuedBy' failed on the 'required' tag"}
-{"level":"error","ts":1774776151.8501906,"caller":"logger/logger.go:62","msg":"client already exists"}
-{"level":"error","ts":1774776151.8532817,"caller":"logger/logger.go:62","msg":"client already exists"}
-{"level":"error","ts":1774776151.8557713,"caller":"logger/logger.go:62","msg":"client already exists"}
-{"level":"error","ts":1774776151.857152,"caller":"logger/logger.go:62","msg":"token is empty"}
-{"level":"error","ts":1774776151.858367,"caller":"logger/logger.go:62","msg":"invalid token"}
+{"level":"error","ts":1774784817.64744,"caller":"logger/logger.go:62","msg":"invalid id"}
+{"level":"error","ts":1774784817.6489956,"caller":"logger/logger.go:62","msg":"client not found"}
+{"level":"error","ts":1774784817.6499672,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1774784819.0270572,"caller":"logger/logger.go:62","msg":"register client: Key: 'Client.FullName' Error:Field validation for 'FullName' failed on the 'required' tag"}
+{"level":"error","ts":1774784819.028899,"caller":"logger/logger.go:62","msg":"register client: Key: 'Client.Phone' Error:Field validation for 'Phone' failed on the 'phone' tag"}
+{"level":"error","ts":1774784819.0307138,"caller":"logger/logger.go:62","msg":"register client: Key: 'Client.Email' Error:Field validation for 'Email' failed on the 'email' tag"}
+{"level":"error","ts":1774784819.0319622,"caller":"logger/logger.go:62","msg":"register client: Key: 'Client.Passport.Series' Error:Field validation for 'Series' failed on the 'len' tag"}
+{"level":"error","ts":1774784819.0332127,"caller":"logger/logger.go:62","msg":"register client: Key: 'Client.Passport.Number' Error:Field validation for 'Number' failed on the 'len' tag"}
+{"level":"error","ts":1774784819.0344489,"caller":"logger/logger.go:62","msg":"register client: Key: 'Client.Passport.IssuedBy' Error:Field validation for 'IssuedBy' failed on the 'required' tag"}
+{"level":"error","ts":1774784819.0356984,"caller":"logger/logger.go:62","msg":"register client: password must be at least 8 characters"}
+{"level":"error","ts":1774784819.0368345,"caller":"logger/logger.go:62","msg":"parsing time \"22-02-1937\" as \"02.01.2006\": cannot parse \"-02-1937\" as \".\""}
+{"level":"error","ts":1774784819.037971,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1774784819.226785,"caller":"logger/logger.go:62","msg":"update client: invalid id"}
+{"level":"error","ts":1774784819.3546348,"caller":"logger/logger.go:62","msg":"client not found"}
+{"level":"error","ts":1774784819.3565662,"caller":"logger/logger.go:62","msg":"update client: Key: 'Client.FullName' Error:Field validation for 'FullName' failed on the 'required' tag"}
+{"level":"error","ts":1774784819.3578885,"caller":"logger/logger.go:62","msg":"update client: Key: 'Client.Phone' Error:Field validation for 'Phone' failed on the 'phone' tag"}
+{"level":"error","ts":1774784819.3593585,"caller":"logger/logger.go:62","msg":"update client: Key: 'Client.Email' Error:Field validation for 'Email' failed on the 'email' tag"}
+{"level":"error","ts":1774784819.3609493,"caller":"logger/logger.go:62","msg":"update client: Key: 'Client.Passport.Series' Error:Field validation for 'Series' failed on the 'numeric' tag"}
+{"level":"error","ts":1774784819.3625019,"caller":"logger/logger.go:62","msg":"update client: Key: 'Client.Passport.Number' Error:Field validation for 'Number' failed on the 'numeric' tag"}
+{"level":"error","ts":1774784819.3640575,"caller":"logger/logger.go:62","msg":"update client: Key: 'Client.Passport.IssuedBy' Error:Field validation for 'IssuedBy' failed on the 'required' tag"}
+{"level":"error","ts":1774784819.3815272,"caller":"logger/logger.go:62","msg":"client already exists"}
+{"level":"error","ts":1774784819.3837185,"caller":"logger/logger.go:62","msg":"client already exists"}
+{"level":"error","ts":1774784819.3875418,"caller":"logger/logger.go:62","msg":"client already exists"}
+{"level":"error","ts":1774784819.3887088,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1774784819.389781,"caller":"logger/logger.go:62","msg":"invalid token"}

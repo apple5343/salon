@@ -100,6 +100,9 @@ func (c *Client) GetCars(ctx context.Context, token string, filter *serviceModel
 		req.Header.Set("Authorization", "Bearer "+token)
 	}
 	q := req.URL.Query()
+	if filter.Status != nil {
+		q.Add("status", string(*filter.Status))
+	}
 	if filter.MinPrice != nil {
 		q.Add("min_price", filter.MinPrice.String())
 	}
