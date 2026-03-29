@@ -34,6 +34,9 @@ func (r *carRepository) GetCarsByFilter(ctx context.Context, filter *service.Car
 	if filter.Color != nil {
 		addCondition("c.color =", *filter.Color)
 	}
+	if filter.InteriorColor != nil {
+		addCondition("c.interior_color =", *filter.InteriorColor)
+	}
 	if filter.Status != nil {
 		addCondition("c.status =", *filter.Status)
 	}
@@ -56,9 +59,9 @@ func (r *carRepository) GetCarsByFilter(ctx context.Context, filter *service.Car
 		sortMap := map[service.CarOrderBy]string{
 			service.CarOrderByPrice:     "price",
 			service.CarOrderByYear:      "year",
-			service.CarOrderByMile:      "mileage",
-			service.CarOrderByCreatedAt: "created_at",
-			service.CarOrderByUpdatedAt: "updated_at",
+			service.CarOrderByMileage:   "mileage",
+			service.CarOrderByCreatedAt: "c.created_at",
+			service.CarOrderByUpdatedAt: "c.updated_at",
 		}
 		direction := "ASC"
 		if filter.OrderDirection != nil && *filter.OrderDirection == service.OrderDirectionDESC {

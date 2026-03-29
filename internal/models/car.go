@@ -85,24 +85,25 @@ type CarOrderBy string
 const (
 	CarOrderByYear      CarOrderBy = "year"
 	CarOrderByPrice     CarOrderBy = "price"
-	CarOrderByMile      CarOrderBy = "mileage"
+	CarOrderByMileage   CarOrderBy = "mileage"
 	CarOrderByCreatedAt CarOrderBy = "created_at"
 	CarOrderByUpdatedAt CarOrderBy = "updated_at"
 )
 
 type CarFilters struct {
-	SupplierID *string `validate:"omitempty,uuid"`
-	ModelID    *string `validate:"omitempty,uuid"`
-	BrandID    *string `validate:"omitempty,uuid"`
-	MinYear    *int    `validate:"omitempty,min=1900"`
-	MaxYear    *int    `validate:"omitempty,min=1900"`
-	Color      *string
-	Status     *CarStatus
-	MinPrice   *decimal.Decimal
-	MaxPrice   *decimal.Decimal
-	MinMileage *int `validate:"omitempty,min=0"`
-	MaxMileage *int `validate:"omitempty,min=0"`
-	OrderBy    *CarOrderBy
+	SupplierID    *string `validate:"omitempty,uuid"`
+	ModelID       *string `validate:"omitempty,uuid"`
+	BrandID       *string `validate:"omitempty,uuid"`
+	MinYear       *int    `validate:"omitempty,min=1900"`
+	MaxYear       *int    `validate:"omitempty,min=1900"`
+	Color         *string
+	InteriorColor *string
+	Status        *CarStatus
+	MinPrice      *decimal.Decimal
+	MaxPrice      *decimal.Decimal
+	MinMileage    *int `validate:"omitempty,min=0"`
+	MaxMileage    *int `validate:"omitempty,min=0"`
+	OrderBy       *CarOrderBy
 	BaseList
 }
 

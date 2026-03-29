@@ -58,6 +58,9 @@ func carFiltersFromRequest(c echo.Context) (*service.CarFilters, error) {
 	if color := c.QueryParam("color"); color != "" {
 		filter.Color = &color
 	}
+	if interiorColor := c.QueryParam("interior_color"); interiorColor != "" {
+		filter.InteriorColor = &interiorColor
+	}
 	if status := c.QueryParam("status"); status != "" {
 		s, ok := models.CarStatusTypeMap[status]
 		if !ok {
@@ -92,6 +95,13 @@ func carFiltersFromRequest(c echo.Context) (*service.CarFilters, error) {
 			return nil, errorx.NewError(err.Error(), errorx.BadRequest)
 		}
 		filter.MaxMileage = &maxMileageInt
+	}
+	if orderBy := c.QueryParam("order_by"); orderBy != "" {
+		o, ok := models.CarOrderByMap[orderBy]
+		if !ok {
+			return nil, errorx.NewError("invalid order by", errorx.BadRequest)
+		}
+		filter.OrderBy = &o
 	}
 	base, err := models.BaseListFromRequest(c)
 	if err != nil {

@@ -4,9 +4,11 @@ import (
 	"math/rand"
 	"net/http"
 	"salon/tests/integration/models"
+	"strconv"
 	"testing"
 
 	"github.com/brianvoe/gofakeit"
+	"github.com/shopspring/decimal"
 	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
 
@@ -77,11 +79,11 @@ func (s *CarSuite) SetupSuite() {
 		s.modelsIDs = append(s.modelsIDs, model.ID)
 	}
 
-	s.T().Run("create", s.Create)
+	s.T().Run("create", s.Create(serviceModels.CarStatusIncoming, 5))
 }
 
 func (s *CarSuite) TestCreate() {
-	s.T().Run("create", s.Create)
+	s.T().Run("create", s.Create(serviceModels.CarStatusIncoming, 5))
 	s.T().Run("invalid", s.CreateInvalid)
 	s.T().Run("forbidden", s.CreateForbidden)
 }
@@ -93,7 +95,13 @@ func (s *CarSuite) TestGet() {
 
 func (s *CarSuite) TestUpdate() {
 	s.T().Run("update", s.Update)
+	s.T().Run("get after update", s.Get)
 	s.T().Run("invalid", s.UpdateInvalid)
+	s.T().Run("forbidden", s.UpdateForbidden)
+}
+
+func (s *CarSuite) TestList() {
+	s.T().Run("list", s.List)
 }
 
 func (s *CarSuite) RandomSupplier() *httpModels.SupplierInternalResponse {
@@ -127,15 +135,28 @@ func CompareCarsPublic(t *testing.T, expected, actual *httpModels.CarInternalRes
 	require.Zero(t, actual.UpdatedAt)
 }
 
-func (s *CarSuite) Create(t *testing.T) {
-	const carsCount int = 10
+func CompareCarsShort(t *testing.T, expected *httpModels.CarInternalResponse, actual *httpModels.CarShort) {
+	require.Equal(t, expected.ID, actual.ID)
+	require.Equal(t, expected.Vin, actual.Vin)
+	require.Equal(t, expected.Year, actual.Year)
+	require.Equal(t, expected.Price, actual.Price)
+	require.Equal(t, expected.Status, expected.Status)
+	require.Equal(t, expected.Model.Brand.Name, actual.BrandName)
+	require.Equal(t, expected.Model.Name, actual.ModelName)
+	require.Equal(t, expected.Supplier.Name, actual.SupplierName)
+}
 
-	for i := 0; i < carsCount; i++ {
-		car, code, err := s.base.client.CreateCar(s.base.ctx, s.adminToken.AccessToken, models.GenerateCar(s.RandomModel().ID, s.RandomSupplier().ID))
-		require.NoError(t, err)
-		require.Equal(t, http.StatusOK, code)
-		s.cars[car.ID] = car
-		s.carsIDs = append(s.carsIDs, car.ID)
+func (s *CarSuite) Create(status serviceModels.CarStatus, count int) func(t *testing.T) {
+	return func(t *testing.T) {
+		for i := 0; i < count; i++ {
+			c := models.GenerateCar(s.RandomModel().ID, s.RandomSupplier().ID)
+			c.Status = string(status)
+			car, code, err := s.base.client.CreateCar(s.base.ctx, s.adminToken.AccessToken, c)
+			require.NoError(t, err)
+			require.Equal(t, http.StatusOK, code)
+			s.cars[car.ID] = car
+			s.carsIDs = append(s.carsIDs, car.ID)
+		}
 	}
 }
 
@@ -310,15 +331,27 @@ func (s *CarSuite) CreateForbidden(t *testing.T) {
 }
 
 func (s *CarSuite) Get(t *testing.T) {
+	availableCount := 0
+	otherCount := 0
 	t.Run("get internal", func(t *testing.T) {
 		for id := range s.cars {
 			car, code, err := s.base.client.GetCar(s.base.ctx, s.managerToken.AccessToken, id)
 			require.NoError(t, err)
 			require.Equal(t, http.StatusOK, code)
 			require.Equal(t, s.cars[id], car)
+			if s.cars[id].Status == string(serviceModels.CarStatusAvailable) {
+				availableCount++
+			} else {
+				otherCount++
+			}
 		}
 	})
-
+	if availableCount == 0 {
+		t.Run("create available", s.Create(serviceModels.CarStatusAvailable, 5))
+	}
+	if otherCount == 0 {
+		t.Run("create other", s.Create(serviceModels.CarStatusIncoming, 5))
+	}
 	t.Run("get public", func(t *testing.T) {
 		for id := range s.cars {
 			car, code, err := s.base.client.GetCar(s.base.ctx, "", id)
@@ -516,4 +549,188 @@ func (s *CarSuite) UpdateInvalid(t *testing.T) {
 		require.NoError(t, err)
 		require.Equal(t, http.StatusConflict, code)
 	})
+}
+
+func (s *CarSuite) UpdateForbidden(t *testing.T) {
+	car := models.CarInternalToCar(s.RandomCar())
+	t.Run("without token", func(t *testing.T) {
+		_, code, err := s.base.client.UpdateCar(s.base.ctx, "", car)
+		require.NoError(t, err)
+		require.Equal(t, http.StatusUnauthorized, code)
+	})
+
+	t.Run("with invalid token", func(t *testing.T) {
+		_, code, err := s.base.client.UpdateCar(s.base.ctx, gofakeit.Word(), car)
+		require.NoError(t, err)
+		require.Equal(t, http.StatusUnauthorized, code)
+	})
+
+	t.Run("with manager token", func(t *testing.T) {
+		_, code, err := s.base.client.UpdateCar(s.base.ctx, s.managerToken.AccessToken, car)
+		require.NoError(t, err)
+		require.Equal(t, http.StatusForbidden, code)
+	})
+}
+
+func (s *CarSuite) CheckList(t *testing.T, token string, filter *serviceModels.CarFilters, expected []string) (map[string]*httpModels.CarShort, []string) {
+	all := make(map[string]*httpModels.CarShort)
+	sorted := []string{}
+	for true {
+		cars, code, err := s.base.client.GetCars(s.base.ctx, token, filter)
+		require.NoError(t, err)
+		require.Equal(t, http.StatusOK, code)
+		require.LessOrEqual(t, len(cars), *filter.Limit)
+		for _, c := range cars {
+			id := c.ID
+			if _, ok := s.cars[id]; !ok {
+				t.Errorf("invalid car id: %s", id)
+				continue
+			}
+			if _, ok := all[id]; ok {
+				t.Errorf("duplicate car id: %s", id)
+				continue
+			}
+			all[id] = c
+			sorted = append(sorted, id)
+		}
+		if len(cars) < *filter.Limit {
+			break
+		}
+		*filter.Offset += *filter.Limit
+	}
+	for _, id := range expected {
+		if _, ok := all[id]; !ok {
+			t.Errorf("not checked car id: %s", id)
+		}
+	}
+	require.Equal(t, len(expected), len(all))
+	return all, sorted
+}
+
+func (s *CarSuite) List(t *testing.T) {
+	for _, status := range []serviceModels.CarStatus{serviceModels.CarStatusAvailable, serviceModels.CarStatusIncoming,
+		serviceModels.CarStatusPending, serviceModels.CarStatusArchived} {
+		t.Run("create "+string(status), s.Create(status, 5))
+	}
+
+	t.Run("all order by created at as asc", func(t *testing.T) {
+		// сортировка по created_at asc должна применяться по умолчанию
+		limit := 6
+		offset := 0
+		filter := serviceModels.CarFilters{
+			BaseList: serviceModels.BaseList{
+				Limit:  &limit,
+				Offset: &offset,
+			},
+		}
+		expected := make([]string, 0, len(s.cars))
+		for id := range s.cars {
+			expected = append(expected, id)
+		}
+		all, sorted := s.CheckList(t, s.adminToken.AccessToken, &filter, expected)
+		for i := 1; i < len(sorted); i++ {
+			if s.cars[sorted[i-1]].CreatedAt.After(s.cars[sorted[i]].CreatedAt) {
+				t.Errorf("invalid order by created at asc: %v > %v", s.cars[sorted[i-1]].CreatedAt, s.cars[sorted[i]].CreatedAt)
+			}
+		}
+		for id, c := range all {
+			CompareCarsShort(t, s.cars[id], c)
+		}
+	})
+
+	t.Run("all available order by price desc", func(t *testing.T) {
+		limit := 8
+		offset := 0
+		orderDirection := serviceModels.OrderDirectionDESC
+		orderBy := serviceModels.CarOrderByPrice
+		// для неавторизованных пользователей доступны только активные машины (available status)
+		filter := serviceModels.CarFilters{
+			BaseList: serviceModels.BaseList{
+				Limit:          &limit,
+				Offset:         &offset,
+				OrderDirection: &orderDirection,
+			},
+			OrderBy: &orderBy,
+		}
+		expected := []string{}
+		for id := range s.cars {
+			if s.cars[id].Status == string(serviceModels.CarStatusAvailable) {
+				expected = append(expected, id)
+			}
+		}
+		all, sorted := s.CheckList(t, "", &filter, expected)
+		for i := 1; i < len(sorted); i++ {
+			price1, err := decimal.NewFromString(s.cars[sorted[i-1]].Price)
+			require.NoError(t, err)
+			price2, err := decimal.NewFromString(s.cars[sorted[i]].Price)
+			require.NoError(t, err)
+			if price1.LessThan(price2) {
+				t.Errorf("invalid order by price desc: %v < %v", s.cars[sorted[i-1]].Price, s.cars[sorted[i]].Price)
+			}
+		}
+		for id, c := range all {
+			CompareCarsShort(t, s.cars[id], c)
+		}
+	})
+
+	type listFunc func() (string, *serviceModels.CarFilters, []string)
+	type checked func(t *testing.T, all map[string]*httpModels.CarShort, sorted []string)
+	tests := []struct {
+		name  string
+		list  listFunc
+		check checked
+	}{
+		{
+			name: "all order with min-max price & order by updated at desc",
+			list: func() (string, *serviceModels.CarFilters, []string) {
+				limit := 12
+				offset := 0
+				orderDirection := serviceModels.OrderDirectionDESC
+				orderBy := serviceModels.CarOrderByUpdatedAt
+				minPrice := gofakeit.Number(100, 1000)
+				maxPrice := minPrice + gofakeit.Number(50, 200)
+				minPriceDecimal, err := decimal.NewFromString(strconv.Itoa(minPrice))
+				require.NoError(t, err)
+				maxPriceDecimal, err := decimal.NewFromString(strconv.Itoa(maxPrice))
+				require.NoError(t, err)
+				filter := serviceModels.CarFilters{
+					BaseList: serviceModels.BaseList{
+						Limit:          &limit,
+						Offset:         &offset,
+						OrderDirection: &orderDirection,
+					},
+					MinPrice: &minPriceDecimal,
+					MaxPrice: &maxPriceDecimal,
+					OrderBy:  &orderBy,
+				}
+				expected := []string{}
+				for id := range s.cars {
+					price, err := decimal.NewFromString(s.cars[id].Price)
+					require.NoError(t, err)
+					if price.GreaterThanOrEqual(minPriceDecimal) && price.LessThanOrEqual(maxPriceDecimal) {
+						expected = append(expected, id)
+					}
+				}
+				return s.adminToken.AccessToken, &filter, expected
+			},
+			check: func(t *testing.T, all map[string]*httpModels.CarShort, sorted []string) {
+				for i := 1; i < len(sorted); i++ {
+					if s.cars[sorted[i-1]].UpdatedAt.Before(s.cars[sorted[i]].UpdatedAt) {
+						t.Errorf("invalid order by updated at desc: %v < %v", s.cars[sorted[i-1]].UpdatedAt, s.cars[sorted[i]].UpdatedAt)
+					}
+				}
+				for id, c := range all {
+					CompareCarsShort(t, s.cars[id], c)
+				}
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			token, filter, expected := tt.list()
+			all, sorted := s.CheckList(t, token, filter, expected)
+			tt.check(t, all, sorted)
+		})
+	}
 }

@@ -11,9 +11,18 @@ import (
 var CarStatusTypeMap = map[string]models.CarStatus{
 	"available": models.CarStatusAvailable,
 	"sold":      models.CarStatusSold,
+	"booked":    models.CarStatusBooked,
 	"pending":   models.CarStatusPending,
 	"archived":  models.CarStatusArchived,
 	"incoming":  models.CarStatusIncoming,
+}
+
+var CarOrderByMap = map[string]models.CarOrderBy{
+	"year":       models.CarOrderByYear,
+	"mileage":    models.CarOrderByMileage,
+	"price":      models.CarOrderByPrice,
+	"created_at": models.CarOrderByCreatedAt,
+	"updated_at": models.CarOrderByUpdatedAt,
 }
 
 type Car struct {

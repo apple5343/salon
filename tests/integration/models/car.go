@@ -20,7 +20,7 @@ func RandomVin() string {
 }
 
 func RandomPrice() string {
-	return strconv.Itoa(gofakeit.Number(1000, 100000)) + "." + strconv.Itoa(gofakeit.Number(0, 99))
+	return strconv.Itoa(gofakeit.Number(100, 1000)) + "." + strconv.Itoa(gofakeit.Number(0, 99))
 }
 
 func GenerateCar(modelID string, supplierID string) *httpModels.Car {

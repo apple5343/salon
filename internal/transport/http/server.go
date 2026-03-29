@@ -124,7 +124,7 @@ func (s *Server) routes() {
 	cars := s.e.Group("/cars")
 	{
 		cars.POST("", authMiddleware(s.carHandler.CreateCar()))
-		cars.GET("", s.carHandler.GetCars())
+		cars.GET("", softAuthMiddleware(s.carHandler.GetCars()))
 		cars.GET("/:id", softAuthMiddleware(s.carHandler.GetCarByID()))
 		cars.PUT("/:id", authMiddleware(s.carHandler.UpdateCar()))
 	}
