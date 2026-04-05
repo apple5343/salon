@@ -20,7 +20,7 @@ func (s *clientService) getByID(ctx context.Context, id string) (*models.Client,
 		if errors.Is(err, repo.ErrNotFound) {
 			return nil, ErrClientNotFound
 		}
-		return nil, errorx.NewError("get client: "+err.Error(), errorx.Internal)
+		return nil, errorx.Wrap("get client", errorx.Internal, err)
 	}
 	return client, nil
 }

@@ -20,7 +20,7 @@ func (s *saleService) getByID(ctx context.Context, id string) (*models.Sale, err
 		if errors.Is(err, repo.ErrNotFound) {
 			return nil, ErrSaleNotFound
 		}
-		return nil, errorx.NewError("get sale: "+err.Error(), errorx.Internal)
+		return nil, errorx.Wrap("get sale", errorx.Internal, err)
 	}
 	return sale, nil
 }

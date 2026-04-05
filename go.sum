@@ -24,6 +24,10 @@ github.com/apparentlymart/go-textseg/v15 v15.0.0 h1:uYvfpb3DyLSCGWnctWKGj857c6ew
 github.com/apparentlymart/go-textseg/v15 v15.0.0/go.mod h1:K8XmNZdhEBkdlyDdvbmmsvpAG721bKi0joRfFdHIWJ4=
 github.com/apple5343/errorx v0.0.2 h1:foCn3507dgkpkgfYPT7VHNG+mUJcGf8G16CZLKkhMW4=
 github.com/apple5343/errorx v0.0.2/go.mod h1:CN4cTOFAwF9vVSLQP/OfVan17WTLfWFhbSca5ydFgvg=
+github.com/apple5343/errorx v0.0.3 h1:usaIRvavHcsnVQoDJb3GQn1l9hybAz9oboTgmr/aA1U=
+github.com/apple5343/errorx v0.0.3/go.mod h1:CN4cTOFAwF9vVSLQP/OfVan17WTLfWFhbSca5ydFgvg=
+github.com/apple5343/errorx v0.1.0 h1:g1K2RXmkhNivSyCQUPdruL9HuMpbms+g+l2aEit8t2Y=
+github.com/apple5343/errorx v0.1.0/go.mod h1:CN4cTOFAwF9vVSLQP/OfVan17WTLfWFhbSca5ydFgvg=
 github.com/aws/aws-sdk-go-v2 v1.30.3 h1:jUeBtG0Ih+ZIFH0F4UkmL9w3cSpaMv9tYYDbzILP8dY=
 github.com/aws/aws-sdk-go-v2 v1.30.3/go.mod h1:nIQjQVp5sfpQcTc9mPSr1B0PaWK5ByX9MOoDadSN4lc=
 github.com/aws/aws-sdk-go-v2/config v1.27.27 h1:HdqgGt1OAP0HkEDDShEl0oSYa9ZZBSOmKpdpsDMdO90=

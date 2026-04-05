@@ -43,7 +43,7 @@ func (s *saleService) Create(ctx context.Context, sale *models.Sale) (*models.Sa
 		if errors.Is(err, repo.ErrForeignKey) {
 			return nil, ErrForeignKey
 		}
-		return nil, errorx.NewError("create sale: "+err.Error(), errorx.BadRequest)
+		return nil, errorx.Wrap("create sale", errorx.BadRequest, err)
 	}
 	return sale, err
 }
@@ -73,7 +73,7 @@ func (s *saleService) Complete(ctx context.Context, id string) (*models.Sale, er
 		if errors.Is(err, repo.ErrNotFound) {
 			return nil, errorx.NewError("sale already processed or not found", errorx.BadRequest)
 		}
-		return nil, errorx.NewError("complete sale: "+err.Error(), errorx.Internal)
+		return nil, errorx.Wrap("complete sale", errorx.Internal, err)
 	}
 	return s.getByID(ctx, id)
 }
@@ -96,7 +96,7 @@ func (s *saleService) Cancel(ctx context.Context, id string) (*models.Sale, erro
 		return nil, err
 	}
 	if err := s.repo.Cancel(ctx, id); err != nil {
-		return nil, errorx.NewError("cancel sale: "+err.Error(), errorx.Internal)
+		return nil, errorx.Wrap("cancel sale", errorx.Internal, err)
 	}
 	return s.getByID(ctx, id)
 }

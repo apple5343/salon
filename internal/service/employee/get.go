@@ -21,7 +21,7 @@ func (s *employeeService) getByID(ctx context.Context, id string) (*models.Emplo
 		if errors.Is(err, repo.ErrNotFound) {
 			return nil, ErrEmployeeNotFound
 		}
-		return nil, errorx.NewError("get employee: "+err.Error(), errorx.Internal)
+		return nil, errorx.Wrap("get employee", errorx.Internal, err)
 	}
 	return employee, nil
 }

@@ -17,14 +17,14 @@ func (s *supplierService) Update(ctx context.Context, supplier *models.Supplier)
 		return nil, ErrForbidden
 	}
 	if err := supplier.BeforeUpdate(s.clock); err != nil {
-		return nil, errorx.NewError("update supplier: "+err.Error(), errorx.BadRequest)
+		return nil, errorx.Wrap("update supplier", errorx.BadRequest, err)
 	}
 	supplier, err := s.repo.Update(ctx, supplier)
 	if err != nil {
 		if errors.Is(err, repo.ErrNotFound) {
 			return nil, ErrSupplierNotFound
 		}
-		return nil, errorx.NewError("update supplier: "+err.Error(), errorx.Internal)
+		return nil, errorx.Wrap("update supplier", errorx.Internal, err)
 	}
 	if err = s.cache.SetByID(ctx, supplier, ttl); err != nil {
 		logger.FromContextOrDefault(ctx).Error(ctx, "update supplier: "+err.Error())

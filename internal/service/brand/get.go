@@ -29,7 +29,7 @@ func (s *brandService) getByID(ctx context.Context, id string) (*models.Brand, e
 		if errors.Is(err, repo.ErrNotFound) {
 			return nil, ErrBrandNotFound
 		}
-		return nil, errorx.NewError("get brand: "+err.Error(), errorx.Internal)
+		return nil, errorx.Wrap("get brand", errorx.Internal, err)
 	}
 	s.cache.SetByID(ctx, b, ttl) //TODO логи
 	return b, nil

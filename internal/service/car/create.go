@@ -16,7 +16,7 @@ func (s *carService) CreateCar(ctx context.Context, c *models.Car) (*models.Car,
 		return nil, nil, nil, nil, ErrForbidden
 	}
 	if err := c.BeforeCreate(s.clock); err != nil {
-		return nil, nil, nil, nil, errorx.NewError("create car: "+err.Error(), errorx.BadRequest)
+		return nil, nil, nil, nil, errorx.Wrap("create car", errorx.BadRequest, err)
 	}
 	if c.Status == models.CarStatusSold || c.Status == models.CarStatusBooked {
 		return nil, nil, nil, nil, errorx.NewError("it is not possible to create a car with the sales status.", errorx.BadRequest)
@@ -28,7 +28,7 @@ func (s *carService) CreateCar(ctx context.Context, c *models.Car) (*models.Car,
 		} else if errors.Is(err, repo.ErrAlreadyExists) {
 			return nil, nil, nil, nil, ErrCarExists
 		}
-		return nil, nil, nil, nil, errorx.NewError("create car: "+err.Error(), errorx.Internal)
+		return nil, nil, nil, nil, errorx.Wrap("create car", errorx.Internal, err)
 	}
 	s.eventService.AddEvent(ctx, &models.Event{
 		Type:       models.EventTypeCreated,

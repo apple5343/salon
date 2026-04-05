@@ -18,14 +18,14 @@ func (s *clientService) Register(ctx context.Context, c *models.Client) (*models
 		return nil, ErrForbidden
 	}
 	if err := c.BeforeCreate(s.clock); err != nil {
-		return nil, errorx.NewError("register client: "+err.Error(), errorx.BadRequest)
+		return nil, errorx.Wrap("register client", errorx.BadRequest, err)
 	}
 	c, err := s.repo.Create(ctx, c)
 	if err != nil {
 		if errors.Is(err, repo.ErrAlreadyExists) {
 			return nil, ErrClientExists
 		}
-		return nil, errorx.NewError("create client: "+err.Error(), errorx.Internal)
+		return nil, errorx.Wrap("create client", errorx.Internal, err)
 	}
 	//TODO добавить логи
 	return c, nil

@@ -5,7 +5,7 @@ go 1.24.9
 toolchain go1.24.12
 
 require (
-	github.com/apple5343/errorx v0.0.2
+	github.com/apple5343/errorx v0.0.3
 	github.com/go-playground/validator/v10 v10.30.1
 	github.com/ilyakaznacheev/cleanenv v1.5.0
 	go.uber.org/zap v1.26.0

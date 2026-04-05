@@ -16,7 +16,7 @@ func (s *modelService) Create(ctx context.Context, m *models.Model) (*models.Mod
 		return nil, nil, ErrForbidden
 	}
 	if err := m.BeforeCreate(s.clock); err != nil {
-		return nil, nil, errorx.NewError("create model: "+err.Error(), errorx.BadRequest)
+		return nil, nil, errorx.Wrap("create model", errorx.BadRequest, err)
 	}
 	m, err := s.repo.Create(ctx, m)
 	if err != nil {
@@ -25,7 +25,7 @@ func (s *modelService) Create(ctx context.Context, m *models.Model) (*models.Mod
 		} else if errors.Is(err, repo.ErrForeignKey) {
 			return nil, nil, ErrForeignKey
 		}
-		return nil, nil, errorx.NewError("create model: "+err.Error(), errorx.Internal)
+		return nil, nil, errorx.Wrap("create model", errorx.Internal, err)
 	}
 	s.eventService.AddEvent(ctx, &models.Event{
 		Type:       models.EventTypeCreated,
@@ -38,7 +38,7 @@ func (s *modelService) Create(ctx context.Context, m *models.Model) (*models.Mod
 	})
 	b, err := s.brandService.GetByID(ctx, m.BrandID)
 	if err != nil {
-		return nil, nil, errorx.NewError("create model: "+err.Error(), errorx.Internal)
+		return nil, nil, errorx.Wrap("create model", errorx.Internal, err)
 	}
 	return m, b, nil
 }

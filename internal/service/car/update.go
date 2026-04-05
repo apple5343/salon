@@ -16,7 +16,7 @@ func (s *carService) UpdateCar(ctx context.Context, c *models.Car) (*models.Car,
 		return nil, nil, nil, nil, ErrForbidden
 	}
 	if err := c.BeforeUpdate(s.clock); err != nil {
-		return nil, nil, nil, nil, errorx.NewError("update car: "+err.Error(), errorx.BadRequest)
+		return nil, nil, nil, nil, errorx.Wrap("update car", errorx.BadRequest, err)
 	}
 	car, _, _, _, err := s.getCarByID(ctx, c.ID)
 	if err != nil {
@@ -37,7 +37,7 @@ func (s *carService) UpdateCar(ctx context.Context, c *models.Car) (*models.Car,
 		} else if errors.Is(err, repo.ErrAlreadyExists) {
 			return nil, nil, nil, nil, ErrCarExists
 		}
-		return nil, nil, nil, nil, errorx.NewError("update car: "+err.Error(), errorx.Internal)
+		return nil, nil, nil, nil, errorx.Wrap("update car", errorx.Internal, err)
 	}
 	s.eventService.AddEvent(ctx, &models.Event{
 		Type:       models.EventTypeUpdated,

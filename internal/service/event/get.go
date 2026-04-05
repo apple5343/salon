@@ -16,7 +16,7 @@ func (s *eventService) getEventByID(ctx context.Context, id string) (*models.Eve
 		if errors.Is(err, repo.ErrNotFound) {
 			return nil, ErrEventNotFound
 		}
-		return nil, errorx.NewError("get event: "+err.Error(), errorx.Internal)
+		return nil, errorx.Wrap("get event", errorx.Internal, err)
 	}
 	return e, nil
 }

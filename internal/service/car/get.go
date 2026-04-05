@@ -21,15 +21,15 @@ func (s *carService) getCarByID(ctx context.Context, id string) (*models.Car, *m
 		if errors.Is(err, repo.ErrNotFound) {
 			return nil, nil, nil, nil, ErrCarNotFound
 		}
-		return nil, nil, nil, nil, errorx.NewError("get car: "+err.Error(), errorx.Internal)
+		return nil, nil, nil, nil, errorx.Wrap("get car", errorx.Internal, err)
 	}
 	m, b, err := s.model.GetByID(ctx, c.ModelID)
 	if err != nil {
-		return nil, nil, nil, nil, errorx.NewError("get car: "+err.Error(), errorx.Internal)
+		return nil, nil, nil, nil, errorx.Wrap("get car", errorx.Internal, err)
 	}
 	sup, err := s.supplier.GetByID(ctx, c.SupplierID)
 	if err != nil {
-		return nil, nil, nil, nil, errorx.NewError("get car: "+err.Error(), errorx.Internal)
+		return nil, nil, nil, nil, errorx.Wrap("get car", errorx.Internal, err)
 	}
 	return c, m, b, sup, nil
 }

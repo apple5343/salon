@@ -18,7 +18,7 @@ func (s *employeeService) Login(ctx context.Context, email, password string) (st
 		if errors.Is(err, repo.ErrNotFound) {
 			return "", "", ErrInvalidCreds
 		}
-		return "", "", errorx.NewError("login employee: "+err.Error(), errorx.Internal)
+		return "", "", errorx.Wrap("login employee", errorx.Internal, err)
 	}
 	if e.Status != models.EmployeeStatusActive {
 		return "", "", ErrInvalidCreds
@@ -29,12 +29,12 @@ func (s *employeeService) Login(ctx context.Context, email, password string) (st
 
 	refreshToken, err := jwt.GenerateToken(jwt.UserInfo{ID: e.ID, Role: string(e.Role)}, []byte(s.jwtConfig.RefreshSecret), s.jwtConfig.RefreshTTL)
 	if err != nil {
-		return "", "", errorx.NewError("login employee: "+err.Error(), errorx.Internal)
+		return "", "", errorx.Wrap("login employee", errorx.Internal, err)
 	}
 
 	accessToken, err := jwt.GenerateToken(jwt.UserInfo{ID: e.ID, Role: string(e.Role)}, []byte(s.jwtConfig.AccessSecret), s.jwtConfig.AccessTTL)
 	if err != nil {
-		return "", "", errorx.NewError("login employee: "+err.Error(), errorx.Internal)
+		return "", "", errorx.Wrap("login employee", errorx.Internal, err)
 	}
 
 	return accessToken, refreshToken, nil
@@ -61,7 +61,7 @@ func (s *employeeService) GetRefreshToken(ctx context.Context) (string, error) {
 	}
 	refreshToken, err = jwt.GenerateToken(jwt.UserInfo{ID: e.ID, Role: string(e.Role)}, []byte(s.jwtConfig.RefreshSecret), s.jwtConfig.RefreshTTL)
 	if err != nil {
-		return "", errorx.NewError("get refreshToken employee: "+err.Error(), errorx.Internal)
+		return "", errorx.Wrap("get refreshToken employee", errorx.Internal, err)
 	}
 
 	return refreshToken, nil
@@ -88,7 +88,7 @@ func (s *employeeService) GetAccessToken(ctx context.Context) (string, error) {
 	}
 	accessToken, err := jwt.GenerateToken(jwt.UserInfo{ID: e.ID, Role: string(e.Role)}, []byte(s.jwtConfig.AccessSecret), s.jwtConfig.AccessTTL)
 	if err != nil {
-		return "", errorx.NewError("get accessToken employee: "+err.Error(), errorx.Internal)
+		return "", errorx.Wrap("get accessToken employee", errorx.Internal, err)
 	}
 
 	return accessToken, nil

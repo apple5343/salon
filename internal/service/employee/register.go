@@ -23,7 +23,7 @@ func (s *employeeService) Register(ctx context.Context, e *models.Employee) (*mo
 	}
 	e.Status = models.EmployeeStatusInactive
 	if err := e.BeforeCreate(s.clock); err != nil {
-		return nil, errorx.NewError("register employee: "+err.Error(), errorx.BadRequest)
+		return nil, errorx.Wrap("register employee", errorx.BadRequest, err)
 	}
 	e.HireDate = e.CreatedAt
 	e, err := s.repo.Create(ctx, e)
@@ -31,7 +31,7 @@ func (s *employeeService) Register(ctx context.Context, e *models.Employee) (*mo
 		if errors.Is(err, repo.ErrAlreadyExists) {
 			return nil, errorx.NewError("employee alredy exists", errorx.Conflict)
 		}
-		return nil, errorx.NewError("register employee: "+err.Error(), errorx.Internal)
+		return nil, errorx.Wrap("register employee", errorx.Internal, err)
 	}
 	//TODO добавить логи
 	return e, nil
@@ -56,7 +56,7 @@ func (s *employeeService) Hire(ctx context.Context, id string) (*models.Employee
 	e.HireDate = s.clock.Now()
 	e, err = s.repo.Update(ctx, e)
 	if err != nil {
-		return nil, errorx.NewError("hire employee: "+err.Error(), errorx.Internal)
+		return nil, errorx.Wrap("hire employee", errorx.Internal, err)
 	}
 	//TODO добавить логи
 	return e, nil
@@ -65,7 +65,7 @@ func (s *employeeService) Hire(ctx context.Context, id string) (*models.Employee
 // from cli only
 func (s *employeeService) RegisterAdmin(ctx context.Context, e *models.Employee) (*models.Employee, error) {
 	if err := e.BeforeCreate(s.clock); err != nil {
-		return nil, errorx.NewError("register employee: "+err.Error(), errorx.BadRequest)
+		return nil, errorx.Wrap("register employee", errorx.BadRequest, err)
 	}
 	e.HireDate = e.CreatedAt
 	e.Status = models.EmployeeStatusActive
@@ -74,7 +74,7 @@ func (s *employeeService) RegisterAdmin(ctx context.Context, e *models.Employee)
 		if errors.Is(err, repo.ErrAlreadyExists) {
 			return nil, errorx.NewError("employee alredy exists", errorx.Conflict)
 		}
-		return nil, errorx.NewError("register employee: "+err.Error(), errorx.Internal)
+		return nil, errorx.Wrap("register employee", errorx.Internal, err)
 	}
 	//TODO добавить логи
 	return e, nil

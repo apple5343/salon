@@ -16,14 +16,14 @@ func (s *brandService) Create(ctx context.Context, b *models.Brand) (*models.Bra
 		return nil, ErrForbidden
 	}
 	if err := b.BeforeCreate(s.clock); err != nil {
-		return nil, errorx.NewError("create brand: "+err.Error(), errorx.BadRequest)
+		return nil, errorx.Wrap("create brand", errorx.BadRequest, err)
 	}
 	b, err := s.repo.Create(ctx, b)
 	if err != nil {
 		if errors.Is(err, repo.ErrAlreadyExists) {
 			return nil, ErrBrandExists
 		}
-		return nil, errorx.NewError("create brand: "+err.Error(), errorx.Internal)
+		return nil, errorx.Wrap("create brand", errorx.Internal, err)
 	}
 	s.cache.SetByID(ctx, b, ttl)
 	s.eventService.AddEvent(ctx, &models.Event{

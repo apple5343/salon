@@ -17,7 +17,7 @@ func (s *brandService) Update(ctx context.Context, b *models.Brand) (*models.Bra
 		return nil, ErrForbidden
 	}
 	if err := b.BeforeUpdate(s.clock); err != nil {
-		return nil, errorx.NewError("update brand: "+err.Error(), errorx.BadRequest)
+		return nil, errorx.Wrap("update brand", errorx.BadRequest, err)
 	}
 	b, err := s.repo.Update(ctx, b)
 	if err != nil {
@@ -26,7 +26,7 @@ func (s *brandService) Update(ctx context.Context, b *models.Brand) (*models.Bra
 		} else if errors.Is(err, repo.ErrAlreadyExists) {
 			return nil, ErrBrandExists
 		}
-		return nil, errorx.NewError("update brand: "+err.Error(), errorx.Internal)
+		return nil, errorx.Wrap("update brand", errorx.Internal, err)
 	}
 	if err = s.cache.SetByID(ctx, b, ttl); err != nil {
 		logger.FromContextOrDefault(ctx).Error(ctx, err.Error())

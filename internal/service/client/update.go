@@ -20,18 +20,18 @@ func (s *clientService) Update(ctx context.Context, c *models.Client) (*models.C
 	if c.PasswordHash == "" {
 		existing, err := s.repo.GetByID(ctx, c.ID)
 		if err != nil {
-			return nil, errorx.NewError("update client: "+err.Error(), errorx.Internal)
+			return nil, errorx.Wrap("update client", errorx.Internal, err)
 		}
 		c.PasswordHash = existing.PasswordHash
 	} else {
 		hashed, err := password.HashPassword(c.PasswordHash)
 		if err != nil {
-			return nil, errorx.NewError("update client: "+err.Error(), errorx.BadRequest)
+			return nil, errorx.Wrap("update client", errorx.BadRequest, err)
 		}
 		c.PasswordHash = hashed
 	}
 	if err := c.BeforeUpdate(s.clock); err != nil {
-		return nil, errorx.NewError("update client: "+err.Error(), errorx.BadRequest)
+		return nil, errorx.Wrap("update client", errorx.BadRequest, err)
 	}
 	client, err := s.repo.Update(ctx, c)
 	if err != nil {
@@ -40,7 +40,7 @@ func (s *clientService) Update(ctx context.Context, c *models.Client) (*models.C
 		} else if errors.Is(err, repo.ErrAlreadyExists) {
 			return nil, ErrClientExists
 		}
-		return nil, errorx.NewError("update client: "+err.Error(), errorx.Internal)
+		return nil, errorx.Wrap("update client", errorx.Internal, err)
 	}
 	//TODO добавить логи
 	return client, nil

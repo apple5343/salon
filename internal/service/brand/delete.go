@@ -20,7 +20,7 @@ func (s *brandService) Delete(ctx context.Context, id string) error {
 	}
 	err = s.repo.Delete(ctx, id)
 	if err != nil {
-		return errorx.NewError("delete brand: "+err.Error(), errorx.Internal)
+		return errorx.Wrap("delete brand", errorx.Internal, err)
 	}
 	s.eventService.AddEvent(ctx, &models.Event{
 		Type:       models.EventTypeDeleted,

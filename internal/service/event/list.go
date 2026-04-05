@@ -22,7 +22,7 @@ func (s *eventService) GetEvents(ctx context.Context, filters *models.EventFilte
 
 	res, err := s.repo.GetEventsByFilter(ctx, filters)
 	if err != nil {
-		return nil, errorx.NewError("get events: "+err.Error(), errorx.Internal)
+		return nil, errorx.Wrap("get events", errorx.Internal, err)
 	}
 	return res, nil
 }

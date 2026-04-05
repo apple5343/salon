@@ -25,7 +25,7 @@ func (s *supplierService) Delete(ctx context.Context, id string) error {
 		if errors.Is(err, repo.ErrForeignKey) {
 			return errorx.NewError("other entities depend on this supplier", errorx.BadRequest)
 		}
-		return errorx.NewError("delete supplier: "+err.Error(), errorx.Internal)
+		return errorx.Wrap("delete supplier", errorx.Internal, err)
 	}
 	if err = s.cache.DeleteByID(ctx, id); err != nil && !errors.Is(err, repo.ErrNotFound) {
 		logger.FromContextOrDefault(ctx).Error(ctx, "delete supplier: "+err.Error())

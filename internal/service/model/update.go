@@ -16,7 +16,7 @@ func (s *modelService) Update(ctx context.Context, m *models.Model) (*models.Mod
 		return nil, nil, ErrForbidden
 	}
 	if err := m.BeforeUpdate(s.clock); err != nil {
-		return nil, nil, errorx.NewError("update model: "+err.Error(), errorx.BadRequest)
+		return nil, nil, errorx.Wrap("update model", errorx.BadRequest, err)
 	}
 	m, err := s.repo.Update(ctx, m)
 	if err != nil {
@@ -27,7 +27,7 @@ func (s *modelService) Update(ctx context.Context, m *models.Model) (*models.Mod
 		} else if errors.Is(err, repo.ErrForeignKey) {
 			return nil, nil, ErrForeignKey
 		}
-		return nil, nil, errorx.NewError("update model: "+err.Error(), errorx.Internal)
+		return nil, nil, errorx.Wrap("update model", errorx.Internal, err)
 	}
 	s.eventService.AddEvent(ctx, &models.Event{
 		Type:       models.EventTypeUpdated,
@@ -40,7 +40,7 @@ func (s *modelService) Update(ctx context.Context, m *models.Model) (*models.Mod
 	})
 	b, err := s.brandService.GetByID(ctx, m.BrandID)
 	if err != nil {
-		return nil, nil, errorx.NewError("update model: "+err.Error(), errorx.Internal)
+		return nil, nil, errorx.Wrap("update model", errorx.Internal, err)
 	}
 	return m, b, nil
 }

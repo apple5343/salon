@@ -21,7 +21,7 @@ func (s *saleService) GetSales(ctx context.Context, filters *models.SaleFilters)
 	}
 	res, err := s.repo.GetSalesByFilter(ctx, filters)
 	if err != nil {
-		return nil, errorx.NewError("get sales: "+err.Error(), errorx.Internal)
+		return nil, errorx.Wrap("get sales", errorx.Internal, err)
 	}
 	return res, nil
 }

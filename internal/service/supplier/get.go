@@ -29,7 +29,7 @@ func (s *supplierService) getByID(ctx context.Context, id string) (*models.Suppl
 		if errors.Is(err, repo.ErrNotFound) {
 			return nil, ErrSupplierNotFound
 		}
-		return nil, errorx.NewError("get supplier: "+err.Error(), errorx.Internal)
+		return nil, errorx.Wrap("get supplier", errorx.Internal, err)
 	}
 	if err = s.cache.SetByID(ctx, supplier, ttl); err != nil {
 		logger.FromContextOrDefault(ctx).Error(ctx, "get supplier: "+err.Error())

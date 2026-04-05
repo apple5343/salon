@@ -21,7 +21,7 @@ func (s *modelService) getModelByID(ctx context.Context, id string) (*models.Mod
 		if errors.Is(err, repo.ErrNotFound) {
 			return nil, ErrModelNotFound
 		}
-		return nil, errorx.NewError("get model: "+err.Error(), errorx.Internal)
+		return nil, errorx.Wrap("get model", errorx.Internal, err)
 	}
 	return m, nil
 }
