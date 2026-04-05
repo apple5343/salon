@@ -54,7 +54,7 @@ type SaleService interface {
 	GetSales(ctx context.Context, filters *models.SaleFilters) ([]*models.Sale, error)
 	Create(ctx context.Context, s *models.Sale) (*models.Sale, error)
 	Complete(ctx context.Context, id string) (*models.Sale, error)
-	Cancel(ctx context.Context, id string) error
+	Cancel(ctx context.Context, id string) (*models.Sale, error)
 }
 
 type SupplierService interface {

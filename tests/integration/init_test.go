@@ -110,6 +110,13 @@ func (s *BaseTestSuite) TestCar() {
 	})
 }
 
+func (s *BaseTestSuite) TestSale() {
+	s.RunGroupWithLogs("sale", func() {
+		t := &SaleSuite{base: s}
+		suite.Run(s.T(), t)
+	})
+}
+
 func (suite *BaseTestSuite) RunGroupWithLogs(testGroup string, run func()) {
 	since := suite.MustRestartApp()
 

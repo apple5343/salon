@@ -16,6 +16,15 @@ func (s *saleService) Create(ctx context.Context, sale *models.Sale) (*models.Sa
 	if role != string(models.EmployeeRoleAdmin) && role != string(models.EmployeeRoleManager) {
 		return nil, ErrForbidden
 	}
+	employeeID := ctxutil.UserIDFromContext(ctx)
+	sale.EmployeeID = employeeID
+	sale.Status = models.SaleStatusPending
+	if err := sale.BeforeCreate(s.clock); err != nil {
+		return nil, errorx.NewError(err.Error(), errorx.BadRequest)
+	}
+	if _, err := s.clientService.GetByID(ctx, sale.ClientID); err != nil {
+		return nil, err
+	}
 	car, _, _, _, err := s.carService.GetCarByID(ctx, sale.CarID)
 	if err != nil {
 		return nil, err
@@ -23,19 +32,20 @@ func (s *saleService) Create(ctx context.Context, sale *models.Sale) (*models.Sa
 	if car.Status != models.CarStatusAvailable {
 		return nil, errorx.NewError("car is not available", errorx.BadRequest)
 	}
-	employeeID := ctxutil.UserIDFromContext(ctx)
-	sale.EmployeeID = employeeID
-	sale.Status = models.SaleStatusPending
-	if err := sale.BeforeCreate(s.clock); err != nil {
-		return nil, errorx.NewError(err.Error(), errorx.BadRequest)
-	}
 	sale.OriginPrice = car.Price
 	if sale.DiscountAmount.GreaterThan(car.Price) {
 		return nil, errorx.NewError("discount amount is greater than car price", errorx.BadRequest)
 	}
 	sale.FinalPrice = car.Price.Sub(sale.DiscountAmount)
 	sale.DiscountPercent = sale.DiscountAmount.Div(car.Price).Mul(decimal.NewFromInt(100)).Round(2)
-	return s.repo.Create(ctx, sale)
+	sale, err = s.repo.Create(ctx, sale)
+	if err != nil {
+		if errors.Is(err, repo.ErrForeignKey) {
+			return nil, ErrForeignKey
+		}
+		return nil, errorx.NewError("create sale: "+err.Error(), errorx.BadRequest)
+	}
+	return sale, err
 }
 
 func (s *saleService) Complete(ctx context.Context, id string) (*models.Sale, error) {
@@ -44,7 +54,7 @@ func (s *saleService) Complete(ctx context.Context, id string) (*models.Sale, er
 		return nil, ErrForbidden
 	}
 	employeeID := ctxutil.UserIDFromContext(ctx)
-	sale, err := s.repo.GetByID(ctx, id)
+	sale, err := s.getByID(ctx, id)
 	if err != nil {
 		return nil, err
 	}
@@ -68,25 +78,25 @@ func (s *saleService) Complete(ctx context.Context, id string) (*models.Sale, er
 	return s.getByID(ctx, id)
 }
 
-func (s *saleService) Cancel(ctx context.Context, id string) error {
+func (s *saleService) Cancel(ctx context.Context, id string) (*models.Sale, error) {
 	role := ctxutil.UserRoleFromContext(ctx)
 	if role != string(models.EmployeeRoleAdmin) && role != string(models.EmployeeRoleManager) {
-		return ErrForbidden
+		return nil, ErrForbidden
 	}
 	employeeID := ctxutil.UserIDFromContext(ctx)
 	sale, err := s.repo.GetByID(ctx, id)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	if sale.EmployeeID != employeeID && role != string(models.EmployeeRoleAdmin) {
-		return ErrForbidden
+		return nil, ErrForbidden
 	}
 	sale.Status = models.SaleStatusCanceled
 	if err := sale.BeforeUpdate(s.clock); err != nil {
-		return err
+		return nil, err
 	}
 	if err := s.repo.Cancel(ctx, id); err != nil {
-		return errorx.NewError("cancel sale: "+err.Error(), errorx.Internal)
+		return nil, errorx.NewError("cancel sale: "+err.Error(), errorx.Internal)
 	}
-	return nil
+	return s.getByID(ctx, id)
 }

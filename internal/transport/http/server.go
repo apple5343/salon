@@ -141,6 +141,7 @@ func (s *Server) routes() {
 	sales := s.e.Group("/sales")
 	{
 		sales.POST("", authMiddleware(s.saleHandler.Create()))
+		sales.GET("/:id", authMiddleware(s.saleHandler.GetByID()))
 		sales.PATCH("/:id", authMiddleware(s.saleHandler.Update()))
 	}
 

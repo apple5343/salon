@@ -28,11 +28,11 @@ func (h *Handler) Update() echo.HandlerFunc {
 		}
 		switch status {
 		case service.SaleStatusCanceled:
-			err := h.service.Cancel(c.Request().Context(), id)
+			sale, err := h.service.Cancel(c.Request().Context(), id)
 			if err != nil {
 				return err
 			}
-			return c.JSON(http.StatusOK, nil)
+			return c.JSON(http.StatusOK, models.SaleToHttp(sale))
 		case service.SaleStatusCompleted:
 			sale, err := h.service.Complete(c.Request().Context(), id)
 			if err != nil {

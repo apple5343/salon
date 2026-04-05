@@ -8,9 +8,13 @@ import (
 	ctxutil "salon/internal/utils/context"
 
 	"github.com/apple5343/errorx"
+	"github.com/docker/distribution/uuid"
 )
 
 func (s *saleService) getByID(ctx context.Context, id string) (*models.Sale, error) {
+	if _, err := uuid.Parse(id); err != nil {
+		return nil, ErrInvalidID
+	}
 	sale, err := s.repo.GetByID(ctx, id)
 	if err != nil {
 		if errors.Is(err, repo.ErrNotFound) {

@@ -141,7 +141,7 @@ func (s *Simulation) ProcessSaleCanceledEvent(e *Event, t time.Time) {
 	}
 	ctx := ctxutil.ContextWithUserID(context.TODO(), employee.ID)
 	ctx = ctxutil.ContextWithUserRole(ctx, string(employee.Role))
-	if err := s.saleService.Cancel(ctx, data.SaleID); err != nil {
+	if _, err := s.saleService.Cancel(ctx, data.SaleID); err != nil {
 		log.Println("cancel sale: " + err.Error())
 		return
 	}
