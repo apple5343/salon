@@ -6,6 +6,7 @@ import (
 	"salon/internal/models"
 	repo "salon/internal/repository/errors"
 	ctxutil "salon/internal/utils/context"
+	"salon/pkg/logger"
 
 	"github.com/apple5343/errorx"
 )
@@ -27,7 +28,9 @@ func (s *brandService) Update(ctx context.Context, b *models.Brand) (*models.Bra
 		}
 		return nil, errorx.NewError("update brand: "+err.Error(), errorx.Internal)
 	}
-	s.cache.SetByID(ctx, b, ttl)
+	if err = s.cache.SetByID(ctx, b, ttl); err != nil {
+		logger.FromContextOrDefault(ctx).Error(ctx, err.Error())
+	}
 	s.eventService.AddEvent(ctx, &models.Event{
 		Type:       models.EventTypeUpdated,
 		EntityType: models.EntityTypeBrand,

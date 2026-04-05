@@ -34,9 +34,16 @@ func (r *saleRepository) Create(ctx context.Context, s *service.Sale) (*service.
 		}
 		return nil, err
 	}
-	_, err = tx.ExecContext(ctx, `UPDATE cars SET status = $1 WHERE id = $2`, string(service.CarStatusBooked), s.CarID)
+	res, err := tx.ExecContext(ctx, `UPDATE cars SET status = $1 WHERE id = $2 AND status = $3`, string(service.CarStatusBooked), s.CarID, string(service.CarStatusAvailable))
 	if err != nil {
 		return nil, err
+	}
+	rowsAffected, err := res.RowsAffected()
+	if err != nil {
+		return nil, err
+	}
+	if rowsAffected == 0 {
+		return nil, errors.ErrNotFound
 	}
 	err = tx.Commit()
 	if err != nil {

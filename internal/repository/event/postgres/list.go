@@ -42,7 +42,6 @@ func (r *eventRepository) GetEventsByFilter(ctx context.Context, filter *service
 	if filter.Offset != nil {
 		query += fmt.Sprintf(" OFFSET %d", *filter.Offset)
 	}
-	fmt.Println(query)
 	if err := r.db.SelectContext(ctx, &events, query, args...); err != nil {
 		return nil, err
 	}

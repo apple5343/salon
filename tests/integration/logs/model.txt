@@ -31,68 +31,68 @@
 [Fx] PROVIDE	clock.Clock <= fx.Annotate(salon/pkg/clock.ClockModule.func1(), fx.As([[clock.Clock]]) from module "clock"
 [Fx] INVOKE		salon/internal/infrastructure/postgres.NewModule.func1() from module "postgres"
 [Fx] BEFORE RUN	provide: go.uber.org/fx.New.func1()
-[Fx] RUN	provide: go.uber.org/fx.New.func1() in 9.109µs
+[Fx] RUN	provide: go.uber.org/fx.New.func1() in 13.393µs
 [Fx] BEFORE RUN	provide: salon/internal/config.PostgresConfig() from module "postgres"
-[Fx] RUN	provide: salon/internal/config.PostgresConfig() in 113.989µs from module "postgres"
+[Fx] RUN	provide: salon/internal/config.PostgresConfig() in 108.035µs from module "postgres"
 [Fx] BEFORE RUN	provide: salon/internal/infrastructure/postgres.NewClient() from module "postgres"
-[Fx] RUN	provide: salon/internal/infrastructure/postgres.NewClient() in 8.640494ms from module "postgres"
+[Fx] RUN	provide: salon/internal/infrastructure/postgres.NewClient() in 9.160868ms from module "postgres"
 [Fx] INVOKE		salon/internal/infrastructure/redis.NewModule.func1() from module "redis"
 [Fx] BEFORE RUN	provide: salon/internal/config.RedisConfig() from module "redis"
-[Fx] RUN	provide: salon/internal/config.RedisConfig() in 34.678µs from module "redis"
+[Fx] RUN	provide: salon/internal/config.RedisConfig() in 39.192µs from module "redis"
 [Fx] BEFORE RUN	provide: salon/internal/infrastructure/redis.NewClient() from module "redis"
-[Fx] RUN	provide: salon/internal/infrastructure/redis.NewClient() in 169.879µs from module "redis"
+[Fx] RUN	provide: salon/internal/infrastructure/redis.NewClient() in 144.501µs from module "redis"
 [Fx] INVOKE		salon/internal/service/event.NewModule.func1() from module "event"
 [Fx] BEFORE RUN	provide: salon/internal/repository/event/postgres.NewRepository() from module "event"
-[Fx] RUN	provide: salon/internal/repository/event/postgres.NewRepository() in 10.32µs from module "event"
+[Fx] RUN	provide: salon/internal/repository/event/postgres.NewRepository() in 7.145µs from module "event"
 [Fx] BEFORE RUN	provide: salon/internal/service/event.NewService() from module "event"
-[Fx] RUN	provide: salon/internal/service/event.NewService() in 15.246µs from module "event"
+[Fx] RUN	provide: salon/internal/service/event.NewService() in 5.929µs from module "event"
 [Fx] INVOKE		salon/internal/transport/http.NewModule.func1() from module "http"
 [Fx] BEFORE RUN	provide: salon/internal/config.HttpServerConfig() from module "http"
-[Fx] RUN	provide: salon/internal/config.HttpServerConfig() in 16.697µs from module "http"
+[Fx] RUN	provide: salon/internal/config.HttpServerConfig() in 12.719µs from module "http"
 [Fx] BEFORE RUN	provide: salon/internal/config.JWTConfig() from module "config"
-[Fx] RUN	provide: salon/internal/config.JWTConfig() in 84.933µs from module "config"
+[Fx] RUN	provide: salon/internal/config.JWTConfig() in 41.562µs from module "config"
 [Fx] BEFORE RUN	provide: salon/internal/config.LoggerConfig() from module "zap"
-[Fx] RUN	provide: salon/internal/config.LoggerConfig() in 14.264µs from module "zap"
+[Fx] RUN	provide: salon/internal/config.LoggerConfig() in 8.319µs from module "zap"
 [Fx] BEFORE RUN	provide: salon/pkg/logger.NewLogger() from module "zap"
-[Fx] RUN	provide: salon/pkg/logger.NewLogger() in 149.872µs from module "zap"
+[Fx] RUN	provide: salon/pkg/logger.NewLogger() in 124.169µs from module "zap"
 [Fx] BEFORE RUN	provide: salon/internal/repository/employee/postgres.NewRepository() from module "employee"
-[Fx] RUN	provide: salon/internal/repository/employee/postgres.NewRepository() in 9.433µs from module "employee"
+[Fx] RUN	provide: salon/internal/repository/employee/postgres.NewRepository() in 5.313µs from module "employee"
 [Fx] BEFORE RUN	provide: fx.Annotate(salon/pkg/clock.ClockModule.func1(), fx.As([[clock.Clock]]) from module "clock"
-[Fx] RUN	provide: fx.Annotate(salon/pkg/clock.ClockModule.func1(), fx.As([[clock.Clock]]) in 26.59µs from module "clock"
+[Fx] RUN	provide: fx.Annotate(salon/pkg/clock.ClockModule.func1(), fx.As([[clock.Clock]]) in 25.153µs from module "clock"
 [Fx] BEFORE RUN	provide: salon/internal/service/employee.NewService() from module "service"
-[Fx] RUN	provide: salon/internal/service/employee.NewService() in 10.119µs from module "service"
+[Fx] RUN	provide: salon/internal/service/employee.NewService() in 8.579µs from module "service"
 [Fx] BEFORE RUN	provide: salon/internal/repository/supplier/postgres.NewRepository() from module "supplier"
-[Fx] RUN	provide: salon/internal/repository/supplier/postgres.NewRepository() in 26.68µs from module "supplier"
+[Fx] RUN	provide: salon/internal/repository/supplier/postgres.NewRepository() in 12.773µs from module "supplier"
 [Fx] BEFORE RUN	provide: salon/internal/repository/supplier/redis.NewRepository() from module "supplier"
-[Fx] RUN	provide: salon/internal/repository/supplier/redis.NewRepository() in 7.333µs from module "supplier"
+[Fx] RUN	provide: salon/internal/repository/supplier/redis.NewRepository() in 4.938µs from module "supplier"
 [Fx] BEFORE RUN	provide: salon/internal/service/supplier.NewService() from module "supplier"
-[Fx] RUN	provide: salon/internal/service/supplier.NewService() in 24.709µs from module "supplier"
+[Fx] RUN	provide: salon/internal/service/supplier.NewService() in 20.723µs from module "supplier"
 [Fx] BEFORE RUN	provide: salon/internal/repository/client/postgres.NewRepository() from module "client"
-[Fx] RUN	provide: salon/internal/repository/client/postgres.NewRepository() in 8.051µs from module "client"
+[Fx] RUN	provide: salon/internal/repository/client/postgres.NewRepository() in 6.049µs from module "client"
 [Fx] BEFORE RUN	provide: salon/internal/service/client.NewService() from module "client"
-[Fx] RUN	provide: salon/internal/service/client.NewService() in 8.666µs from module "client"
+[Fx] RUN	provide: salon/internal/service/client.NewService() in 7.436µs from module "client"
 [Fx] BEFORE RUN	provide: salon/internal/repository/car/postgres.NewRepository() from module "car"
-[Fx] RUN	provide: salon/internal/repository/car/postgres.NewRepository() in 13µs from module "car"
+[Fx] RUN	provide: salon/internal/repository/car/postgres.NewRepository() in 8.619µs from module "car"
 [Fx] BEFORE RUN	provide: salon/internal/repository/model/postgres.NewRepository() from module "model"
-[Fx] RUN	provide: salon/internal/repository/model/postgres.NewRepository() in 11.42µs from module "model"
+[Fx] RUN	provide: salon/internal/repository/model/postgres.NewRepository() in 8.547µs from module "model"
 [Fx] BEFORE RUN	provide: salon/internal/repository/brand/postgres.NewRepository() from module "brand"
-[Fx] RUN	provide: salon/internal/repository/brand/postgres.NewRepository() in 8.132µs from module "brand"
+[Fx] RUN	provide: salon/internal/repository/brand/postgres.NewRepository() in 8.768µs from module "brand"
 [Fx] BEFORE RUN	provide: salon/internal/repository/brand/redis.NewCache() from module "brand"
-[Fx] RUN	provide: salon/internal/repository/brand/redis.NewCache() in 12.112µs from module "brand"
+[Fx] RUN	provide: salon/internal/repository/brand/redis.NewCache() in 4.661µs from module "brand"
 [Fx] BEFORE RUN	provide: salon/internal/service/brand.NewService() from module "brand"
-[Fx] RUN	provide: salon/internal/service/brand.NewService() in 9.022µs from module "brand"
+[Fx] RUN	provide: salon/internal/service/brand.NewService() in 6.926µs from module "brand"
 [Fx] BEFORE RUN	provide: salon/internal/service/model.NewService() from module "model"
-[Fx] RUN	provide: salon/internal/service/model.NewService() in 8.374µs from module "model"
+[Fx] RUN	provide: salon/internal/service/model.NewService() in 6.29µs from module "model"
 [Fx] BEFORE RUN	provide: salon/internal/service/car.NewService() from module "car"
-[Fx] RUN	provide: salon/internal/service/car.NewService() in 18.011µs from module "car"
+[Fx] RUN	provide: salon/internal/service/car.NewService() in 14.691µs from module "car"
 [Fx] BEFORE RUN	provide: salon/internal/repository/sale/postgres.NewRepository() from module "sale"
-[Fx] RUN	provide: salon/internal/repository/sale/postgres.NewRepository() in 20.977µs from module "sale"
+[Fx] RUN	provide: salon/internal/repository/sale/postgres.NewRepository() in 10.654µs from module "sale"
 [Fx] BEFORE RUN	provide: salon/internal/service/sale.NewService() from module "sale"
-[Fx] RUN	provide: salon/internal/service/sale.NewService() in 8.673µs from module "sale"
+[Fx] RUN	provide: salon/internal/service/sale.NewService() in 6.907µs from module "sale"
 [Fx] BEFORE RUN	provide: salon/internal/transport/http.NewServer() from module "http"
-[Fx] RUN	provide: salon/internal/transport/http.NewServer() in 73.061µs from module "http"
+[Fx] RUN	provide: salon/internal/transport/http.NewServer() in 73.541µs from module "http"
 [Fx] HOOK OnStart		salon/internal/transport/http.NewModule.func1.1() executing (caller: salon/internal/transport/http.NewModule.func1)
-[Fx] HOOK OnStart		salon/internal/transport/http.NewModule.func1.1() called by salon/internal/transport/http.NewModule.func1 ran successfully in 3.193µs
+[Fx] HOOK OnStart		salon/internal/transport/http.NewModule.func1.1() called by salon/internal/transport/http.NewModule.func1 ran successfully in 5.345µs
 [Fx] RUNNING
 
    ____    __
@@ -104,45 +104,45 @@ https://echo.labstack.com
 ____________________________________O/_______
                                     O\
 ⇨ http server started on [::]:8080
-{"level":"error","ts":1775382796.5293393,"caller":"logger/logger.go:62","msg":"create model: Key: 'Model.Name' Error:Field validation for 'Name' failed on the 'required' tag"}
-{"level":"error","ts":1775382796.5306745,"caller":"logger/logger.go:62","msg":"create model: Key: 'Model.BrandID' Error:Field validation for 'BrandID' failed on the 'uuid' tag"}
-{"level":"error","ts":1775382796.532403,"caller":"logger/logger.go:62","msg":"foreign key, entity not found"}
-{"level":"error","ts":1775382796.5336995,"caller":"logger/logger.go:62","msg":"create model: Key: 'Model.BrandID' Error:Field validation for 'BrandID' failed on the 'required' tag"}
-{"level":"error","ts":1775382796.5349698,"caller":"logger/logger.go:62","msg":"create model: Key: 'Model.Generation' Error:Field validation for 'Generation' failed on the 'required' tag"}
-{"level":"error","ts":1775382796.536262,"caller":"logger/logger.go:62","msg":"invalid body type"}
-{"level":"error","ts":1775382796.537559,"caller":"logger/logger.go:62","msg":"invalid transmission type"}
-{"level":"error","ts":1775382796.5388606,"caller":"logger/logger.go:62","msg":"create model: Key: 'Model.Name' Error:Field validation for 'Name' failed on the 'required' tag"}
-{"level":"error","ts":1775382796.5401201,"caller":"logger/logger.go:62","msg":"create model: Key: 'Model.EngineDisplacement' Error:Field validation for 'EngineDisplacement' failed on the 'min' tag"}
-{"level":"error","ts":1775382796.5413177,"caller":"logger/logger.go:62","msg":"create model: Key: 'Model.PowerHP' Error:Field validation for 'PowerHP' failed on the 'min' tag"}
-{"level":"error","ts":1775382796.5425336,"caller":"logger/logger.go:62","msg":"invalid drive type"}
-{"level":"error","ts":1775382796.543883,"caller":"logger/logger.go:62","msg":"create model: Key: 'Model.BasePrice' Error:Field validation for 'BasePrice' failed on the 'min' tag"}
-{"level":"error","ts":1775382796.5452187,"caller":"logger/logger.go:62","msg":"invalid body type"}
-{"level":"error","ts":1775382796.5463855,"caller":"logger/logger.go:62","msg":"invalid transmission type"}
-{"level":"error","ts":1775382796.5475295,"caller":"logger/logger.go:62","msg":"invalid fuel type"}
-{"level":"error","ts":1775382796.548656,"caller":"logger/logger.go:62","msg":"invalid drive type"}
-{"level":"error","ts":1775382796.5497904,"caller":"logger/logger.go:62","msg":"token is empty"}
-{"level":"error","ts":1775382796.5507581,"caller":"logger/logger.go:62","msg":"invalid token"}
-{"level":"error","ts":1775382796.5518434,"caller":"logger/logger.go:62","msg":"forbidden"}
-{"level":"error","ts":1775382796.5959578,"caller":"logger/logger.go:62","msg":"invalid id"}
-{"level":"error","ts":1775382796.6082578,"caller":"logger/logger.go:62","msg":"model not found"}
-{"level":"error","ts":1775382796.6739721,"caller":"logger/logger.go:62","msg":"update model: invalid id"}
-{"level":"error","ts":1775382796.6761441,"caller":"logger/logger.go:62","msg":"model not found"}
-{"level":"error","ts":1775382796.677702,"caller":"logger/logger.go:62","msg":"update model: Key: 'Model.BrandID' Error:Field validation for 'BrandID' failed on the 'uuid' tag"}
-{"level":"error","ts":1775382796.679796,"caller":"logger/logger.go:62","msg":"foreign key, entity not found"}
-{"level":"error","ts":1775382796.681141,"caller":"logger/logger.go:62","msg":"update model: Key: 'Model.Name' Error:Field validation for 'Name' failed on the 'required' tag"}
-{"level":"error","ts":1775382796.6824455,"caller":"logger/logger.go:62","msg":"update model: Key: 'Model.Generation' Error:Field validation for 'Generation' failed on the 'required' tag"}
-{"level":"error","ts":1775382796.6836565,"caller":"logger/logger.go:62","msg":"invalid body type"}
-{"level":"error","ts":1775382796.6848667,"caller":"logger/logger.go:62","msg":"invalid transmission type"}
-{"level":"error","ts":1775382796.686349,"caller":"logger/logger.go:62","msg":"invalid fuel type"}
-{"level":"error","ts":1775382796.6877406,"caller":"logger/logger.go:62","msg":"invalid drive type"}
-{"level":"error","ts":1775382796.6888278,"caller":"logger/logger.go:62","msg":"update model: Key: 'Model.EngineDisplacement' Error:Field validation for 'EngineDisplacement' failed on the 'min' tag"}
-{"level":"error","ts":1775382796.6901948,"caller":"logger/logger.go:62","msg":"update model: Key: 'Model.PowerHP' Error:Field validation for 'PowerHP' failed on the 'min' tag"}
-{"level":"error","ts":1775382796.6916418,"caller":"logger/logger.go:62","msg":"update model: Key: 'Model.BasePrice' Error:Field validation for 'BasePrice' failed on the 'min' tag"}
-{"level":"error","ts":1775382796.693066,"caller":"logger/logger.go:62","msg":"update model: Key: 'Model.BrandID' Error:Field validation for 'BrandID' failed on the 'required' tag"}
-{"level":"error","ts":1775382796.6943512,"caller":"logger/logger.go:62","msg":"invalid transmission type"}
-{"level":"error","ts":1775382796.6956186,"caller":"logger/logger.go:62","msg":"invalid fuel type"}
-{"level":"error","ts":1775382796.6968956,"caller":"logger/logger.go:62","msg":"invalid drive type"}
-{"level":"error","ts":1775382796.698087,"caller":"logger/logger.go:62","msg":"invalid body type"}
-{"level":"error","ts":1775382796.6993222,"caller":"logger/logger.go:62","msg":"token is empty"}
-{"level":"error","ts":1775382796.7005646,"caller":"logger/logger.go:62","msg":"invalid token"}
-{"level":"error","ts":1775382796.7119257,"caller":"logger/logger.go:62","msg":"forbidden"}
+{"level":"error","ts":1775387095.196679,"caller":"logger/logger.go:62","msg":"create model: Key: 'Model.Name' Error:Field validation for 'Name' failed on the 'required' tag"}
+{"level":"error","ts":1775387095.198296,"caller":"logger/logger.go:62","msg":"create model: Key: 'Model.BrandID' Error:Field validation for 'BrandID' failed on the 'uuid' tag"}
+{"level":"error","ts":1775387095.200724,"caller":"logger/logger.go:62","msg":"foreign key, entity not found"}
+{"level":"error","ts":1775387095.2021277,"caller":"logger/logger.go:62","msg":"create model: Key: 'Model.BrandID' Error:Field validation for 'BrandID' failed on the 'required' tag"}
+{"level":"error","ts":1775387095.203663,"caller":"logger/logger.go:62","msg":"create model: Key: 'Model.Generation' Error:Field validation for 'Generation' failed on the 'required' tag"}
+{"level":"error","ts":1775387095.205289,"caller":"logger/logger.go:62","msg":"invalid body type"}
+{"level":"error","ts":1775387095.2065072,"caller":"logger/logger.go:62","msg":"invalid transmission type"}
+{"level":"error","ts":1775387095.2077558,"caller":"logger/logger.go:62","msg":"create model: Key: 'Model.Name' Error:Field validation for 'Name' failed on the 'required' tag"}
+{"level":"error","ts":1775387095.209027,"caller":"logger/logger.go:62","msg":"create model: Key: 'Model.EngineDisplacement' Error:Field validation for 'EngineDisplacement' failed on the 'min' tag"}
+{"level":"error","ts":1775387095.2103765,"caller":"logger/logger.go:62","msg":"create model: Key: 'Model.PowerHP' Error:Field validation for 'PowerHP' failed on the 'min' tag"}
+{"level":"error","ts":1775387095.2118876,"caller":"logger/logger.go:62","msg":"invalid drive type"}
+{"level":"error","ts":1775387095.2130227,"caller":"logger/logger.go:62","msg":"create model: Key: 'Model.BasePrice' Error:Field validation for 'BasePrice' failed on the 'min' tag"}
+{"level":"error","ts":1775387095.2142262,"caller":"logger/logger.go:62","msg":"invalid body type"}
+{"level":"error","ts":1775387095.2157745,"caller":"logger/logger.go:62","msg":"invalid transmission type"}
+{"level":"error","ts":1775387095.2168481,"caller":"logger/logger.go:62","msg":"invalid fuel type"}
+{"level":"error","ts":1775387095.2179766,"caller":"logger/logger.go:62","msg":"invalid drive type"}
+{"level":"error","ts":1775387095.219381,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1775387095.2203317,"caller":"logger/logger.go:62","msg":"invalid token"}
+{"level":"error","ts":1775387095.221462,"caller":"logger/logger.go:62","msg":"forbidden"}
+{"level":"error","ts":1775387095.2699645,"caller":"logger/logger.go:62","msg":"invalid id"}
+{"level":"error","ts":1775387095.2832398,"caller":"logger/logger.go:62","msg":"model not found"}
+{"level":"error","ts":1775387095.3431845,"caller":"logger/logger.go:62","msg":"update model: invalid id"}
+{"level":"error","ts":1775387095.3462446,"caller":"logger/logger.go:62","msg":"model not found"}
+{"level":"error","ts":1775387095.347685,"caller":"logger/logger.go:62","msg":"update model: Key: 'Model.BrandID' Error:Field validation for 'BrandID' failed on the 'uuid' tag"}
+{"level":"error","ts":1775387095.3504062,"caller":"logger/logger.go:62","msg":"foreign key, entity not found"}
+{"level":"error","ts":1775387095.3522074,"caller":"logger/logger.go:62","msg":"update model: Key: 'Model.Name' Error:Field validation for 'Name' failed on the 'required' tag"}
+{"level":"error","ts":1775387095.35363,"caller":"logger/logger.go:62","msg":"update model: Key: 'Model.Generation' Error:Field validation for 'Generation' failed on the 'required' tag"}
+{"level":"error","ts":1775387095.3549373,"caller":"logger/logger.go:62","msg":"invalid body type"}
+{"level":"error","ts":1775387095.3560004,"caller":"logger/logger.go:62","msg":"invalid transmission type"}
+{"level":"error","ts":1775387095.357399,"caller":"logger/logger.go:62","msg":"invalid fuel type"}
+{"level":"error","ts":1775387095.358611,"caller":"logger/logger.go:62","msg":"invalid drive type"}
+{"level":"error","ts":1775387095.3598983,"caller":"logger/logger.go:62","msg":"update model: Key: 'Model.EngineDisplacement' Error:Field validation for 'EngineDisplacement' failed on the 'min' tag"}
+{"level":"error","ts":1775387095.3610482,"caller":"logger/logger.go:62","msg":"update model: Key: 'Model.PowerHP' Error:Field validation for 'PowerHP' failed on the 'min' tag"}
+{"level":"error","ts":1775387095.3624291,"caller":"logger/logger.go:62","msg":"update model: Key: 'Model.BasePrice' Error:Field validation for 'BasePrice' failed on the 'min' tag"}
+{"level":"error","ts":1775387095.3639765,"caller":"logger/logger.go:62","msg":"update model: Key: 'Model.BrandID' Error:Field validation for 'BrandID' failed on the 'required' tag"}
+{"level":"error","ts":1775387095.3653588,"caller":"logger/logger.go:62","msg":"invalid transmission type"}
+{"level":"error","ts":1775387095.366708,"caller":"logger/logger.go:62","msg":"invalid fuel type"}
+{"level":"error","ts":1775387095.3682804,"caller":"logger/logger.go:62","msg":"invalid drive type"}
+{"level":"error","ts":1775387095.3693519,"caller":"logger/logger.go:62","msg":"invalid body type"}
+{"level":"error","ts":1775387095.370634,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1775387095.3719509,"caller":"logger/logger.go:62","msg":"invalid token"}
+{"level":"error","ts":1775387095.3856835,"caller":"logger/logger.go:62","msg":"forbidden"}
