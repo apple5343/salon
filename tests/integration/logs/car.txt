@@ -31,68 +31,68 @@
 [Fx] PROVIDE	clock.Clock <= fx.Annotate(salon/pkg/clock.ClockModule.func1(), fx.As([[clock.Clock]]) from module "clock"
 [Fx] INVOKE		salon/internal/infrastructure/postgres.NewModule.func1() from module "postgres"
 [Fx] BEFORE RUN	provide: go.uber.org/fx.New.func1()
-[Fx] RUN	provide: go.uber.org/fx.New.func1() in 8.897µs
+[Fx] RUN	provide: go.uber.org/fx.New.func1() in 8.881µs
 [Fx] BEFORE RUN	provide: salon/internal/config.PostgresConfig() from module "postgres"
-[Fx] RUN	provide: salon/internal/config.PostgresConfig() in 122.388µs from module "postgres"
+[Fx] RUN	provide: salon/internal/config.PostgresConfig() in 124.896µs from module "postgres"
 [Fx] BEFORE RUN	provide: salon/internal/infrastructure/postgres.NewClient() from module "postgres"
-[Fx] RUN	provide: salon/internal/infrastructure/postgres.NewClient() in 8.720938ms from module "postgres"
+[Fx] RUN	provide: salon/internal/infrastructure/postgres.NewClient() in 8.273634ms from module "postgres"
 [Fx] INVOKE		salon/internal/infrastructure/redis.NewModule.func1() from module "redis"
 [Fx] BEFORE RUN	provide: salon/internal/config.RedisConfig() from module "redis"
-[Fx] RUN	provide: salon/internal/config.RedisConfig() in 26.497µs from module "redis"
+[Fx] RUN	provide: salon/internal/config.RedisConfig() in 26.575µs from module "redis"
 [Fx] BEFORE RUN	provide: salon/internal/infrastructure/redis.NewClient() from module "redis"
-[Fx] RUN	provide: salon/internal/infrastructure/redis.NewClient() in 99.116µs from module "redis"
+[Fx] RUN	provide: salon/internal/infrastructure/redis.NewClient() in 116.437µs from module "redis"
 [Fx] INVOKE		salon/internal/service/event.NewModule.func1() from module "event"
 [Fx] BEFORE RUN	provide: salon/internal/repository/event/postgres.NewRepository() from module "event"
-[Fx] RUN	provide: salon/internal/repository/event/postgres.NewRepository() in 14.15µs from module "event"
+[Fx] RUN	provide: salon/internal/repository/event/postgres.NewRepository() in 11.579µs from module "event"
 [Fx] BEFORE RUN	provide: salon/internal/service/event.NewService() from module "event"
-[Fx] RUN	provide: salon/internal/service/event.NewService() in 7.895µs from module "event"
+[Fx] RUN	provide: salon/internal/service/event.NewService() in 7.428µs from module "event"
 [Fx] INVOKE		salon/internal/transport/http.NewModule.func1() from module "http"
 [Fx] BEFORE RUN	provide: salon/internal/config.HttpServerConfig() from module "http"
-[Fx] RUN	provide: salon/internal/config.HttpServerConfig() in 9.266µs from module "http"
+[Fx] RUN	provide: salon/internal/config.HttpServerConfig() in 11.484µs from module "http"
 [Fx] BEFORE RUN	provide: salon/internal/config.JWTConfig() from module "config"
-[Fx] RUN	provide: salon/internal/config.JWTConfig() in 25.406µs from module "config"
+[Fx] RUN	provide: salon/internal/config.JWTConfig() in 27.227µs from module "config"
 [Fx] BEFORE RUN	provide: salon/internal/config.LoggerConfig() from module "zap"
-[Fx] RUN	provide: salon/internal/config.LoggerConfig() in 6.788µs from module "zap"
+[Fx] RUN	provide: salon/internal/config.LoggerConfig() in 7.584µs from module "zap"
 [Fx] BEFORE RUN	provide: salon/pkg/logger.NewLogger() from module "zap"
-[Fx] RUN	provide: salon/pkg/logger.NewLogger() in 58.304µs from module "zap"
+[Fx] RUN	provide: salon/pkg/logger.NewLogger() in 131.563µs from module "zap"
 [Fx] BEFORE RUN	provide: salon/internal/repository/employee/postgres.NewRepository() from module "employee"
-[Fx] RUN	provide: salon/internal/repository/employee/postgres.NewRepository() in 8.883µs from module "employee"
+[Fx] RUN	provide: salon/internal/repository/employee/postgres.NewRepository() in 4.362µs from module "employee"
 [Fx] BEFORE RUN	provide: fx.Annotate(salon/pkg/clock.ClockModule.func1(), fx.As([[clock.Clock]]) from module "clock"
-[Fx] RUN	provide: fx.Annotate(salon/pkg/clock.ClockModule.func1(), fx.As([[clock.Clock]]) in 26.431µs from module "clock"
+[Fx] RUN	provide: fx.Annotate(salon/pkg/clock.ClockModule.func1(), fx.As([[clock.Clock]]) in 27.773µs from module "clock"
 [Fx] BEFORE RUN	provide: salon/internal/service/employee.NewService() from module "service"
-[Fx] RUN	provide: salon/internal/service/employee.NewService() in 16.761µs from module "service"
+[Fx] RUN	provide: salon/internal/service/employee.NewService() in 11.338µs from module "service"
 [Fx] BEFORE RUN	provide: salon/internal/repository/supplier/postgres.NewRepository() from module "supplier"
-[Fx] RUN	provide: salon/internal/repository/supplier/postgres.NewRepository() in 9.524µs from module "supplier"
+[Fx] RUN	provide: salon/internal/repository/supplier/postgres.NewRepository() in 10.543µs from module "supplier"
 [Fx] BEFORE RUN	provide: salon/internal/repository/supplier/redis.NewRepository() from module "supplier"
-[Fx] RUN	provide: salon/internal/repository/supplier/redis.NewRepository() in 4.072µs from module "supplier"
+[Fx] RUN	provide: salon/internal/repository/supplier/redis.NewRepository() in 4.463µs from module "supplier"
 [Fx] BEFORE RUN	provide: salon/internal/service/supplier.NewService() from module "supplier"
-[Fx] RUN	provide: salon/internal/service/supplier.NewService() in 12.766µs from module "supplier"
+[Fx] RUN	provide: salon/internal/service/supplier.NewService() in 12.58µs from module "supplier"
 [Fx] BEFORE RUN	provide: salon/internal/repository/client/postgres.NewRepository() from module "client"
-[Fx] RUN	provide: salon/internal/repository/client/postgres.NewRepository() in 4.598µs from module "client"
+[Fx] RUN	provide: salon/internal/repository/client/postgres.NewRepository() in 4.731µs from module "client"
 [Fx] BEFORE RUN	provide: salon/internal/service/client.NewService() from module "client"
-[Fx] RUN	provide: salon/internal/service/client.NewService() in 5.39µs from module "client"
+[Fx] RUN	provide: salon/internal/service/client.NewService() in 5.453µs from module "client"
 [Fx] BEFORE RUN	provide: salon/internal/repository/car/postgres.NewRepository() from module "car"
-[Fx] RUN	provide: salon/internal/repository/car/postgres.NewRepository() in 4.258µs from module "car"
+[Fx] RUN	provide: salon/internal/repository/car/postgres.NewRepository() in 4.389µs from module "car"
 [Fx] BEFORE RUN	provide: salon/internal/repository/model/postgres.NewRepository() from module "model"
-[Fx] RUN	provide: salon/internal/repository/model/postgres.NewRepository() in 3.839µs from module "model"
+[Fx] RUN	provide: salon/internal/repository/model/postgres.NewRepository() in 3.979µs from module "model"
 [Fx] BEFORE RUN	provide: salon/internal/repository/brand/postgres.NewRepository() from module "brand"
-[Fx] RUN	provide: salon/internal/repository/brand/postgres.NewRepository() in 10.253µs from module "brand"
+[Fx] RUN	provide: salon/internal/repository/brand/postgres.NewRepository() in 10.501µs from module "brand"
 [Fx] BEFORE RUN	provide: salon/internal/repository/brand/redis.NewCache() from module "brand"
-[Fx] RUN	provide: salon/internal/repository/brand/redis.NewCache() in 7.741µs from module "brand"
+[Fx] RUN	provide: salon/internal/repository/brand/redis.NewCache() in 7.792µs from module "brand"
 [Fx] BEFORE RUN	provide: salon/internal/service/brand.NewService() from module "brand"
-[Fx] RUN	provide: salon/internal/service/brand.NewService() in 5.573µs from module "brand"
+[Fx] RUN	provide: salon/internal/service/brand.NewService() in 8.346µs from module "brand"
 [Fx] BEFORE RUN	provide: salon/internal/service/model.NewService() from module "model"
-[Fx] RUN	provide: salon/internal/service/model.NewService() in 5.289µs from module "model"
+[Fx] RUN	provide: salon/internal/service/model.NewService() in 5.015µs from module "model"
 [Fx] BEFORE RUN	provide: salon/internal/service/car.NewService() from module "car"
-[Fx] RUN	provide: salon/internal/service/car.NewService() in 10.075µs from module "car"
+[Fx] RUN	provide: salon/internal/service/car.NewService() in 21.916µs from module "car"
 [Fx] BEFORE RUN	provide: salon/internal/repository/sale/postgres.NewRepository() from module "sale"
-[Fx] RUN	provide: salon/internal/repository/sale/postgres.NewRepository() in 8.476µs from module "sale"
+[Fx] RUN	provide: salon/internal/repository/sale/postgres.NewRepository() in 8.568µs from module "sale"
 [Fx] BEFORE RUN	provide: salon/internal/service/sale.NewService() from module "sale"
-[Fx] RUN	provide: salon/internal/service/sale.NewService() in 5.157µs from module "sale"
+[Fx] RUN	provide: salon/internal/service/sale.NewService() in 5.208µs from module "sale"
 [Fx] BEFORE RUN	provide: salon/internal/transport/http.NewServer() from module "http"
-[Fx] RUN	provide: salon/internal/transport/http.NewServer() in 43.735µs from module "http"
+[Fx] RUN	provide: salon/internal/transport/http.NewServer() in 42.604µs from module "http"
 [Fx] HOOK OnStart		salon/internal/transport/http.NewModule.func1.1() executing (caller: salon/internal/transport/http.NewModule.func1)
-[Fx] HOOK OnStart		salon/internal/transport/http.NewModule.func1.1() called by salon/internal/transport/http.NewModule.func1 ran successfully in 4.187µs
+[Fx] HOOK OnStart		salon/internal/transport/http.NewModule.func1.1() called by salon/internal/transport/http.NewModule.func1 ran successfully in 3.984µs
 [Fx] RUNNING
 
    ____    __
@@ -104,95 +104,95 @@ https://echo.labstack.com
 ____________________________________O/_______
                                     O\
 ⇨ http server started on [::]:8080
-{"level":"error","ts":1775896291.3740644,"caller":"logger/logger.go:62","msg":"create car: Key: 'Car.Color' Error:Field validation for 'Color' failed on the 'required' tag"}
-{"level":"error","ts":1775896291.3758144,"caller":"logger/logger.go:62","msg":"invalid status"}
-{"level":"error","ts":1775896291.3776777,"caller":"logger/logger.go:62","msg":"it is not possible to create a car with the sales status."}
-{"level":"error","ts":1775896291.3792105,"caller":"logger/logger.go:62","msg":"it is not possible to create a car with the sales status."}
-{"level":"error","ts":1775896291.3803306,"caller":"logger/logger.go:62","msg":"create car: Key: 'Car.InteriorColor' Error:Field validation for 'InteriorColor' failed on the 'required' tag"}
-{"level":"error","ts":1775896291.3815799,"caller":"logger/logger.go:62","msg":"create car: Key: 'Car.Mileage' Error:Field validation for 'Mileage' failed on the 'min' tag"}
-{"level":"error","ts":1775896291.3828747,"caller":"logger/logger.go:62","msg":"create car: Key: 'Car.ModelID' Error:Field validation for 'ModelID' failed on the 'required' tag"}
-{"level":"error","ts":1775896291.3838155,"caller":"logger/logger.go:62","msg":"create car: Key: 'Car.ModelID' Error:Field validation for 'ModelID' failed on the 'uuid' tag"}
-{"level":"error","ts":1775896291.3848019,"caller":"logger/logger.go:62","msg":"create car: Key: 'Car.Color' Error:Field validation for 'Color' failed on the 'required' tag"}
-{"level":"error","ts":1775896291.3856802,"caller":"logger/logger.go:62","msg":"invalid price"}
-{"level":"error","ts":1775896291.3867605,"caller":"logger/logger.go:62","msg":"create car: price cannot be negative"}
-{"level":"error","ts":1775896291.3879938,"caller":"logger/logger.go:62","msg":"create car: Key: 'Car.SupplierID' Error:Field validation for 'SupplierID' failed on the 'required' tag\nKey: 'Car.Color' Error:Field validation for 'Color' failed on the 'required' tag"}
-{"level":"error","ts":1775896291.389033,"caller":"logger/logger.go:62","msg":"create car: Key: 'Car.SupplierID' Error:Field validation for 'SupplierID' failed on the 'uuid' tag"}
-{"level":"error","ts":1775896291.3915682,"caller":"logger/logger.go:62","msg":"foreign key, entity not found"}
-{"level":"error","ts":1775896291.3928435,"caller":"logger/logger.go:62","msg":"create car: Key: 'Car.Vin' Error:Field validation for 'Vin' failed on the 'required' tag"}
-{"level":"error","ts":1775896291.3941126,"caller":"logger/logger.go:62","msg":"create car: Key: 'Car.Vin' Error:Field validation for 'Vin' failed on the 'len' tag"}
-{"level":"error","ts":1775896291.3963566,"caller":"logger/logger.go:62","msg":"car already exists"}
-{"level":"error","ts":1775896291.397594,"caller":"logger/logger.go:62","msg":"create car: Key: 'Car.Year' Error:Field validation for 'Year' failed on the 'required' tag"}
-{"level":"error","ts":1775896291.3986819,"caller":"logger/logger.go:62","msg":"create car: Key: 'Car.Year' Error:Field validation for 'Year' failed on the 'min' tag"}
-{"level":"error","ts":1775896291.3996408,"caller":"logger/logger.go:62","msg":"token is empty"}
-{"level":"error","ts":1775896291.415131,"caller":"logger/logger.go:62","msg":"invalid token"}
-{"level":"error","ts":1775896291.4173205,"caller":"logger/logger.go:62","msg":"forbidden"}
-{"level":"error","ts":1775896291.465514,"caller":"logger/logger.go:62","msg":"car not found"}
-{"level":"error","ts":1775896291.4680686,"caller":"logger/logger.go:62","msg":"car not found"}
-{"level":"error","ts":1775896291.4707744,"caller":"logger/logger.go:62","msg":"car not found"}
-{"level":"error","ts":1775896291.4731123,"caller":"logger/logger.go:62","msg":"car not found"}
-{"level":"error","ts":1775896291.4755359,"caller":"logger/logger.go:62","msg":"car not found"}
-{"level":"error","ts":1775896291.4820213,"caller":"logger/logger.go:62","msg":"car not found"}
-{"level":"error","ts":1775896291.4841943,"caller":"logger/logger.go:62","msg":"car not found"}
-{"level":"error","ts":1775896291.4868364,"caller":"logger/logger.go:62","msg":"car not found"}
-{"level":"error","ts":1775896291.4922829,"caller":"logger/logger.go:62","msg":"car not found"}
-{"level":"error","ts":1775896291.4943783,"caller":"logger/logger.go:62","msg":"car not found"}
-{"level":"error","ts":1775896291.4970806,"caller":"logger/logger.go:62","msg":"invalid id"}
-{"level":"error","ts":1775896291.498427,"caller":"logger/logger.go:62","msg":"car not found"}
-{"level":"error","ts":1775896291.948566,"caller":"logger/logger.go:62","msg":"car not found"}
-{"level":"error","ts":1775896291.9502366,"caller":"logger/logger.go:62","msg":"car not found"}
-{"level":"error","ts":1775896291.9528234,"caller":"logger/logger.go:62","msg":"car not found"}
-{"level":"error","ts":1775896291.9543824,"caller":"logger/logger.go:62","msg":"car not found"}
-{"level":"error","ts":1775896291.9559243,"caller":"logger/logger.go:62","msg":"car not found"}
-{"level":"error","ts":1775896291.9580493,"caller":"logger/logger.go:62","msg":"car not found"}
-{"level":"error","ts":1775896291.9596286,"caller":"logger/logger.go:62","msg":"car not found"}
-{"level":"error","ts":1775896291.9824853,"caller":"logger/logger.go:62","msg":"car not found"}
-{"level":"error","ts":1775896291.984925,"caller":"logger/logger.go:62","msg":"car not found"}
-{"level":"error","ts":1775896291.9872856,"caller":"logger/logger.go:62","msg":"car not found"}
-{"level":"error","ts":1775896291.989645,"caller":"logger/logger.go:62","msg":"car not found"}
-{"level":"error","ts":1775896291.992383,"caller":"logger/logger.go:62","msg":"car not found"}
-{"level":"error","ts":1775896291.995215,"caller":"logger/logger.go:62","msg":"car not found"}
-{"level":"error","ts":1775896291.9977353,"caller":"logger/logger.go:62","msg":"car not found"}
-{"level":"error","ts":1775896292.0005522,"caller":"logger/logger.go:62","msg":"car not found"}
-{"level":"error","ts":1775896292.0029202,"caller":"logger/logger.go:62","msg":"car not found"}
-{"level":"error","ts":1775896292.0092058,"caller":"logger/logger.go:62","msg":"car not found"}
-{"level":"error","ts":1775896292.011677,"caller":"logger/logger.go:62","msg":"car not found"}
-{"level":"error","ts":1775896292.0147727,"caller":"logger/logger.go:62","msg":"car not found"}
-{"level":"error","ts":1775896292.0172153,"caller":"logger/logger.go:62","msg":"car not found"}
-{"level":"error","ts":1775896292.0199175,"caller":"logger/logger.go:62","msg":"car not found"}
-{"level":"error","ts":1775896292.0395105,"caller":"logger/logger.go:62","msg":"car not found"}
-{"level":"error","ts":1775896292.0418892,"caller":"logger/logger.go:62","msg":"car not found"}
-{"level":"error","ts":1775896292.0446415,"caller":"logger/logger.go:62","msg":"car not found"}
-{"level":"error","ts":1775896292.047206,"caller":"logger/logger.go:62","msg":"car not found"}
-{"level":"error","ts":1775896292.050295,"caller":"logger/logger.go:62","msg":"car not found"}
-{"level":"error","ts":1775896292.0530024,"caller":"logger/logger.go:62","msg":"car not found"}
-{"level":"error","ts":1775896292.0556617,"caller":"logger/logger.go:62","msg":"car not found"}
-{"level":"error","ts":1775896292.0579336,"caller":"logger/logger.go:62","msg":"car not found"}
-{"level":"error","ts":1775896292.0601873,"caller":"logger/logger.go:62","msg":"car not found"}
-{"level":"error","ts":1775896292.0618904,"caller":"logger/logger.go:62","msg":"car not found"}
-{"level":"error","ts":1775896292.0643814,"caller":"logger/logger.go:62","msg":"car not found"}
-{"level":"error","ts":1775896292.066422,"caller":"logger/logger.go:62","msg":"car not found"}
-{"level":"error","ts":1775896292.0681236,"caller":"logger/logger.go:62","msg":"car not found"}
-{"level":"error","ts":1775896292.0703692,"caller":"logger/logger.go:62","msg":"car not found"}
-{"level":"error","ts":1775896292.071804,"caller":"logger/logger.go:62","msg":"update car: invalid id"}
-{"level":"error","ts":1775896292.0736797,"caller":"logger/logger.go:62","msg":"car not found"}
-{"level":"error","ts":1775896292.0749817,"caller":"logger/logger.go:62","msg":"update car: Key: 'Car.ModelID' Error:Field validation for 'ModelID' failed on the 'uuid' tag"}
-{"level":"error","ts":1775896292.0791214,"caller":"logger/logger.go:62","msg":"foreign key, entity not found"}
-{"level":"error","ts":1775896292.0805426,"caller":"logger/logger.go:62","msg":"update car: Key: 'Car.SupplierID' Error:Field validation for 'SupplierID' failed on the 'uuid' tag"}
-{"level":"error","ts":1775896292.0836868,"caller":"logger/logger.go:62","msg":"foreign key, entity not found"}
-{"level":"error","ts":1775896292.0850003,"caller":"logger/logger.go:62","msg":"update car: Key: 'Car.Color' Error:Field validation for 'Color' failed on the 'required' tag"}
-{"level":"error","ts":1775896292.0862103,"caller":"logger/logger.go:62","msg":"update car: Key: 'Car.InteriorColor' Error:Field validation for 'InteriorColor' failed on the 'required' tag"}
-{"level":"error","ts":1775896292.0870907,"caller":"logger/logger.go:62","msg":"update car: Key: 'Car.Mileage' Error:Field validation for 'Mileage' failed on the 'min' tag"}
-{"level":"error","ts":1775896292.0882657,"caller":"logger/logger.go:62","msg":"invalid price"}
-{"level":"error","ts":1775896292.089632,"caller":"logger/logger.go:62","msg":"update car: price cannot be negative"}
-{"level":"error","ts":1775896292.0908124,"caller":"logger/logger.go:62","msg":"invalid status"}
-{"level":"error","ts":1775896292.0934782,"caller":"logger/logger.go:62","msg":"it is not possible to change the sales status directly."}
-{"level":"error","ts":1775896292.095999,"caller":"logger/logger.go:62","msg":"it is not possible to change the sales status directly."}
-{"level":"error","ts":1775896292.0972712,"caller":"logger/logger.go:62","msg":"update car: Key: 'Car.Year' Error:Field validation for 'Year' failed on the 'required' tag"}
-{"level":"error","ts":1775896292.1131706,"caller":"logger/logger.go:62","msg":"update car: Key: 'Car.Year' Error:Field validation for 'Year' failed on the 'max' tag"}
-{"level":"error","ts":1775896292.114545,"caller":"logger/logger.go:62","msg":"update car: Key: 'Car.Vin' Error:Field validation for 'Vin' failed on the 'len' tag"}
-{"level":"error","ts":1775896292.1182055,"caller":"logger/logger.go:62","msg":"car already exists"}
-{"level":"error","ts":1775896292.2807815,"caller":"logger/logger.go:62","msg":"it is not possible to update sold or booked cars."}
-{"level":"error","ts":1775896292.2890735,"caller":"logger/logger.go:62","msg":"it is not possible to update sold or booked cars."}
-{"level":"error","ts":1775896292.2905657,"caller":"logger/logger.go:62","msg":"token is empty"}
-{"level":"error","ts":1775896292.2918797,"caller":"logger/logger.go:62","msg":"invalid token"}
-{"level":"error","ts":1775896292.2933264,"caller":"logger/logger.go:62","msg":"forbidden"}
+{"level":"error","ts":1775905033.2870007,"caller":"logger/logger.go:62","msg":"create car: Key: 'Car.Color' Error:Field validation for 'Color' failed on the 'required' tag"}
+{"level":"error","ts":1775905033.2885997,"caller":"logger/logger.go:62","msg":"invalid status"}
+{"level":"error","ts":1775905033.29029,"caller":"logger/logger.go:62","msg":"it is not possible to create a car with the sales status."}
+{"level":"error","ts":1775905033.2915306,"caller":"logger/logger.go:62","msg":"it is not possible to create a car with the sales status."}
+{"level":"error","ts":1775905033.2926757,"caller":"logger/logger.go:62","msg":"create car: Key: 'Car.InteriorColor' Error:Field validation for 'InteriorColor' failed on the 'required' tag"}
+{"level":"error","ts":1775905033.294016,"caller":"logger/logger.go:62","msg":"create car: Key: 'Car.Mileage' Error:Field validation for 'Mileage' failed on the 'min' tag"}
+{"level":"error","ts":1775905033.2951415,"caller":"logger/logger.go:62","msg":"create car: Key: 'Car.ModelID' Error:Field validation for 'ModelID' failed on the 'required' tag"}
+{"level":"error","ts":1775905033.2962816,"caller":"logger/logger.go:62","msg":"create car: Key: 'Car.ModelID' Error:Field validation for 'ModelID' failed on the 'uuid' tag"}
+{"level":"error","ts":1775905033.2973702,"caller":"logger/logger.go:62","msg":"create car: Key: 'Car.Color' Error:Field validation for 'Color' failed on the 'required' tag"}
+{"level":"error","ts":1775905033.2982352,"caller":"logger/logger.go:62","msg":"invalid price"}
+{"level":"error","ts":1775905033.2992175,"caller":"logger/logger.go:62","msg":"create car: price cannot be negative"}
+{"level":"error","ts":1775905033.3001957,"caller":"logger/logger.go:62","msg":"create car: Key: 'Car.SupplierID' Error:Field validation for 'SupplierID' failed on the 'required' tag\nKey: 'Car.Color' Error:Field validation for 'Color' failed on the 'required' tag"}
+{"level":"error","ts":1775905033.3012877,"caller":"logger/logger.go:62","msg":"create car: Key: 'Car.SupplierID' Error:Field validation for 'SupplierID' failed on the 'uuid' tag"}
+{"level":"error","ts":1775905033.303989,"caller":"logger/logger.go:62","msg":"foreign key, entity not found"}
+{"level":"error","ts":1775905033.3052642,"caller":"logger/logger.go:62","msg":"create car: Key: 'Car.Vin' Error:Field validation for 'Vin' failed on the 'required' tag"}
+{"level":"error","ts":1775905033.3065143,"caller":"logger/logger.go:62","msg":"create car: Key: 'Car.Vin' Error:Field validation for 'Vin' failed on the 'len' tag"}
+{"level":"error","ts":1775905033.30873,"caller":"logger/logger.go:62","msg":"car already exists"}
+{"level":"error","ts":1775905033.3101425,"caller":"logger/logger.go:62","msg":"create car: Key: 'Car.Year' Error:Field validation for 'Year' failed on the 'required' tag"}
+{"level":"error","ts":1775905033.3113,"caller":"logger/logger.go:62","msg":"create car: Key: 'Car.Year' Error:Field validation for 'Year' failed on the 'min' tag"}
+{"level":"error","ts":1775905033.312302,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1775905033.3291228,"caller":"logger/logger.go:62","msg":"invalid token"}
+{"level":"error","ts":1775905033.3319645,"caller":"logger/logger.go:62","msg":"forbidden"}
+{"level":"error","ts":1775905033.3708806,"caller":"logger/logger.go:62","msg":"car not found"}
+{"level":"error","ts":1775905033.3727746,"caller":"logger/logger.go:62","msg":"car not found"}
+{"level":"error","ts":1775905033.3744392,"caller":"logger/logger.go:62","msg":"car not found"}
+{"level":"error","ts":1775905033.3782616,"caller":"logger/logger.go:62","msg":"car not found"}
+{"level":"error","ts":1775905033.3796167,"caller":"logger/logger.go:62","msg":"car not found"}
+{"level":"error","ts":1775905033.3817863,"caller":"logger/logger.go:62","msg":"car not found"}
+{"level":"error","ts":1775905033.384379,"caller":"logger/logger.go:62","msg":"car not found"}
+{"level":"error","ts":1775905033.3865058,"caller":"logger/logger.go:62","msg":"car not found"}
+{"level":"error","ts":1775905033.3888547,"caller":"logger/logger.go:62","msg":"car not found"}
+{"level":"error","ts":1775905033.3988051,"caller":"logger/logger.go:62","msg":"car not found"}
+{"level":"error","ts":1775905033.4001222,"caller":"logger/logger.go:62","msg":"invalid id"}
+{"level":"error","ts":1775905033.401479,"caller":"logger/logger.go:62","msg":"car not found"}
+{"level":"error","ts":1775905033.8322577,"caller":"logger/logger.go:62","msg":"car not found"}
+{"level":"error","ts":1775905033.8353472,"caller":"logger/logger.go:62","msg":"car not found"}
+{"level":"error","ts":1775905033.8381617,"caller":"logger/logger.go:62","msg":"car not found"}
+{"level":"error","ts":1775905033.8400948,"caller":"logger/logger.go:62","msg":"car not found"}
+{"level":"error","ts":1775905033.8416517,"caller":"logger/logger.go:62","msg":"car not found"}
+{"level":"error","ts":1775905033.8441405,"caller":"logger/logger.go:62","msg":"car not found"}
+{"level":"error","ts":1775905033.8465922,"caller":"logger/logger.go:62","msg":"car not found"}
+{"level":"error","ts":1775905033.8715582,"caller":"logger/logger.go:62","msg":"car not found"}
+{"level":"error","ts":1775905033.8745968,"caller":"logger/logger.go:62","msg":"car not found"}
+{"level":"error","ts":1775905033.8772078,"caller":"logger/logger.go:62","msg":"car not found"}
+{"level":"error","ts":1775905033.879359,"caller":"logger/logger.go:62","msg":"car not found"}
+{"level":"error","ts":1775905033.8814845,"caller":"logger/logger.go:62","msg":"car not found"}
+{"level":"error","ts":1775905033.8842251,"caller":"logger/logger.go:62","msg":"car not found"}
+{"level":"error","ts":1775905033.8866065,"caller":"logger/logger.go:62","msg":"car not found"}
+{"level":"error","ts":1775905033.8887594,"caller":"logger/logger.go:62","msg":"car not found"}
+{"level":"error","ts":1775905033.8914132,"caller":"logger/logger.go:62","msg":"car not found"}
+{"level":"error","ts":1775905033.8934624,"caller":"logger/logger.go:62","msg":"car not found"}
+{"level":"error","ts":1775905033.8950486,"caller":"logger/logger.go:62","msg":"car not found"}
+{"level":"error","ts":1775905033.8964982,"caller":"logger/logger.go:62","msg":"car not found"}
+{"level":"error","ts":1775905033.8981726,"caller":"logger/logger.go:62","msg":"car not found"}
+{"level":"error","ts":1775905033.900492,"caller":"logger/logger.go:62","msg":"car not found"}
+{"level":"error","ts":1775905033.9067223,"caller":"logger/logger.go:62","msg":"car not found"}
+{"level":"error","ts":1775905033.9114025,"caller":"logger/logger.go:62","msg":"car not found"}
+{"level":"error","ts":1775905033.914342,"caller":"logger/logger.go:62","msg":"car not found"}
+{"level":"error","ts":1775905033.9167676,"caller":"logger/logger.go:62","msg":"car not found"}
+{"level":"error","ts":1775905033.9190128,"caller":"logger/logger.go:62","msg":"car not found"}
+{"level":"error","ts":1775905033.9214776,"caller":"logger/logger.go:62","msg":"car not found"}
+{"level":"error","ts":1775905033.923467,"caller":"logger/logger.go:62","msg":"car not found"}
+{"level":"error","ts":1775905033.929664,"caller":"logger/logger.go:62","msg":"car not found"}
+{"level":"error","ts":1775905033.932181,"caller":"logger/logger.go:62","msg":"car not found"}
+{"level":"error","ts":1775905033.934718,"caller":"logger/logger.go:62","msg":"car not found"}
+{"level":"error","ts":1775905033.9373798,"caller":"logger/logger.go:62","msg":"car not found"}
+{"level":"error","ts":1775905033.939367,"caller":"logger/logger.go:62","msg":"car not found"}
+{"level":"error","ts":1775905033.9410255,"caller":"logger/logger.go:62","msg":"car not found"}
+{"level":"error","ts":1775905033.9448168,"caller":"logger/logger.go:62","msg":"car not found"}
+{"level":"error","ts":1775905033.9482377,"caller":"logger/logger.go:62","msg":"update car: invalid id"}
+{"level":"error","ts":1775905033.949838,"caller":"logger/logger.go:62","msg":"car not found"}
+{"level":"error","ts":1775905033.9508364,"caller":"logger/logger.go:62","msg":"update car: Key: 'Car.ModelID' Error:Field validation for 'ModelID' failed on the 'uuid' tag"}
+{"level":"error","ts":1775905033.9551792,"caller":"logger/logger.go:62","msg":"foreign key, entity not found"}
+{"level":"error","ts":1775905033.9562373,"caller":"logger/logger.go:62","msg":"update car: Key: 'Car.SupplierID' Error:Field validation for 'SupplierID' failed on the 'uuid' tag"}
+{"level":"error","ts":1775905033.959804,"caller":"logger/logger.go:62","msg":"foreign key, entity not found"}
+{"level":"error","ts":1775905033.9611578,"caller":"logger/logger.go:62","msg":"update car: Key: 'Car.Color' Error:Field validation for 'Color' failed on the 'required' tag"}
+{"level":"error","ts":1775905033.9625072,"caller":"logger/logger.go:62","msg":"update car: Key: 'Car.InteriorColor' Error:Field validation for 'InteriorColor' failed on the 'required' tag"}
+{"level":"error","ts":1775905033.9637392,"caller":"logger/logger.go:62","msg":"update car: Key: 'Car.Mileage' Error:Field validation for 'Mileage' failed on the 'min' tag"}
+{"level":"error","ts":1775905033.964938,"caller":"logger/logger.go:62","msg":"invalid price"}
+{"level":"error","ts":1775905033.9661765,"caller":"logger/logger.go:62","msg":"update car: price cannot be negative"}
+{"level":"error","ts":1775905033.9674182,"caller":"logger/logger.go:62","msg":"invalid status"}
+{"level":"error","ts":1775905033.970151,"caller":"logger/logger.go:62","msg":"it is not possible to change the sales status directly."}
+{"level":"error","ts":1775905033.9728398,"caller":"logger/logger.go:62","msg":"it is not possible to change the sales status directly."}
+{"level":"error","ts":1775905033.9743807,"caller":"logger/logger.go:62","msg":"update car: Key: 'Car.Year' Error:Field validation for 'Year' failed on the 'required' tag"}
+{"level":"error","ts":1775905033.9873087,"caller":"logger/logger.go:62","msg":"update car: Key: 'Car.Year' Error:Field validation for 'Year' failed on the 'max' tag"}
+{"level":"error","ts":1775905033.9904742,"caller":"logger/logger.go:62","msg":"update car: Key: 'Car.Vin' Error:Field validation for 'Vin' failed on the 'len' tag"}
+{"level":"error","ts":1775905033.9955332,"caller":"logger/logger.go:62","msg":"car already exists"}
+{"level":"error","ts":1775905034.1597345,"caller":"logger/logger.go:62","msg":"it is not possible to update sold or booked cars."}
+{"level":"error","ts":1775905034.168435,"caller":"logger/logger.go:62","msg":"it is not possible to update sold or booked cars."}
+{"level":"error","ts":1775905034.1697683,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1775905034.1708767,"caller":"logger/logger.go:62","msg":"invalid token"}
+{"level":"error","ts":1775905034.1721501,"caller":"logger/logger.go:62","msg":"forbidden"}

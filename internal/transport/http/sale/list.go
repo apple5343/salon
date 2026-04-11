@@ -37,6 +37,12 @@ func salesFiltersFromRequest(c echo.Context) (*service.SaleFilters, error) {
 	if carID := c.QueryParam("car_id"); carID != "" {
 		filters.CarID = &carID
 	}
+	if clientID := c.QueryParam("client_id"); clientID != "" {
+		filters.ClientID = &clientID
+	}
+	if employeeID := c.QueryParam("employee_id"); employeeID != "" {
+		filters.EmployeeID = &employeeID
+	}
 	if status := c.QueryParam("status"); status != "" {
 		s, ok := models.SaleStatusMap[status]
 		if !ok {
