@@ -62,6 +62,8 @@ func (s *SupplierSuite) TestUpdate() {
 
 func (s *SupplierSuite) TestList() {
 	s.T().Run("list", s.List)
+	s.T().Run("invalid", s.ListInvalid)
+	s.T().Run("forbidden", s.ListForbidden)
 }
 
 func CompareSuppliersPublic(t *testing.T, expected *httpModels.SupplierInternalResponse, actual *httpModels.SupplierInternalResponse) {
@@ -370,4 +372,62 @@ func (s *SupplierSuite) List(t *testing.T) {
 			}
 		}
 	})
+}
+
+func (s *SupplierSuite) ListInvalid(t *testing.T) {
+	t.Run("with invalid order_by", func(t *testing.T) {
+		var orderBy serviceModels.SupplierOrderBy = "invalid"
+		filter := serviceModels.SupplierFilters{OrderBy: &orderBy}
+		_, code, err := s.base.client.GetSuppliers(s.base.ctx, s.adminToken.AccessToken, &filter)
+		require.NoError(t, err)
+		require.Equal(t, http.StatusBadRequest, code)
+	})
+
+	t.Run("with invalid order_direction", func(t *testing.T) {
+		var orderDirection serviceModels.OrderDirection = "invalid"
+		filter := serviceModels.SupplierFilters{
+			BaseList: serviceModels.BaseList{
+				OrderDirection: &orderDirection,
+			},
+		}
+		_, code, err := s.base.client.GetSuppliers(s.base.ctx, s.adminToken.AccessToken, &filter)
+		require.NoError(t, err)
+		require.Equal(t, http.StatusBadRequest, code)
+	})
+
+	t.Run("with invalid country_code", func(t *testing.T) {
+		countryCode := "INVALID"
+		filter := serviceModels.SupplierFilters{CountryCode: &countryCode}
+		_, code, err := s.base.client.GetSuppliers(s.base.ctx, s.adminToken.AccessToken, &filter)
+		require.NoError(t, err)
+		require.Equal(t, http.StatusBadRequest, code)
+	})
+
+	t.Run("with negative limit", func(t *testing.T) {
+		limit := -10
+		filter := serviceModels.SupplierFilters{
+			BaseList: serviceModels.BaseList{
+				Limit: &limit,
+			},
+		}
+		_, code, err := s.base.client.GetSuppliers(s.base.ctx, s.adminToken.AccessToken, &filter)
+		require.NoError(t, err)
+		require.Equal(t, http.StatusBadRequest, code)
+	})
+
+	t.Run("with negative offset", func(t *testing.T) {
+		offset := -10
+		filter := serviceModels.SupplierFilters{
+			BaseList: serviceModels.BaseList{
+				Offset: &offset,
+			},
+		}
+		_, code, err := s.base.client.GetSuppliers(s.base.ctx, s.adminToken.AccessToken, &filter)
+		require.NoError(t, err)
+		require.Equal(t, http.StatusBadRequest, code)
+	})
+}
+
+func (s *SupplierSuite) ListForbidden(t *testing.T) {
+	t.Skip("Suppliers list is public endpoint")
 }
