@@ -10,25 +10,25 @@ import (
 	"github.com/apple5343/errorx"
 )
 
-func (s *carService) UpdateCar(ctx context.Context, c *models.Car) (*models.Car, *models.Model, *models.Brand, *models.Supplier, error) {
+func (s *carService) UpdateCar(ctx context.Context, car *models.Car) (*models.Car, *models.Model, *models.Brand, *models.Supplier, error) {
 	role := ctxutil.UserRoleFromContext(ctx)
 	if role != string(models.EmployeeRoleAdmin) {
 		return nil, nil, nil, nil, ErrForbidden
 	}
-	if err := c.BeforeUpdate(s.clock); err != nil {
+	if err := car.BeforeUpdate(s.clock); err != nil {
 		return nil, nil, nil, nil, errorx.Wrap("update car", errorx.BadRequest, err)
 	}
-	car, _, _, _, err := s.getCarByID(ctx, c.ID)
+	existingCar, _, _, _, err := s.getCarByID(ctx, car.ID)
 	if err != nil {
 		return nil, nil, nil, nil, err
 	}
-	if car.Status == models.CarStatusSold || car.Status == models.CarStatusBooked {
-		return nil, nil, nil, nil, errorx.NewError("it is not possible to change status directly.", errorx.BadRequest)
+	if existingCar.Status == models.CarStatusSold || existingCar.Status == models.CarStatusBooked {
+		return nil, nil, nil, nil, errorx.NewError("it is not possible to update sold or booked cars.", errorx.BadRequest)
 	}
-	if c.Status == models.CarStatusSold || c.Status == models.CarStatusBooked {
+	if car.Status == models.CarStatusSold || car.Status == models.CarStatusBooked {
 		return nil, nil, nil, nil, errorx.NewError("it is not possible to change the sales status directly.", errorx.BadRequest)
 	}
-	c, err = s.repo.UpdateCar(ctx, c)
+	car, err = s.repo.UpdateCar(ctx, car)
 	if err != nil {
 		if errors.Is(err, repo.ErrNotFound) {
 			return nil, nil, nil, nil, ErrCarNotFound
@@ -42,11 +42,11 @@ func (s *carService) UpdateCar(ctx context.Context, c *models.Car) (*models.Car,
 	s.eventService.AddEvent(ctx, &models.Event{
 		Type:       models.EventTypeUpdated,
 		EntityType: models.EntityTypeCar,
-		EntityID:   c.ID,
+		EntityID:   car.ID,
 		ActorID:    ctxutil.UserIDFromContext(ctx),
 		ActorRole:  role,
-		Payload:    models.CarPayload(c),
+		Payload:    models.CarPayload(car),
 		CreatedAt:  s.clock.Now(),
 	})
-	return s.getCarByID(ctx, c.ID)
+	return s.getCarByID(ctx, car.ID)
 }

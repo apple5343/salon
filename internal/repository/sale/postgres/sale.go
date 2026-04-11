@@ -17,6 +17,18 @@ func (r *saleRepository) Create(ctx context.Context, s *service.Sale) (*service.
 		return nil, err
 	}
 	defer tx.Rollback()
+	var carStatus string
+	err = tx.QueryRowContext(ctx, `SELECT status FROM cars WHERE id = $1 FOR UPDATE`, s.CarID).Scan(&carStatus)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, errors.ErrNotFound
+		}
+		return nil, err
+	}
+	if carStatus != string(service.CarStatusAvailable) {
+		return nil, errors.ErrCarNotAvailable
+	}
+
 	id := uuid.New().String()
 	repoS := models.SaleToDatabase(s)
 	repoS.ID = id
@@ -34,16 +46,9 @@ func (r *saleRepository) Create(ctx context.Context, s *service.Sale) (*service.
 		}
 		return nil, err
 	}
-	res, err := tx.ExecContext(ctx, `UPDATE cars SET status = $1 WHERE id = $2 AND status = $3`, string(service.CarStatusBooked), s.CarID, string(service.CarStatusAvailable))
+	_, err = tx.ExecContext(ctx, `UPDATE cars SET status = $1 WHERE id = $2`, string(service.CarStatusBooked), s.CarID)
 	if err != nil {
 		return nil, err
-	}
-	rowsAffected, err := res.RowsAffected()
-	if err != nil {
-		return nil, err
-	}
-	if rowsAffected == 0 {
-		return nil, errors.ErrNotFound
 	}
 	err = tx.Commit()
 	if err != nil {
@@ -88,10 +93,14 @@ func (r *saleRepository) Cancel(ctx context.Context, id string) error {
 	}
 	defer tx.Rollback()
 	now := r.clock.Now()
-	res := tx.QueryRowContext(ctx, "UPDATE sales SET status = $1 , updated_at = $2 WHERE id = $3 RETURNING car_id", string(service.SaleStatusCanceled), now, id)
+	res := tx.QueryRowContext(ctx, "UPDATE sales SET status = $1 , updated_at = $2 WHERE id = $3 AND status = $4 RETURNING car_id",
+		string(service.SaleStatusCanceled), now, id, string(service.SaleStatusPending))
 
 	var carID string
 	if err = res.Scan(&carID); err != nil {
+		if err == sql.ErrNoRows {
+			return errors.ErrNotFound
+		}
 		return err
 	}
 

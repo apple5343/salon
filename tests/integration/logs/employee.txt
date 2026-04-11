@@ -31,68 +31,68 @@
 [Fx] PROVIDE	clock.Clock <= fx.Annotate(salon/pkg/clock.ClockModule.func1(), fx.As([[clock.Clock]]) from module "clock"
 [Fx] INVOKE		salon/internal/infrastructure/postgres.NewModule.func1() from module "postgres"
 [Fx] BEFORE RUN	provide: go.uber.org/fx.New.func1()
-[Fx] RUN	provide: go.uber.org/fx.New.func1() in 3.397µs
+[Fx] RUN	provide: go.uber.org/fx.New.func1() in 8.779µs
 [Fx] BEFORE RUN	provide: salon/internal/config.PostgresConfig() from module "postgres"
-[Fx] RUN	provide: salon/internal/config.PostgresConfig() in 44.68µs from module "postgres"
+[Fx] RUN	provide: salon/internal/config.PostgresConfig() in 104.703µs from module "postgres"
 [Fx] BEFORE RUN	provide: salon/internal/infrastructure/postgres.NewClient() from module "postgres"
-[Fx] RUN	provide: salon/internal/infrastructure/postgres.NewClient() in 3.610714ms from module "postgres"
+[Fx] RUN	provide: salon/internal/infrastructure/postgres.NewClient() in 7.674026ms from module "postgres"
 [Fx] INVOKE		salon/internal/infrastructure/redis.NewModule.func1() from module "redis"
 [Fx] BEFORE RUN	provide: salon/internal/config.RedisConfig() from module "redis"
-[Fx] RUN	provide: salon/internal/config.RedisConfig() in 10.633µs from module "redis"
+[Fx] RUN	provide: salon/internal/config.RedisConfig() in 32.176µs from module "redis"
 [Fx] BEFORE RUN	provide: salon/internal/infrastructure/redis.NewClient() from module "redis"
-[Fx] RUN	provide: salon/internal/infrastructure/redis.NewClient() in 54.44µs from module "redis"
+[Fx] RUN	provide: salon/internal/infrastructure/redis.NewClient() in 99.848µs from module "redis"
 [Fx] INVOKE		salon/internal/service/event.NewModule.func1() from module "event"
 [Fx] BEFORE RUN	provide: salon/internal/repository/event/postgres.NewRepository() from module "event"
-[Fx] RUN	provide: salon/internal/repository/event/postgres.NewRepository() in 2.259µs from module "event"
+[Fx] RUN	provide: salon/internal/repository/event/postgres.NewRepository() in 14.4µs from module "event"
 [Fx] BEFORE RUN	provide: salon/internal/service/event.NewService() from module "event"
-[Fx] RUN	provide: salon/internal/service/event.NewService() in 2.929µs from module "event"
+[Fx] RUN	provide: salon/internal/service/event.NewService() in 5.977µs from module "event"
 [Fx] INVOKE		salon/internal/transport/http.NewModule.func1() from module "http"
 [Fx] BEFORE RUN	provide: salon/internal/config.HttpServerConfig() from module "http"
-[Fx] RUN	provide: salon/internal/config.HttpServerConfig() in 4.011µs from module "http"
+[Fx] RUN	provide: salon/internal/config.HttpServerConfig() in 9.59µs from module "http"
 [Fx] BEFORE RUN	provide: salon/internal/config.JWTConfig() from module "config"
-[Fx] RUN	provide: salon/internal/config.JWTConfig() in 122.938µs from module "config"
+[Fx] RUN	provide: salon/internal/config.JWTConfig() in 27.16µs from module "config"
 [Fx] BEFORE RUN	provide: salon/internal/config.LoggerConfig() from module "zap"
-[Fx] RUN	provide: salon/internal/config.LoggerConfig() in 6.278µs from module "zap"
+[Fx] RUN	provide: salon/internal/config.LoggerConfig() in 13.424µs from module "zap"
 [Fx] BEFORE RUN	provide: salon/pkg/logger.NewLogger() from module "zap"
-[Fx] RUN	provide: salon/pkg/logger.NewLogger() in 36.221µs from module "zap"
+[Fx] RUN	provide: salon/pkg/logger.NewLogger() in 117.584µs from module "zap"
 [Fx] BEFORE RUN	provide: salon/internal/repository/employee/postgres.NewRepository() from module "employee"
-[Fx] RUN	provide: salon/internal/repository/employee/postgres.NewRepository() in 1.614µs from module "employee"
+[Fx] RUN	provide: salon/internal/repository/employee/postgres.NewRepository() in 4.432µs from module "employee"
 [Fx] BEFORE RUN	provide: fx.Annotate(salon/pkg/clock.ClockModule.func1(), fx.As([[clock.Clock]]) from module "clock"
-[Fx] RUN	provide: fx.Annotate(salon/pkg/clock.ClockModule.func1(), fx.As([[clock.Clock]]) in 8.686µs from module "clock"
+[Fx] RUN	provide: fx.Annotate(salon/pkg/clock.ClockModule.func1(), fx.As([[clock.Clock]]) in 31.491µs from module "clock"
 [Fx] BEFORE RUN	provide: salon/internal/service/employee.NewService() from module "service"
-[Fx] RUN	provide: salon/internal/service/employee.NewService() in 2.794µs from module "service"
+[Fx] RUN	provide: salon/internal/service/employee.NewService() in 11.521µs from module "service"
 [Fx] BEFORE RUN	provide: salon/internal/repository/supplier/postgres.NewRepository() from module "supplier"
-[Fx] RUN	provide: salon/internal/repository/supplier/postgres.NewRepository() in 9.682µs from module "supplier"
+[Fx] RUN	provide: salon/internal/repository/supplier/postgres.NewRepository() in 11.132µs from module "supplier"
 [Fx] BEFORE RUN	provide: salon/internal/repository/supplier/redis.NewRepository() from module "supplier"
-[Fx] RUN	provide: salon/internal/repository/supplier/redis.NewRepository() in 1.663µs from module "supplier"
+[Fx] RUN	provide: salon/internal/repository/supplier/redis.NewRepository() in 4.098µs from module "supplier"
 [Fx] BEFORE RUN	provide: salon/internal/service/supplier.NewService() from module "supplier"
-[Fx] RUN	provide: salon/internal/service/supplier.NewService() in 6.622µs from module "supplier"
+[Fx] RUN	provide: salon/internal/service/supplier.NewService() in 22.055µs from module "supplier"
 [Fx] BEFORE RUN	provide: salon/internal/repository/client/postgres.NewRepository() from module "client"
-[Fx] RUN	provide: salon/internal/repository/client/postgres.NewRepository() in 1.705µs from module "client"
+[Fx] RUN	provide: salon/internal/repository/client/postgres.NewRepository() in 5.262µs from module "client"
 [Fx] BEFORE RUN	provide: salon/internal/service/client.NewService() from module "client"
-[Fx] RUN	provide: salon/internal/service/client.NewService() in 1.995µs from module "client"
+[Fx] RUN	provide: salon/internal/service/client.NewService() in 5.067µs from module "client"
 [Fx] BEFORE RUN	provide: salon/internal/repository/car/postgres.NewRepository() from module "car"
-[Fx] RUN	provide: salon/internal/repository/car/postgres.NewRepository() in 2.728µs from module "car"
+[Fx] RUN	provide: salon/internal/repository/car/postgres.NewRepository() in 4.132µs from module "car"
 [Fx] BEFORE RUN	provide: salon/internal/repository/model/postgres.NewRepository() from module "model"
-[Fx] RUN	provide: salon/internal/repository/model/postgres.NewRepository() in 1.288µs from module "model"
+[Fx] RUN	provide: salon/internal/repository/model/postgres.NewRepository() in 3.834µs from module "model"
 [Fx] BEFORE RUN	provide: salon/internal/repository/brand/postgres.NewRepository() from module "brand"
-[Fx] RUN	provide: salon/internal/repository/brand/postgres.NewRepository() in 5.992µs from module "brand"
+[Fx] RUN	provide: salon/internal/repository/brand/postgres.NewRepository() in 4.775µs from module "brand"
 [Fx] BEFORE RUN	provide: salon/internal/repository/brand/redis.NewCache() from module "brand"
-[Fx] RUN	provide: salon/internal/repository/brand/redis.NewCache() in 2.538µs from module "brand"
+[Fx] RUN	provide: salon/internal/repository/brand/redis.NewCache() in 7.9µs from module "brand"
 [Fx] BEFORE RUN	provide: salon/internal/service/brand.NewService() from module "brand"
-[Fx] RUN	provide: salon/internal/service/brand.NewService() in 2.019µs from module "brand"
+[Fx] RUN	provide: salon/internal/service/brand.NewService() in 9.215µs from module "brand"
 [Fx] BEFORE RUN	provide: salon/internal/service/model.NewService() from module "model"
-[Fx] RUN	provide: salon/internal/service/model.NewService() in 2.247µs from module "model"
+[Fx] RUN	provide: salon/internal/service/model.NewService() in 6.068µs from module "model"
 [Fx] BEFORE RUN	provide: salon/internal/service/car.NewService() from module "car"
-[Fx] RUN	provide: salon/internal/service/car.NewService() in 4.794µs from module "car"
+[Fx] RUN	provide: salon/internal/service/car.NewService() in 8.995µs from module "car"
 [Fx] BEFORE RUN	provide: salon/internal/repository/sale/postgres.NewRepository() from module "sale"
-[Fx] RUN	provide: salon/internal/repository/sale/postgres.NewRepository() in 4.439µs from module "sale"
+[Fx] RUN	provide: salon/internal/repository/sale/postgres.NewRepository() in 8.428µs from module "sale"
 [Fx] BEFORE RUN	provide: salon/internal/service/sale.NewService() from module "sale"
-[Fx] RUN	provide: salon/internal/service/sale.NewService() in 2.195µs from module "sale"
+[Fx] RUN	provide: salon/internal/service/sale.NewService() in 5.509µs from module "sale"
 [Fx] BEFORE RUN	provide: salon/internal/transport/http.NewServer() from module "http"
-[Fx] RUN	provide: salon/internal/transport/http.NewServer() in 20.464µs from module "http"
+[Fx] RUN	provide: salon/internal/transport/http.NewServer() in 41.116µs from module "http"
 [Fx] HOOK OnStart		salon/internal/transport/http.NewModule.func1.1() executing (caller: salon/internal/transport/http.NewModule.func1)
-[Fx] HOOK OnStart		salon/internal/transport/http.NewModule.func1.1() called by salon/internal/transport/http.NewModule.func1 ran successfully in 3.496µs
+[Fx] HOOK OnStart		salon/internal/transport/http.NewModule.func1.1() called by salon/internal/transport/http.NewModule.func1 ran successfully in 1.339µs
 [Fx] RUNNING
 
    ____    __
@@ -104,117 +104,117 @@ https://echo.labstack.com
 ____________________________________O/_______
                                     O\
 ⇨ http server started on [::]:8080
-{"level":"error","ts":1775392915.3469734,"caller":"logger/logger.go:62","msg":"invalid credentials"}
-{"level":"error","ts":1775392915.3484576,"caller":"logger/logger.go:62","msg":"invalid credentials"}
-{"level":"error","ts":1775392915.4008818,"caller":"logger/logger.go:62","msg":"invalid credentials"}
-{"level":"error","ts":1775392915.4019341,"caller":"logger/logger.go:62","msg":"invalid credentials"}
-{"level":"error","ts":1775392915.4027452,"caller":"logger/logger.go:62","msg":"invalid credentials"}
-{"level":"error","ts":1775392915.4521725,"caller":"logger/logger.go:62","msg":"invalid credentials"}
-{"level":"error","ts":1775392915.453063,"caller":"logger/logger.go:62","msg":"invalid credentials"}
-{"level":"error","ts":1775392915.453703,"caller":"logger/logger.go:62","msg":"invalid credentials"}
-{"level":"error","ts":1775392915.4544785,"caller":"logger/logger.go:62","msg":"invalid credentials"}
-{"level":"error","ts":1775392915.4552007,"caller":"logger/logger.go:62","msg":"invalid credentials"}
-{"level":"error","ts":1775392915.5067096,"caller":"logger/logger.go:62","msg":"invalid credentials"}
-{"level":"error","ts":1775392915.558225,"caller":"logger/logger.go:62","msg":"invalid credentials"}
-{"level":"error","ts":1775392915.6089156,"caller":"logger/logger.go:62","msg":"invalid credentials"}
-{"level":"error","ts":1775392915.6101947,"caller":"logger/logger.go:62","msg":"invalid credentials"}
-{"level":"error","ts":1775392915.6110475,"caller":"logger/logger.go:62","msg":"invalid credentials"}
-{"level":"error","ts":1775392915.6122634,"caller":"logger/logger.go:62","msg":"invalid credentials"}
-{"level":"error","ts":1775392915.6129847,"caller":"logger/logger.go:62","msg":"invalid credentials"}
-{"level":"error","ts":1775392915.6136515,"caller":"logger/logger.go:62","msg":"invalid credentials"}
-{"level":"error","ts":1775392915.6142273,"caller":"logger/logger.go:62","msg":"invalid credentials"}
-{"level":"error","ts":1775392915.6148193,"caller":"logger/logger.go:62","msg":"invalid credentials"}
-{"level":"error","ts":1775392915.6380599,"caller":"logger/logger.go:62","msg":"invalid credentials"}
-{"level":"error","ts":1775392915.6394475,"caller":"logger/logger.go:62","msg":"invalid credentials"}
-{"level":"error","ts":1775392915.6404305,"caller":"logger/logger.go:62","msg":"invalid credentials"}
-{"level":"error","ts":1775392915.6415327,"caller":"logger/logger.go:62","msg":"invalid credentials"}
-{"level":"error","ts":1775392915.6426325,"caller":"logger/logger.go:62","msg":"invalid credentials"}
-{"level":"error","ts":1775392915.6434662,"caller":"logger/logger.go:62","msg":"token is empty"}
-{"level":"error","ts":1775392915.6442125,"caller":"logger/logger.go:62","msg":"invalid token"}
-{"level":"error","ts":1775392915.6451404,"caller":"logger/logger.go:62","msg":"token is empty"}
-{"level":"error","ts":1775392915.6459978,"caller":"logger/logger.go:62","msg":"invalid token"}
-{"level":"error","ts":1775392915.646836,"caller":"logger/logger.go:62","msg":"token is empty"}
-{"level":"error","ts":1775392915.6476126,"caller":"logger/logger.go:62","msg":"invalid token"}
-{"level":"error","ts":1775392916.728451,"caller":"logger/logger.go:62","msg":"employee not found"}
-{"level":"error","ts":1775392916.728985,"caller":"logger/logger.go:62","msg":"invalid id"}
-{"level":"error","ts":1775392916.7295306,"caller":"logger/logger.go:62","msg":"token is empty"}
-{"level":"error","ts":1775392916.7299929,"caller":"logger/logger.go:62","msg":"token is empty"}
-{"level":"error","ts":1775392916.7303605,"caller":"logger/logger.go:62","msg":"token is empty"}
-{"level":"error","ts":1775392916.7307212,"caller":"logger/logger.go:62","msg":"token is empty"}
-{"level":"error","ts":1775392916.7311053,"caller":"logger/logger.go:62","msg":"token is empty"}
-{"level":"error","ts":1775392916.7315524,"caller":"logger/logger.go:62","msg":"token is empty"}
-{"level":"error","ts":1775392916.7319083,"caller":"logger/logger.go:62","msg":"token is empty"}
-{"level":"error","ts":1775392916.732262,"caller":"logger/logger.go:62","msg":"token is empty"}
-{"level":"error","ts":1775392916.743244,"caller":"logger/logger.go:62","msg":"token is empty"}
-{"level":"error","ts":1775392916.7436724,"caller":"logger/logger.go:62","msg":"token is empty"}
-{"level":"error","ts":1775392916.7440906,"caller":"logger/logger.go:62","msg":"token is empty"}
-{"level":"error","ts":1775392916.7446835,"caller":"logger/logger.go:62","msg":"token is empty"}
-{"level":"error","ts":1775392916.7451324,"caller":"logger/logger.go:62","msg":"token is empty"}
-{"level":"error","ts":1775392916.7455761,"caller":"logger/logger.go:62","msg":"token is empty"}
-{"level":"error","ts":1775392916.7460225,"caller":"logger/logger.go:62","msg":"token is empty"}
-{"level":"error","ts":1775392916.8012803,"caller":"logger/logger.go:62","msg":"forbidden"}
-{"level":"error","ts":1775392916.8019366,"caller":"logger/logger.go:62","msg":"forbidden"}
-{"level":"error","ts":1775392916.8023913,"caller":"logger/logger.go:62","msg":"forbidden"}
-{"level":"error","ts":1775392916.8027997,"caller":"logger/logger.go:62","msg":"forbidden"}
-{"level":"error","ts":1775392916.8031266,"caller":"logger/logger.go:62","msg":"forbidden"}
-{"level":"error","ts":1775392917.0954669,"caller":"logger/logger.go:62","msg":"register employee: Key: 'Employee.FullName' Error:Field validation for 'FullName' failed on the 'required' tag"}
-{"level":"error","ts":1775392917.0962274,"caller":"logger/logger.go:62","msg":"register employee: Key: 'Employee.Phone' Error:Field validation for 'Phone' failed on the 'required' tag"}
-{"level":"error","ts":1775392917.0968068,"caller":"logger/logger.go:62","msg":"register employee: Key: 'Employee.Passport.Series' Error:Field validation for 'Series' failed on the 'required' tag"}
-{"level":"error","ts":1775392917.0973704,"caller":"logger/logger.go:62","msg":"register employee: Key: 'Employee.Passport.Number' Error:Field validation for 'Number' failed on the 'required' tag"}
-{"level":"error","ts":1775392917.10633,"caller":"logger/logger.go:62","msg":"register employee: Key: 'Employee.Passport.IssuedBy' Error:Field validation for 'IssuedBy' failed on the 'required' tag"}
-{"level":"error","ts":1775392917.1068623,"caller":"logger/logger.go:62","msg":"register employee: password must be at least 8 characters"}
-{"level":"error","ts":1775392917.1075144,"caller":"logger/logger.go:62","msg":"register employee: Key: 'Employee.Email' Error:Field validation for 'Email' failed on the 'required' tag"}
-{"level":"error","ts":1775392917.1080532,"caller":"logger/logger.go:62","msg":"invalid role"}
-{"level":"error","ts":1775392917.108469,"caller":"logger/logger.go:62","msg":"token is empty"}
-{"level":"error","ts":1775392917.1608307,"caller":"logger/logger.go:62","msg":"only admin can register employee"}
-{"level":"error","ts":1775392917.1617346,"caller":"logger/logger.go:62","msg":"admin cannot be registered"}
-{"level":"error","ts":1775392918.497352,"caller":"logger/logger.go:62","msg":"employee not found"}
-{"level":"error","ts":1775392918.4979756,"caller":"logger/logger.go:62","msg":"invalid id"}
-{"level":"error","ts":1775392918.498706,"caller":"logger/logger.go:62","msg":"update employee: Key: 'Employee.Email' Error:Field validation for 'Email' failed on the 'email' tag"}
-{"level":"error","ts":1775392918.4998298,"caller":"logger/logger.go:62","msg":"employee alredy exists"}
-{"level":"error","ts":1775392918.5005257,"caller":"logger/logger.go:62","msg":"update employee: Key: 'Employee.Phone' Error:Field validation for 'Phone' failed on the 'phone' tag"}
-{"level":"error","ts":1775392918.501501,"caller":"logger/logger.go:62","msg":"employee alredy exists"}
-{"level":"error","ts":1775392918.5022662,"caller":"logger/logger.go:62","msg":"update employee: Key: 'Employee.Passport.Series' Error:Field validation for 'Series' failed on the 'len' tag"}
-{"level":"error","ts":1775392918.5030632,"caller":"logger/logger.go:62","msg":"update employee: Key: 'Employee.Passport.Number' Error:Field validation for 'Number' failed on the 'len' tag"}
-{"level":"error","ts":1775392918.5041611,"caller":"logger/logger.go:62","msg":"employee alredy exists"}
-{"level":"error","ts":1775392918.505052,"caller":"logger/logger.go:62","msg":"update employee: Key: 'Employee.FullName' Error:Field validation for 'FullName' failed on the 'required' tag"}
-{"level":"error","ts":1775392918.505756,"caller":"logger/logger.go:62","msg":"token is empty"}
-{"level":"error","ts":1775392918.5060604,"caller":"logger/logger.go:62","msg":"token is empty"}
-{"level":"error","ts":1775392918.5063565,"caller":"logger/logger.go:62","msg":"token is empty"}
-{"level":"error","ts":1775392918.5066977,"caller":"logger/logger.go:62","msg":"token is empty"}
-{"level":"error","ts":1775392918.5071142,"caller":"logger/logger.go:62","msg":"token is empty"}
-{"level":"error","ts":1775392918.5075347,"caller":"logger/logger.go:62","msg":"token is empty"}
-{"level":"error","ts":1775392918.507915,"caller":"logger/logger.go:62","msg":"token is empty"}
-{"level":"error","ts":1775392918.5082545,"caller":"logger/logger.go:62","msg":"token is empty"}
-{"level":"error","ts":1775392918.508665,"caller":"logger/logger.go:62","msg":"token is empty"}
-{"level":"error","ts":1775392918.5089161,"caller":"logger/logger.go:62","msg":"token is empty"}
-{"level":"error","ts":1775392918.5264108,"caller":"logger/logger.go:62","msg":"token is empty"}
-{"level":"error","ts":1775392918.527061,"caller":"logger/logger.go:62","msg":"token is empty"}
-{"level":"error","ts":1775392918.5277815,"caller":"logger/logger.go:62","msg":"token is empty"}
-{"level":"error","ts":1775392918.528397,"caller":"logger/logger.go:62","msg":"token is empty"}
-{"level":"error","ts":1775392918.5287406,"caller":"logger/logger.go:62","msg":"token is empty"}
-{"level":"error","ts":1775392918.52935,"caller":"logger/logger.go:62","msg":"token is empty"}
-{"level":"error","ts":1775392918.5301747,"caller":"logger/logger.go:62","msg":"token is empty"}
-{"level":"error","ts":1775392918.530914,"caller":"logger/logger.go:62","msg":"token is empty"}
-{"level":"error","ts":1775392918.5316453,"caller":"logger/logger.go:62","msg":"token is empty"}
-{"level":"error","ts":1775392918.5323968,"caller":"logger/logger.go:62","msg":"token is empty"}
-{"level":"error","ts":1775392918.5896611,"caller":"logger/logger.go:62","msg":"forbidden"}
-{"level":"error","ts":1775392918.5903404,"caller":"logger/logger.go:62","msg":"forbidden"}
-{"level":"error","ts":1775392918.590896,"caller":"logger/logger.go:62","msg":"forbidden"}
-{"level":"error","ts":1775392918.5912857,"caller":"logger/logger.go:62","msg":"forbidden"}
-{"level":"error","ts":1775392918.5917463,"caller":"logger/logger.go:62","msg":"forbidden"}
-{"level":"error","ts":1775392918.5921767,"caller":"logger/logger.go:62","msg":"forbidden"}
-{"level":"error","ts":1775392918.592627,"caller":"logger/logger.go:62","msg":"forbidden"}
-{"level":"error","ts":1775392918.593052,"caller":"logger/logger.go:62","msg":"forbidden"}
-{"level":"error","ts":1775392918.5936084,"caller":"logger/logger.go:62","msg":"forbidden"}
-{"level":"error","ts":1775392918.5940833,"caller":"logger/logger.go:62","msg":"forbidden"}
-{"level":"error","ts":1775392918.5946043,"caller":"logger/logger.go:62","msg":"forbidden"}
-{"level":"error","ts":1775392918.5950804,"caller":"logger/logger.go:62","msg":"forbidden"}
-{"level":"error","ts":1775392918.595512,"caller":"logger/logger.go:62","msg":"forbidden"}
-{"level":"error","ts":1775392918.6087072,"caller":"logger/logger.go:62","msg":"forbidden"}
-{"level":"error","ts":1775392918.60927,"caller":"logger/logger.go:62","msg":"forbidden"}
-{"level":"error","ts":1775392918.609764,"caller":"logger/logger.go:62","msg":"forbidden"}
-{"level":"error","ts":1775392918.6101344,"caller":"logger/logger.go:62","msg":"forbidden"}
-{"level":"error","ts":1775392918.6103864,"caller":"logger/logger.go:62","msg":"forbidden"}
-{"level":"error","ts":1775392918.6106122,"caller":"logger/logger.go:62","msg":"forbidden"}
-{"level":"error","ts":1775392918.611066,"caller":"logger/logger.go:62","msg":"forbidden"}
+{"level":"error","ts":1775896312.240342,"caller":"logger/logger.go:62","msg":"invalid credentials"}
+{"level":"error","ts":1775896312.2428236,"caller":"logger/logger.go:62","msg":"invalid credentials"}
+{"level":"error","ts":1775896312.2444644,"caller":"logger/logger.go:62","msg":"invalid credentials"}
+{"level":"error","ts":1775896312.2460742,"caller":"logger/logger.go:62","msg":"invalid credentials"}
+{"level":"error","ts":1775896312.2475474,"caller":"logger/logger.go:62","msg":"invalid credentials"}
+{"level":"error","ts":1775896312.2491,"caller":"logger/logger.go:62","msg":"invalid credentials"}
+{"level":"error","ts":1775896312.3817708,"caller":"logger/logger.go:62","msg":"invalid credentials"}
+{"level":"error","ts":1775896312.511887,"caller":"logger/logger.go:62","msg":"invalid credentials"}
+{"level":"error","ts":1775896312.5145779,"caller":"logger/logger.go:62","msg":"invalid credentials"}
+{"level":"error","ts":1775896312.6446195,"caller":"logger/logger.go:62","msg":"invalid credentials"}
+{"level":"error","ts":1775896312.779426,"caller":"logger/logger.go:62","msg":"invalid credentials"}
+{"level":"error","ts":1775896312.7813094,"caller":"logger/logger.go:62","msg":"invalid credentials"}
+{"level":"error","ts":1775896312.9092593,"caller":"logger/logger.go:62","msg":"invalid credentials"}
+{"level":"error","ts":1775896312.912191,"caller":"logger/logger.go:62","msg":"invalid credentials"}
+{"level":"error","ts":1775896312.9141364,"caller":"logger/logger.go:62","msg":"invalid credentials"}
+{"level":"error","ts":1775896312.91572,"caller":"logger/logger.go:62","msg":"invalid credentials"}
+{"level":"error","ts":1775896312.917376,"caller":"logger/logger.go:62","msg":"invalid credentials"}
+{"level":"error","ts":1775896312.9189208,"caller":"logger/logger.go:62","msg":"invalid credentials"}
+{"level":"error","ts":1775896312.9203267,"caller":"logger/logger.go:62","msg":"invalid credentials"}
+{"level":"error","ts":1775896312.9218194,"caller":"logger/logger.go:62","msg":"invalid credentials"}
+{"level":"error","ts":1775896312.9315078,"caller":"logger/logger.go:62","msg":"invalid credentials"}
+{"level":"error","ts":1775896312.9331653,"caller":"logger/logger.go:62","msg":"invalid credentials"}
+{"level":"error","ts":1775896312.935055,"caller":"logger/logger.go:62","msg":"invalid credentials"}
+{"level":"error","ts":1775896312.9368966,"caller":"logger/logger.go:62","msg":"invalid credentials"}
+{"level":"error","ts":1775896312.938369,"caller":"logger/logger.go:62","msg":"invalid credentials"}
+{"level":"error","ts":1775896312.9395378,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1775896312.940578,"caller":"logger/logger.go:62","msg":"invalid token"}
+{"level":"error","ts":1775896312.9416192,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1775896312.9426582,"caller":"logger/logger.go:62","msg":"invalid token"}
+{"level":"error","ts":1775896312.9435315,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1775896312.944502,"caller":"logger/logger.go:62","msg":"invalid token"}
+{"level":"error","ts":1775896315.7331722,"caller":"logger/logger.go:62","msg":"employee not found"}
+{"level":"error","ts":1775896315.7342596,"caller":"logger/logger.go:62","msg":"invalid id"}
+{"level":"error","ts":1775896315.7351224,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1775896315.7361245,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1775896315.7371926,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1775896315.7380528,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1775896315.7389562,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1775896315.7399888,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1775896315.7409794,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1775896315.7417448,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1775896315.7654293,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1775896315.7684045,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1775896315.7704012,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1775896315.7719846,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1775896315.7732267,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1775896315.7744606,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1775896315.7755072,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1775896315.909039,"caller":"logger/logger.go:62","msg":"forbidden"}
+{"level":"error","ts":1775896315.9099882,"caller":"logger/logger.go:62","msg":"forbidden"}
+{"level":"error","ts":1775896315.9110384,"caller":"logger/logger.go:62","msg":"forbidden"}
+{"level":"error","ts":1775896315.9120576,"caller":"logger/logger.go:62","msg":"forbidden"}
+{"level":"error","ts":1775896315.912977,"caller":"logger/logger.go:62","msg":"forbidden"}
+{"level":"error","ts":1775896316.5880134,"caller":"logger/logger.go:62","msg":"register employee: Key: 'Employee.FullName' Error:Field validation for 'FullName' failed on the 'required' tag"}
+{"level":"error","ts":1775896316.589501,"caller":"logger/logger.go:62","msg":"register employee: Key: 'Employee.Phone' Error:Field validation for 'Phone' failed on the 'required' tag"}
+{"level":"error","ts":1775896316.5909874,"caller":"logger/logger.go:62","msg":"register employee: Key: 'Employee.Passport.Series' Error:Field validation for 'Series' failed on the 'required' tag"}
+{"level":"error","ts":1775896316.5920148,"caller":"logger/logger.go:62","msg":"register employee: Key: 'Employee.Passport.Number' Error:Field validation for 'Number' failed on the 'required' tag"}
+{"level":"error","ts":1775896316.6126702,"caller":"logger/logger.go:62","msg":"register employee: Key: 'Employee.Passport.IssuedBy' Error:Field validation for 'IssuedBy' failed on the 'required' tag"}
+{"level":"error","ts":1775896316.615279,"caller":"logger/logger.go:62","msg":"register employee: password must be at least 8 characters"}
+{"level":"error","ts":1775896316.616766,"caller":"logger/logger.go:62","msg":"register employee: Key: 'Employee.Email' Error:Field validation for 'Email' failed on the 'required' tag"}
+{"level":"error","ts":1775896316.61809,"caller":"logger/logger.go:62","msg":"invalid role"}
+{"level":"error","ts":1775896316.6190631,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1775896316.7566125,"caller":"logger/logger.go:62","msg":"only admin can register employee"}
+{"level":"error","ts":1775896316.7580643,"caller":"logger/logger.go:62","msg":"admin cannot be registered"}
+{"level":"error","ts":1775896320.207313,"caller":"logger/logger.go:62","msg":"employee not found"}
+{"level":"error","ts":1775896320.2092416,"caller":"logger/logger.go:62","msg":"invalid id"}
+{"level":"error","ts":1775896320.2111485,"caller":"logger/logger.go:62","msg":"update employee: Key: 'Employee.Email' Error:Field validation for 'Email' failed on the 'email' tag"}
+{"level":"error","ts":1775896320.213551,"caller":"logger/logger.go:62","msg":"employee alredy exists"}
+{"level":"error","ts":1775896320.215005,"caller":"logger/logger.go:62","msg":"update employee: Key: 'Employee.Phone' Error:Field validation for 'Phone' failed on the 'phone' tag"}
+{"level":"error","ts":1775896320.2168458,"caller":"logger/logger.go:62","msg":"employee alredy exists"}
+{"level":"error","ts":1775896320.2179542,"caller":"logger/logger.go:62","msg":"update employee: Key: 'Employee.Passport.Series' Error:Field validation for 'Series' failed on the 'len' tag"}
+{"level":"error","ts":1775896320.2191348,"caller":"logger/logger.go:62","msg":"update employee: Key: 'Employee.Passport.Number' Error:Field validation for 'Number' failed on the 'len' tag"}
+{"level":"error","ts":1775896320.2208292,"caller":"logger/logger.go:62","msg":"employee alredy exists"}
+{"level":"error","ts":1775896320.2218893,"caller":"logger/logger.go:62","msg":"update employee: Key: 'Employee.FullName' Error:Field validation for 'FullName' failed on the 'required' tag"}
+{"level":"error","ts":1775896320.2225585,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1775896320.2231472,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1775896320.2237468,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1775896320.2247493,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1775896320.2256753,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1775896320.2265692,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1775896320.2274423,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1775896320.228444,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1775896320.2295754,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1775896320.2305713,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1775896320.2429967,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1775896320.2442355,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1775896320.2454426,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1775896320.2466357,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1775896320.2477555,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1775896320.2488506,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1775896320.2498665,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1775896320.2510226,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1775896320.2520053,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1775896320.2532988,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1775896320.3891153,"caller":"logger/logger.go:62","msg":"forbidden"}
+{"level":"error","ts":1775896320.390342,"caller":"logger/logger.go:62","msg":"forbidden"}
+{"level":"error","ts":1775896320.3913329,"caller":"logger/logger.go:62","msg":"forbidden"}
+{"level":"error","ts":1775896320.3920403,"caller":"logger/logger.go:62","msg":"forbidden"}
+{"level":"error","ts":1775896320.3926134,"caller":"logger/logger.go:62","msg":"forbidden"}
+{"level":"error","ts":1775896320.3934112,"caller":"logger/logger.go:62","msg":"forbidden"}
+{"level":"error","ts":1775896320.3942168,"caller":"logger/logger.go:62","msg":"forbidden"}
+{"level":"error","ts":1775896320.3951664,"caller":"logger/logger.go:62","msg":"forbidden"}
+{"level":"error","ts":1775896320.396244,"caller":"logger/logger.go:62","msg":"forbidden"}
+{"level":"error","ts":1775896320.3973424,"caller":"logger/logger.go:62","msg":"forbidden"}
+{"level":"error","ts":1775896320.3981166,"caller":"logger/logger.go:62","msg":"forbidden"}
+{"level":"error","ts":1775896320.4186945,"caller":"logger/logger.go:62","msg":"forbidden"}
+{"level":"error","ts":1775896320.4200134,"caller":"logger/logger.go:62","msg":"forbidden"}
+{"level":"error","ts":1775896320.4213276,"caller":"logger/logger.go:62","msg":"forbidden"}
+{"level":"error","ts":1775896320.4225235,"caller":"logger/logger.go:62","msg":"forbidden"}
+{"level":"error","ts":1775896320.4236963,"caller":"logger/logger.go:62","msg":"forbidden"}
+{"level":"error","ts":1775896320.4248958,"caller":"logger/logger.go:62","msg":"forbidden"}
+{"level":"error","ts":1775896320.426037,"caller":"logger/logger.go:62","msg":"forbidden"}
+{"level":"error","ts":1775896320.4271643,"caller":"logger/logger.go:62","msg":"forbidden"}
+{"level":"error","ts":1775896320.4282517,"caller":"logger/logger.go:62","msg":"forbidden"}

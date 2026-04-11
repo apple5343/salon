@@ -3,7 +3,8 @@ package errors
 import "errors"
 
 var (
-	ErrNotFound      = errors.New("not found")
-	ErrAlreadyExists = errors.New("already exists")
-	ErrForeignKey    = errors.New("foreign key")
+	ErrNotFound        = errors.New("not found")
+	ErrAlreadyExists   = errors.New("already exists")
+	ErrForeignKey      = errors.New("foreign key")
+	ErrCarNotAvailable = errors.New("car not available")
 )

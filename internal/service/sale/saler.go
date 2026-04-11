@@ -42,6 +42,10 @@ func (s *saleService) Create(ctx context.Context, sale *models.Sale) (*models.Sa
 	if err != nil {
 		if errors.Is(err, repo.ErrForeignKey) {
 			return nil, ErrForeignKey
+		} else if errors.Is(err, repo.ErrNotFound) {
+			return nil, ErrCarNotFound
+		} else if errors.Is(err, repo.ErrCarNotAvailable) {
+			return nil, ErrCarNotAvailable
 		}
 		return nil, errorx.Wrap("create sale", errorx.BadRequest, err)
 	}

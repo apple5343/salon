@@ -31,68 +31,68 @@
 [Fx] PROVIDE	clock.Clock <= fx.Annotate(salon/pkg/clock.ClockModule.func1(), fx.As([[clock.Clock]]) from module "clock"
 [Fx] INVOKE		salon/internal/infrastructure/postgres.NewModule.func1() from module "postgres"
 [Fx] BEFORE RUN	provide: go.uber.org/fx.New.func1()
-[Fx] RUN	provide: go.uber.org/fx.New.func1() in 4.319µs
+[Fx] RUN	provide: go.uber.org/fx.New.func1() in 9.337µs
 [Fx] BEFORE RUN	provide: salon/internal/config.PostgresConfig() from module "postgres"
-[Fx] RUN	provide: salon/internal/config.PostgresConfig() in 49.759µs from module "postgres"
+[Fx] RUN	provide: salon/internal/config.PostgresConfig() in 96.916µs from module "postgres"
 [Fx] BEFORE RUN	provide: salon/internal/infrastructure/postgres.NewClient() from module "postgres"
-[Fx] RUN	provide: salon/internal/infrastructure/postgres.NewClient() in 4.616932ms from module "postgres"
+[Fx] RUN	provide: salon/internal/infrastructure/postgres.NewClient() in 8.157507ms from module "postgres"
 [Fx] INVOKE		salon/internal/infrastructure/redis.NewModule.func1() from module "redis"
 [Fx] BEFORE RUN	provide: salon/internal/config.RedisConfig() from module "redis"
-[Fx] RUN	provide: salon/internal/config.RedisConfig() in 13.998µs from module "redis"
+[Fx] RUN	provide: salon/internal/config.RedisConfig() in 23.9µs from module "redis"
 [Fx] BEFORE RUN	provide: salon/internal/infrastructure/redis.NewClient() from module "redis"
-[Fx] RUN	provide: salon/internal/infrastructure/redis.NewClient() in 48.784µs from module "redis"
+[Fx] RUN	provide: salon/internal/infrastructure/redis.NewClient() in 128.386µs from module "redis"
 [Fx] INVOKE		salon/internal/service/event.NewModule.func1() from module "event"
 [Fx] BEFORE RUN	provide: salon/internal/repository/event/postgres.NewRepository() from module "event"
-[Fx] RUN	provide: salon/internal/repository/event/postgres.NewRepository() in 5.297µs from module "event"
+[Fx] RUN	provide: salon/internal/repository/event/postgres.NewRepository() in 5.851µs from module "event"
 [Fx] BEFORE RUN	provide: salon/internal/service/event.NewService() from module "event"
-[Fx] RUN	provide: salon/internal/service/event.NewService() in 3.364µs from module "event"
+[Fx] RUN	provide: salon/internal/service/event.NewService() in 9.368µs from module "event"
 [Fx] INVOKE		salon/internal/transport/http.NewModule.func1() from module "http"
 [Fx] BEFORE RUN	provide: salon/internal/config.HttpServerConfig() from module "http"
-[Fx] RUN	provide: salon/internal/config.HttpServerConfig() in 4.454µs from module "http"
+[Fx] RUN	provide: salon/internal/config.HttpServerConfig() in 10.822µs from module "http"
 [Fx] BEFORE RUN	provide: salon/internal/config.JWTConfig() from module "config"
-[Fx] RUN	provide: salon/internal/config.JWTConfig() in 20.702µs from module "config"
+[Fx] RUN	provide: salon/internal/config.JWTConfig() in 30.989µs from module "config"
 [Fx] BEFORE RUN	provide: salon/internal/config.LoggerConfig() from module "zap"
-[Fx] RUN	provide: salon/internal/config.LoggerConfig() in 3.833µs from module "zap"
+[Fx] RUN	provide: salon/internal/config.LoggerConfig() in 7.293µs from module "zap"
 [Fx] BEFORE RUN	provide: salon/pkg/logger.NewLogger() from module "zap"
-[Fx] RUN	provide: salon/pkg/logger.NewLogger() in 30.519µs from module "zap"
+[Fx] RUN	provide: salon/pkg/logger.NewLogger() in 93.972µs from module "zap"
 [Fx] BEFORE RUN	provide: salon/internal/repository/employee/postgres.NewRepository() from module "employee"
-[Fx] RUN	provide: salon/internal/repository/employee/postgres.NewRepository() in 3.939µs from module "employee"
+[Fx] RUN	provide: salon/internal/repository/employee/postgres.NewRepository() in 4.387µs from module "employee"
 [Fx] BEFORE RUN	provide: fx.Annotate(salon/pkg/clock.ClockModule.func1(), fx.As([[clock.Clock]]) from module "clock"
-[Fx] RUN	provide: fx.Annotate(salon/pkg/clock.ClockModule.func1(), fx.As([[clock.Clock]]) in 13.931µs from module "clock"
+[Fx] RUN	provide: fx.Annotate(salon/pkg/clock.ClockModule.func1(), fx.As([[clock.Clock]]) in 21.758µs from module "clock"
 [Fx] BEFORE RUN	provide: salon/internal/service/employee.NewService() from module "service"
-[Fx] RUN	provide: salon/internal/service/employee.NewService() in 3.53µs from module "service"
+[Fx] RUN	provide: salon/internal/service/employee.NewService() in 6.841µs from module "service"
 [Fx] BEFORE RUN	provide: salon/internal/repository/supplier/postgres.NewRepository() from module "supplier"
-[Fx] RUN	provide: salon/internal/repository/supplier/postgres.NewRepository() in 4.758µs from module "supplier"
+[Fx] RUN	provide: salon/internal/repository/supplier/postgres.NewRepository() in 16.356µs from module "supplier"
 [Fx] BEFORE RUN	provide: salon/internal/repository/supplier/redis.NewRepository() from module "supplier"
-[Fx] RUN	provide: salon/internal/repository/supplier/redis.NewRepository() in 1.918µs from module "supplier"
+[Fx] RUN	provide: salon/internal/repository/supplier/redis.NewRepository() in 4.55µs from module "supplier"
 [Fx] BEFORE RUN	provide: salon/internal/service/supplier.NewService() from module "supplier"
-[Fx] RUN	provide: salon/internal/service/supplier.NewService() in 6.394µs from module "supplier"
+[Fx] RUN	provide: salon/internal/service/supplier.NewService() in 22.776µs from module "supplier"
 [Fx] BEFORE RUN	provide: salon/internal/repository/client/postgres.NewRepository() from module "client"
-[Fx] RUN	provide: salon/internal/repository/client/postgres.NewRepository() in 2.211µs from module "client"
+[Fx] RUN	provide: salon/internal/repository/client/postgres.NewRepository() in 4.808µs from module "client"
 [Fx] BEFORE RUN	provide: salon/internal/service/client.NewService() from module "client"
-[Fx] RUN	provide: salon/internal/service/client.NewService() in 2.281µs from module "client"
+[Fx] RUN	provide: salon/internal/service/client.NewService() in 5.438µs from module "client"
 [Fx] BEFORE RUN	provide: salon/internal/repository/car/postgres.NewRepository() from module "car"
-[Fx] RUN	provide: salon/internal/repository/car/postgres.NewRepository() in 2.197µs from module "car"
+[Fx] RUN	provide: salon/internal/repository/car/postgres.NewRepository() in 7.577µs from module "car"
 [Fx] BEFORE RUN	provide: salon/internal/repository/model/postgres.NewRepository() from module "model"
-[Fx] RUN	provide: salon/internal/repository/model/postgres.NewRepository() in 1.638µs from module "model"
+[Fx] RUN	provide: salon/internal/repository/model/postgres.NewRepository() in 6.855µs from module "model"
 [Fx] BEFORE RUN	provide: salon/internal/repository/brand/postgres.NewRepository() from module "brand"
-[Fx] RUN	provide: salon/internal/repository/brand/postgres.NewRepository() in 2.403µs from module "brand"
+[Fx] RUN	provide: salon/internal/repository/brand/postgres.NewRepository() in 4.404µs from module "brand"
 [Fx] BEFORE RUN	provide: salon/internal/repository/brand/redis.NewCache() from module "brand"
-[Fx] RUN	provide: salon/internal/repository/brand/redis.NewCache() in 3.277µs from module "brand"
+[Fx] RUN	provide: salon/internal/repository/brand/redis.NewCache() in 6.478µs from module "brand"
 [Fx] BEFORE RUN	provide: salon/internal/service/brand.NewService() from module "brand"
-[Fx] RUN	provide: salon/internal/service/brand.NewService() in 2.509µs from module "brand"
+[Fx] RUN	provide: salon/internal/service/brand.NewService() in 6.172µs from module "brand"
 [Fx] BEFORE RUN	provide: salon/internal/service/model.NewService() from module "model"
-[Fx] RUN	provide: salon/internal/service/model.NewService() in 2.22µs from module "model"
+[Fx] RUN	provide: salon/internal/service/model.NewService() in 5.415µs from module "model"
 [Fx] BEFORE RUN	provide: salon/internal/service/car.NewService() from module "car"
-[Fx] RUN	provide: salon/internal/service/car.NewService() in 4.043µs from module "car"
+[Fx] RUN	provide: salon/internal/service/car.NewService() in 11.886µs from module "car"
 [Fx] BEFORE RUN	provide: salon/internal/repository/sale/postgres.NewRepository() from module "sale"
-[Fx] RUN	provide: salon/internal/repository/sale/postgres.NewRepository() in 7.102µs from module "sale"
+[Fx] RUN	provide: salon/internal/repository/sale/postgres.NewRepository() in 14.155µs from module "sale"
 [Fx] BEFORE RUN	provide: salon/internal/service/sale.NewService() from module "sale"
-[Fx] RUN	provide: salon/internal/service/sale.NewService() in 2.456µs from module "sale"
+[Fx] RUN	provide: salon/internal/service/sale.NewService() in 5.4µs from module "sale"
 [Fx] BEFORE RUN	provide: salon/internal/transport/http.NewServer() from module "http"
-[Fx] RUN	provide: salon/internal/transport/http.NewServer() in 23.519µs from module "http"
+[Fx] RUN	provide: salon/internal/transport/http.NewServer() in 52.166µs from module "http"
 [Fx] HOOK OnStart		salon/internal/transport/http.NewModule.func1.1() executing (caller: salon/internal/transport/http.NewModule.func1)
-[Fx] HOOK OnStart		salon/internal/transport/http.NewModule.func1.1() called by salon/internal/transport/http.NewModule.func1 ran successfully in 2.027µs
+[Fx] HOOK OnStart		salon/internal/transport/http.NewModule.func1.1() called by salon/internal/transport/http.NewModule.func1 ran successfully in 3.548µs
 [Fx] RUNNING
 
    ____    __
@@ -104,23 +104,23 @@ https://echo.labstack.com
 ____________________________________O/_______
                                     O\
 ⇨ http server started on [::]:8080
-{"level":"error","ts":1775392931.9037929,"caller":"logger/logger.go:62","msg":"Key: 'Sale.CarID' Error:Field validation for 'CarID' failed on the 'required' tag"}
-{"level":"error","ts":1775392931.9049368,"caller":"logger/logger.go:62","msg":"Key: 'Sale.CarID' Error:Field validation for 'CarID' failed on the 'uuid' tag"}
-{"level":"error","ts":1775392931.9065378,"caller":"logger/logger.go:62","msg":"car not found"}
-{"level":"error","ts":1775392931.9073863,"caller":"logger/logger.go:62","msg":"Key: 'Sale.ClientID' Error:Field validation for 'ClientID' failed on the 'required' tag"}
-{"level":"error","ts":1775392931.908195,"caller":"logger/logger.go:62","msg":"Key: 'Sale.ClientID' Error:Field validation for 'ClientID' failed on the 'uuid' tag"}
-{"level":"error","ts":1775392931.9091892,"caller":"logger/logger.go:62","msg":"client not found"}
-{"level":"error","ts":1775392931.912649,"caller":"logger/logger.go:62","msg":"car is not available"}
-{"level":"error","ts":1775392931.915138,"caller":"logger/logger.go:62","msg":"token is empty"}
-{"level":"error","ts":1775392931.91599,"caller":"logger/logger.go:62","msg":"invalid token"}
-{"level":"error","ts":1775392931.9316773,"caller":"logger/logger.go:62","msg":"invalid id"}
-{"level":"error","ts":1775392931.932994,"caller":"logger/logger.go:62","msg":"sale not found"}
-{"level":"error","ts":1775392931.934034,"caller":"logger/logger.go:62","msg":"token is empty"}
-{"level":"error","ts":1775392931.9348779,"caller":"logger/logger.go:62","msg":"invalid token"}
-{"level":"error","ts":1775392931.9457664,"caller":"logger/logger.go:62","msg":"invalid id"}
-{"level":"error","ts":1775392931.9473486,"caller":"logger/logger.go:62","msg":"sale not found"}
-{"level":"error","ts":1775392931.9486663,"caller":"logger/logger.go:62","msg":"invalid status"}
-{"level":"error","ts":1775392931.9532967,"caller":"logger/logger.go:62","msg":"sale is not pending"}
-{"level":"error","ts":1775392931.9632924,"caller":"logger/logger.go:62","msg":"token is empty"}
-{"level":"error","ts":1775392931.9644656,"caller":"logger/logger.go:62","msg":"invalid token"}
-{"level":"error","ts":1775392931.966168,"caller":"logger/logger.go:62","msg":"forbidden"}
+{"level":"error","ts":1775896337.027728,"caller":"logger/logger.go:62","msg":"Key: 'Sale.CarID' Error:Field validation for 'CarID' failed on the 'required' tag"}
+{"level":"error","ts":1775896337.0291626,"caller":"logger/logger.go:62","msg":"Key: 'Sale.CarID' Error:Field validation for 'CarID' failed on the 'uuid' tag"}
+{"level":"error","ts":1775896337.0311975,"caller":"logger/logger.go:62","msg":"car not found"}
+{"level":"error","ts":1775896337.0323575,"caller":"logger/logger.go:62","msg":"Key: 'Sale.ClientID' Error:Field validation for 'ClientID' failed on the 'required' tag"}
+{"level":"error","ts":1775896337.0333364,"caller":"logger/logger.go:62","msg":"Key: 'Sale.ClientID' Error:Field validation for 'ClientID' failed on the 'uuid' tag"}
+{"level":"error","ts":1775896337.0352826,"caller":"logger/logger.go:62","msg":"client not found"}
+{"level":"error","ts":1775896337.042877,"caller":"logger/logger.go:62","msg":"car is not available"}
+{"level":"error","ts":1775896337.0488412,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1775896337.0500321,"caller":"logger/logger.go:62","msg":"invalid token"}
+{"level":"error","ts":1775896337.0743632,"caller":"logger/logger.go:62","msg":"invalid id"}
+{"level":"error","ts":1775896337.0757809,"caller":"logger/logger.go:62","msg":"sale not found"}
+{"level":"error","ts":1775896337.0770402,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1775896337.0778697,"caller":"logger/logger.go:62","msg":"invalid token"}
+{"level":"error","ts":1775896337.087009,"caller":"logger/logger.go:62","msg":"invalid id"}
+{"level":"error","ts":1775896337.0886953,"caller":"logger/logger.go:62","msg":"sale not found"}
+{"level":"error","ts":1775896337.0896442,"caller":"logger/logger.go:62","msg":"invalid status"}
+{"level":"error","ts":1775896337.0943363,"caller":"logger/logger.go:62","msg":"sale is not pending"}
+{"level":"error","ts":1775896337.105184,"caller":"logger/logger.go:62","msg":"token is empty"}
+{"level":"error","ts":1775896337.1065347,"caller":"logger/logger.go:62","msg":"invalid token"}
+{"level":"error","ts":1775896337.1084657,"caller":"logger/logger.go:62","msg":"forbidden"}

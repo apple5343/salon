@@ -550,6 +550,47 @@ func (s *CarSuite) UpdateInvalid(t *testing.T) {
 		require.Equal(t, http.StatusConflict, code)
 	})
 
+	var saleID string
+	t.Run("update status of booked car", func(t *testing.T) {
+		c := models.CarInternalToCar(car)
+		c.Status = string(serviceModels.CarStatusAvailable)
+		car, code, err := s.base.client.UpdateCar(s.base.ctx, s.adminToken.AccessToken, c)
+		require.NoError(t, err)
+		require.Equal(t, http.StatusOK, code)
+
+		client, code, err := s.base.client.RegisterClient(s.base.ctx, s.adminToken.AccessToken, models.GenerateClient())
+		require.NoError(t, err)
+		require.Equal(t, http.StatusOK, code)
+		sale, code, err := s.base.client.CreateSale(s.base.ctx, s.adminToken.AccessToken, models.GenerateSale(car, client.ID))
+		require.NoError(t, err)
+		require.Equal(t, http.StatusOK, code)
+		saleID = sale.ID
+
+		c = models.CarInternalToCar(car)
+		c.Status = string(serviceModels.CarStatusPending)
+		_, code, err = s.base.client.UpdateCar(s.base.ctx, s.adminToken.AccessToken, c)
+		require.NoError(t, err)
+		require.Equal(t, http.StatusBadRequest, code)
+	})
+
+	t.Run("update status of sold car", func(t *testing.T) {
+		_, code, err := s.base.client.UpdateSale(s.base.ctx, s.adminToken.AccessToken, saleID, string(serviceModels.SaleStatusCompleted))
+		require.NoError(t, err)
+		require.Equal(t, http.StatusOK, code)
+
+		car, code, err = s.base.client.GetCar(s.base.ctx, s.adminToken.AccessToken, car.ID)
+		require.NoError(t, err)
+		require.Equal(t, http.StatusOK, code)
+		require.Equal(t, string(serviceModels.CarStatusSold), car.Status)
+		s.cars[car.ID] = car
+
+		c := models.CarInternalToCar(car)
+		c.Status = string(serviceModels.CarStatusPending)
+		_, code, err = s.base.client.UpdateCar(s.base.ctx, s.adminToken.AccessToken, c)
+		require.NoError(t, err)
+		require.Equal(t, http.StatusBadRequest, code)
+	})
+
 	//TODO обноаление машины с статусом sold или booked
 }
 
@@ -739,8 +780,8 @@ func (s *CarSuite) List(t *testing.T) {
 
 				filter := serviceModels.CarFilters{
 					BaseList: serviceModels.BaseList{
-						Limit:          &limit,
-						Offset:         &offset,
+						Limit:  &limit,
+						Offset: &offset,
 					},
 					MinMileage: &min,
 					MaxMileage: &max,
