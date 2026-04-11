@@ -38,7 +38,7 @@ func (s *ModelSuite) SetupSuite() {
 		s.brandsIds = append(s.brandsIds, brand.ID)
 	}
 
-	s.T().Run("create", s.Create)
+	s.T().Run("create", s.Create(20))
 }
 
 func CompareModelsPublic(t *testing.T, expected, actual *httpModels.ModelInternalResponse) {
@@ -57,6 +57,17 @@ func CompareModelsPublic(t *testing.T, expected, actual *httpModels.ModelInterna
 	require.Zero(t, actual.UpdatedAt)
 }
 
+func CompareModelsShort(t *testing.T, expected *httpModels.ModelInternalResponse, actual *httpModels.ModelShort) {
+	require.Equal(t, expected.ID, actual.ID)
+	require.Equal(t, expected.Name, actual.Name)
+	require.Equal(t, expected.Generation, actual.Generation)
+	require.Equal(t, expected.BodyType, actual.BodyType)
+	require.Equal(t, expected.PowerHP, actual.PowerHP)
+	require.Equal(t, expected.DriveType, actual.DriveType)
+	require.Equal(t, expected.BasePrice, actual.BasePrice)
+	require.Equal(t, expected.Brand.Name, actual.BrandName)
+}
+
 func (s *ModelSuite) RandomModel() *httpModels.Model {
 	s.Require().GreaterOrEqual(len(s.modelsIds), 1)
 	return models.ModelInternalToModel(s.models[s.modelsIds[gofakeit.Number(0, len(s.modelsIds)-1)]])
@@ -68,7 +79,7 @@ func (s *ModelSuite) RandomBrandId() string {
 }
 
 func (s *ModelSuite) TestCreate() {
-	s.T().Run("create", s.Create)
+	s.T().Run("create", s.Create(5))
 	s.T().Run("invalid", s.CreateInvalid)
 	s.T().Run("forbidden", s.CreateForbidden)
 }
@@ -84,16 +95,23 @@ func (s *ModelSuite) TestUpdate() {
 	s.T().Run("forbidden", s.UpdateForbidden)
 }
 
-func (s *ModelSuite) Create(t *testing.T) {
-	const modelsCount int = 10
+func (s *ModelSuite) TestList() {
+	s.T().Run("create", s.Create(40))
+	s.T().Run("list", s.List)
+	s.T().Run("invalid", s.ListInvalid)
+	s.T().Run("forbidden", s.ListForbidden)
+}
 
-	for i := 0; i < modelsCount; i++ {
-		m := models.GenerateModel(s.RandomBrandId())
-		model, code, err := s.base.client.CreateModel(s.base.ctx, s.adminToken.AccessToken, m)
-		require.NoError(t, err)
-		require.Equal(t, http.StatusOK, code)
-		s.models[model.ID] = model
-		s.modelsIds = append(s.modelsIds, model.ID)
+func (s *ModelSuite) Create(count int) func(t *testing.T) {
+	return func(t *testing.T) {
+		for i := 0; i < count; i++ {
+			m := models.GenerateModel(s.RandomBrandId())
+			model, code, err := s.base.client.CreateModel(s.base.ctx, s.adminToken.AccessToken, m)
+			require.NoError(t, err)
+			require.Equal(t, http.StatusOK, code)
+			s.models[model.ID] = model
+			s.modelsIds = append(s.modelsIds, model.ID)
+		}
 	}
 }
 
@@ -502,7 +520,7 @@ func (s *ModelSuite) CheckList(t *testing.T, token string, filter *serviceModels
 		require.LessOrEqual(t, len(models), *filter.Limit)
 		for _, model := range models {
 			id := model.ID
-			if _, ok := all[id]; !ok {
+			if _, ok := s.models[id]; !ok {
 				t.Errorf("invalid model id: %s", id)
 				continue
 			}
@@ -526,4 +544,436 @@ func (s *ModelSuite) CheckList(t *testing.T, token string, filter *serviceModels
 	}
 	require.Equal(t, len(expected), len(all))
 	return all, sorted
+}
+
+func (s *ModelSuite) List(t *testing.T) {
+	t.Run("all models order by created at asc", func(t *testing.T) {
+		limit := 5
+		offset := 0
+		filter := serviceModels.ModelFilters{
+			BaseList: serviceModels.BaseList{
+				Limit:  &limit,
+				Offset: &offset,
+			},
+		}
+		expected := make([]string, 0, len(s.models))
+		for id := range s.models {
+			expected = append(expected, id)
+		}
+		all, sorted := s.CheckList(t, s.adminToken.AccessToken, &filter, expected)
+		for i := 1; i < len(sorted); i++ {
+			if s.models[sorted[i-1]].CreatedAt.After(s.models[sorted[i]].CreatedAt) {
+				t.Errorf("invalid order by created at asc: %v > %v", s.models[sorted[i-1]].CreatedAt, s.models[sorted[i]].CreatedAt)
+			}
+		}
+		for id := range all {
+			require.NotNil(t, all[id])
+		}
+	})
+
+	t.Run("filter by brand_id", func(t *testing.T) {
+		for brandID := range s.brands {
+			limit := 10
+			offset := 0
+			filter := serviceModels.ModelFilters{
+				BaseList: serviceModels.BaseList{
+					Limit:  &limit,
+					Offset: &offset,
+				},
+				BrandID: &brandID,
+			}
+			expected := []string{}
+			for id := range s.models {
+				if s.models[id].Brand.ID == brandID {
+					expected = append(expected, id)
+				}
+			}
+			all, _ := s.CheckList(t, s.adminToken.AccessToken, &filter, expected)
+			for id := range all {
+				require.Equal(t, s.brands[brandID].Name, all[id].BrandName)
+				CompareModelsShort(t, s.models[id], all[id])
+			}
+		}
+	})
+
+	t.Run("filter by body_type", func(t *testing.T) {
+		bodyTypes := []serviceModels.BodyType{
+			serviceModels.BodyTypeSedan,
+			serviceModels.BodyTypeSUV,
+			serviceModels.BodyTypeHatchback,
+		}
+		for _, bodyType := range bodyTypes {
+			limit := 10
+			offset := 0
+			filter := serviceModels.ModelFilters{
+				BaseList: serviceModels.BaseList{
+					Limit:  &limit,
+					Offset: &offset,
+				},
+				BodyType: &bodyType,
+			}
+			expected := []string{}
+			for id := range s.models {
+				if s.models[id].BodyType == string(bodyType) {
+					expected = append(expected, id)
+				}
+			}
+			all, _ := s.CheckList(t, s.adminToken.AccessToken, &filter, expected)
+			for id := range all {
+				require.Equal(t, string(bodyType), all[id].BodyType)
+				CompareModelsShort(t, s.models[id], all[id])
+			}
+		}
+	})
+
+	t.Run("filter by transmission_type", func(t *testing.T) {
+		transmissionTypes := []serviceModels.TransmissionType{
+			serviceModels.TransmissionTypeManual,
+			serviceModels.TransmissionTypeAutomatic,
+		}
+		for _, transmissionType := range transmissionTypes {
+			limit := 10
+			offset := 0
+			filter := serviceModels.ModelFilters{
+				BaseList: serviceModels.BaseList{
+					Limit:  &limit,
+					Offset: &offset,
+				},
+				TransmissionType: &transmissionType,
+			}
+			expected := []string{}
+			for id := range s.models {
+				if s.models[id].TransmissionType == string(transmissionType) {
+					expected = append(expected, id)
+				}
+			}
+			s.CheckList(t, s.adminToken.AccessToken, &filter, expected)
+		}
+	})
+
+	t.Run("filter by fuel_type", func(t *testing.T) {
+		fuelTypes := []serviceModels.FuelType{
+			serviceModels.FuelTypeGasoline,
+			serviceModels.FuelTypeDiesel,
+			serviceModels.FuelTypeElectric,
+		}
+		for _, fuelType := range fuelTypes {
+			limit := 10
+			offset := 0
+			filter := serviceModels.ModelFilters{
+				BaseList: serviceModels.BaseList{
+					Limit:  &limit,
+					Offset: &offset,
+				},
+				FuelType: &fuelType,
+			}
+			expected := []string{}
+			for id := range s.models {
+				if s.models[id].FuelType == string(fuelType) {
+					expected = append(expected, id)
+				}
+			}
+			s.CheckList(t, s.adminToken.AccessToken, &filter, expected)
+		}
+	})
+
+	t.Run("filter by drive_type", func(t *testing.T) {
+		driveTypes := []serviceModels.DriveType{
+			serviceModels.DriveTypeFwd,
+			serviceModels.DriveTypeRwd,
+			serviceModels.DriveTypeAwd,
+		}
+		for _, driveType := range driveTypes {
+			limit := 10
+			offset := 0
+			filter := serviceModels.ModelFilters{
+				BaseList: serviceModels.BaseList{
+					Limit:  &limit,
+					Offset: &offset,
+				},
+				DriveType: &driveType,
+			}
+			expected := []string{}
+			for id := range s.models {
+				if s.models[id].DriveType == string(driveType) {
+					expected = append(expected, id)
+				}
+			}
+			all, _ := s.CheckList(t, s.adminToken.AccessToken, &filter, expected)
+			for id := range all {
+				require.Equal(t, string(driveType), all[id].DriveType)
+				CompareModelsShort(t, s.models[id], all[id])
+			}
+		}
+	})
+
+	t.Run("filter by brand_id and body_type with order by base_price desc", func(t *testing.T) {
+		for brandID := range s.brands {
+			bodyType := serviceModels.BodyTypeSedan
+			orderBy := serviceModels.ModelOrderByBasePrice
+			direction := serviceModels.OrderDirectionDESC
+			limit := 5
+			offset := 0
+			filter := serviceModels.ModelFilters{
+				BrandID:  &brandID,
+				BodyType: (*serviceModels.BodyType)(&bodyType),
+				OrderBy:  &orderBy,
+				BaseList: serviceModels.BaseList{
+					Limit:          &limit,
+					Offset:         &offset,
+					OrderDirection: &direction,
+				},
+			}
+			expected := []string{}
+			for id := range s.models {
+				if s.models[id].Brand.ID == brandID && s.models[id].BodyType == string(bodyType) {
+					expected = append(expected, id)
+				}
+			}
+			if len(expected) == 0 {
+				continue
+			}
+			all, sorted := s.CheckList(t, s.adminToken.AccessToken, &filter, expected)
+			for i := 1; i < len(sorted); i++ {
+				if s.models[sorted[i-1]].BasePrice < s.models[sorted[i]].BasePrice {
+					t.Errorf("invalid order by base_price desc: %v < %v", s.models[sorted[i-1]].BasePrice, s.models[sorted[i]].BasePrice)
+				}
+			}
+			for id := range all {
+				require.Equal(t, s.brands[brandID].Name, all[id].BrandName)
+				require.Equal(t, string(bodyType), all[id].BodyType)
+				CompareModelsShort(t, s.models[id], all[id])
+			}
+		}
+	})
+
+	t.Run("filter by transmission_type and fuel_type with order by power_hp asc", func(t *testing.T) {
+		transmissionType := serviceModels.TransmissionTypeAutomatic
+		fuelType := serviceModels.FuelTypeGasoline
+		orderBy := serviceModels.ModelOrderByPowerHP
+		limit := 5
+		offset := 0
+		filter := serviceModels.ModelFilters{
+			TransmissionType: (*serviceModels.TransmissionType)(&transmissionType),
+			FuelType:         (*serviceModels.FuelType)(&fuelType),
+			OrderBy:          &orderBy,
+			BaseList: serviceModels.BaseList{
+				Limit:  &limit,
+				Offset: &offset,
+			},
+		}
+		expected := []string{}
+		for id := range s.models {
+			if s.models[id].TransmissionType == string(transmissionType) && s.models[id].FuelType == string(fuelType) {
+				expected = append(expected, id)
+			}
+		}
+		if len(expected) > 0 {
+			_, sorted := s.CheckList(t, s.adminToken.AccessToken, &filter, expected)
+			for i := 1; i < len(sorted); i++ {
+				if s.models[sorted[i-1]].PowerHP > s.models[sorted[i]].PowerHP {
+					t.Errorf("invalid order by power_hp asc: %v > %v", s.models[sorted[i-1]].PowerHP, s.models[sorted[i]].PowerHP)
+				}
+			}
+		}
+	})
+
+	t.Run("filter by body_type and drive_type with order by name asc", func(t *testing.T) {
+		bodyType := serviceModels.BodyTypeSUV
+		driveType := serviceModels.DriveTypeAwd
+		orderBy := serviceModels.ModelOrderByName
+		limit := 5
+		offset := 0
+		filter := serviceModels.ModelFilters{
+			BodyType:  (*serviceModels.BodyType)(&bodyType),
+			DriveType: (*serviceModels.DriveType)(&driveType),
+			OrderBy:   &orderBy,
+			BaseList: serviceModels.BaseList{
+				Limit:  &limit,
+				Offset: &offset,
+			},
+		}
+		expected := []string{}
+		for id := range s.models {
+			if s.models[id].BodyType == string(bodyType) && s.models[id].DriveType == string(driveType) {
+				expected = append(expected, id)
+			}
+		}
+		if len(expected) > 0 {
+			all, sorted := s.CheckList(t, s.adminToken.AccessToken, &filter, expected)
+			for i := 1; i < len(sorted); i++ {
+				if s.models[sorted[i-1]].Name > s.models[sorted[i]].Name {
+					t.Errorf("invalid order by name asc: %v > %v", s.models[sorted[i-1]].Name, s.models[sorted[i]].Name)
+				}
+			}
+			for id := range all {
+				require.Equal(t, string(bodyType), all[id].BodyType)
+				require.Equal(t, string(driveType), all[id].DriveType)
+				CompareModelsShort(t, s.models[id], all[id])
+			}
+		}
+	})
+
+	t.Run("filter by brand_id and drive_type with order by updated_at desc", func(t *testing.T) {
+		for brandID := range s.brands {
+			driveType := serviceModels.DriveTypeFwd
+			orderBy := serviceModels.ModelOrderByUpdatedAt
+			direction := serviceModels.OrderDirectionDESC
+			limit := 5
+			offset := 0
+			filter := serviceModels.ModelFilters{
+				BrandID:   &brandID,
+				DriveType: (*serviceModels.DriveType)(&driveType),
+				OrderBy:   &orderBy,
+				BaseList: serviceModels.BaseList{
+					Limit:          &limit,
+					Offset:         &offset,
+					OrderDirection: &direction,
+				},
+			}
+			expected := []string{}
+			for id := range s.models {
+				if s.models[id].Brand.ID == brandID && s.models[id].DriveType == string(driveType) {
+					expected = append(expected, id)
+				}
+			}
+			if len(expected) == 0 {
+				continue
+			}
+			all, sorted := s.CheckList(t, s.adminToken.AccessToken, &filter, expected)
+			for i := 1; i < len(sorted); i++ {
+				if s.models[sorted[i-1]].UpdatedAt.Before(s.models[sorted[i]].UpdatedAt) {
+					t.Errorf("invalid order by updated_at desc: %v < %v", s.models[sorted[i-1]].UpdatedAt, s.models[sorted[i]].UpdatedAt)
+				}
+			}
+			for id := range all {
+				require.Equal(t, s.brands[brandID].Name, all[id].BrandName)
+				require.Equal(t, string(driveType), all[id].DriveType)
+				CompareModelsShort(t, s.models[id], all[id])
+			}
+		}
+	})
+
+	t.Run("filter by fuel_type and drive_type with order by engine_displacement desc", func(t *testing.T) {
+		fuelType := serviceModels.FuelTypeDiesel
+		driveType := serviceModels.DriveTypeRwd
+		orderBy := serviceModels.ModelOrderByEngineDisplacement
+		direction := serviceModels.OrderDirectionDESC
+		limit := 5
+		offset := 0
+		filter := serviceModels.ModelFilters{
+			FuelType:  (*serviceModels.FuelType)(&fuelType),
+			DriveType: (*serviceModels.DriveType)(&driveType),
+			OrderBy:   &orderBy,
+			BaseList: serviceModels.BaseList{
+				Limit:          &limit,
+				Offset:         &offset,
+				OrderDirection: &direction,
+			},
+		}
+		expected := []string{}
+		for id := range s.models {
+			if s.models[id].FuelType == string(fuelType) && s.models[id].DriveType == string(driveType) {
+				expected = append(expected, id)
+			}
+		}
+		if len(expected) > 0 {
+			_, sorted := s.CheckList(t, s.adminToken.AccessToken, &filter, expected)
+			for i := 1; i < len(sorted); i++ {
+				if s.models[sorted[i-1]].EngineDisplacement < s.models[sorted[i]].EngineDisplacement {
+					t.Errorf("invalid order by engine_displacement desc: %v < %v", s.models[sorted[i-1]].EngineDisplacement, s.models[sorted[i]].EngineDisplacement)
+				}
+			}
+		}
+	})
+}
+
+func (s *ModelSuite) ListInvalid(t *testing.T) {
+	t.Run("with invalid order_by", func(t *testing.T) {
+		var orderBy serviceModels.ModelOrderBy = "invalid"
+		filter := serviceModels.ModelFilters{OrderBy: &orderBy}
+		_, code, err := s.base.client.GetModels(s.base.ctx, s.adminToken.AccessToken, &filter)
+		require.NoError(t, err)
+		require.Equal(t, http.StatusBadRequest, code)
+	})
+
+	t.Run("with invalid order_direction", func(t *testing.T) {
+		var orderDirection serviceModels.OrderDirection = "invalid"
+		filter := serviceModels.ModelFilters{
+			BaseList: serviceModels.BaseList{
+				OrderDirection: &orderDirection,
+			},
+		}
+		_, code, err := s.base.client.GetModels(s.base.ctx, s.adminToken.AccessToken, &filter)
+		require.NoError(t, err)
+		require.Equal(t, http.StatusBadRequest, code)
+	})
+
+	t.Run("with invalid brand_id", func(t *testing.T) {
+		brandID := "invalid"
+		filter := serviceModels.ModelFilters{BrandID: &brandID}
+		_, code, err := s.base.client.GetModels(s.base.ctx, s.adminToken.AccessToken, &filter)
+		require.NoError(t, err)
+		require.Equal(t, http.StatusBadRequest, code)
+	})
+
+	t.Run("with invalid body_type", func(t *testing.T) {
+		var bodyType serviceModels.BodyType = "invalid"
+		filter := serviceModels.ModelFilters{BodyType: &bodyType}
+		_, code, err := s.base.client.GetModels(s.base.ctx, s.adminToken.AccessToken, &filter)
+		require.NoError(t, err)
+		require.Equal(t, http.StatusBadRequest, code)
+	})
+
+	t.Run("with invalid transmission_type", func(t *testing.T) {
+		var transmissionType serviceModels.TransmissionType = "invalid"
+		filter := serviceModels.ModelFilters{TransmissionType: &transmissionType}
+		_, code, err := s.base.client.GetModels(s.base.ctx, s.adminToken.AccessToken, &filter)
+		require.NoError(t, err)
+		require.Equal(t, http.StatusBadRequest, code)
+	})
+
+	t.Run("with invalid fuel_type", func(t *testing.T) {
+		var fuelType serviceModels.FuelType = "invalid"
+		filter := serviceModels.ModelFilters{FuelType: &fuelType}
+		_, code, err := s.base.client.GetModels(s.base.ctx, s.adminToken.AccessToken, &filter)
+		require.NoError(t, err)
+		require.Equal(t, http.StatusBadRequest, code)
+	})
+
+	t.Run("with invalid drive_type", func(t *testing.T) {
+		var driveType serviceModels.DriveType = "invalid"
+		filter := serviceModels.ModelFilters{DriveType: &driveType}
+		_, code, err := s.base.client.GetModels(s.base.ctx, s.adminToken.AccessToken, &filter)
+		require.NoError(t, err)
+		require.Equal(t, http.StatusBadRequest, code)
+	})
+
+	t.Run("with negative limit", func(t *testing.T) {
+		limit := -10
+		filter := serviceModels.ModelFilters{
+			BaseList: serviceModels.BaseList{
+				Limit: &limit,
+			},
+		}
+		_, code, err := s.base.client.GetModels(s.base.ctx, s.adminToken.AccessToken, &filter)
+		require.NoError(t, err)
+		require.Equal(t, http.StatusBadRequest, code)
+	})
+
+	t.Run("with negative offset", func(t *testing.T) {
+		offset := -10
+		filter := serviceModels.ModelFilters{
+			BaseList: serviceModels.BaseList{
+				Offset: &offset,
+			},
+		}
+		_, code, err := s.base.client.GetModels(s.base.ctx, s.adminToken.AccessToken, &filter)
+		require.NoError(t, err)
+		require.Equal(t, http.StatusBadRequest, code)
+	})
+}
+
+func (s *ModelSuite) ListForbidden(t *testing.T) {
+	t.Skip("Models list is public endpoint")
 }
