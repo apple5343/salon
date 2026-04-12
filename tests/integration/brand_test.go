@@ -67,6 +67,8 @@ func (s *BrandSuite) TestUpdate() {
 func (s *BrandSuite) TestList() {
 	s.T().Run("create", s.Create(15))
 	s.T().Run("list", s.List)
+	s.T().Run("invalid", s.ListInvalid)
+	s.T().Run("forbidden", s.ListForbidden)
 }
 
 func CompareBrandsPublic(t *testing.T, expected, actual *httpModels.BrandInternalResponse) {
@@ -410,4 +412,62 @@ func (s *BrandSuite) List(t *testing.T) {
 			}
 		}
 	})
+}
+
+func (s *BrandSuite) ListInvalid(t *testing.T) {
+	t.Run("with invalid order_by", func(t *testing.T) {
+		var orderBy serviceModels.BrandOrderBy = "invalid"
+		filter := serviceModels.BrandFilters{OrderBy: &orderBy}
+		_, code, err := s.base.client.GetBrands(s.base.ctx, s.adminToken.AccessToken, &filter)
+		require.NoError(t, err)
+		require.Equal(t, http.StatusBadRequest, code)
+	})
+
+	t.Run("with invalid order_direction", func(t *testing.T) {
+		var orderDirection serviceModels.OrderDirection = "invalid"
+		filter := serviceModels.BrandFilters{
+			BaseList: serviceModels.BaseList{
+				OrderDirection: &orderDirection,
+			},
+		}
+		_, code, err := s.base.client.GetBrands(s.base.ctx, s.adminToken.AccessToken, &filter)
+		require.NoError(t, err)
+		require.Equal(t, http.StatusBadRequest, code)
+	})
+
+	t.Run("with invalid country_code", func(t *testing.T) {
+		countryCode := "INVALID"
+		filter := serviceModels.BrandFilters{CountryCode: &countryCode}
+		_, code, err := s.base.client.GetBrands(s.base.ctx, s.adminToken.AccessToken, &filter)
+		require.NoError(t, err)
+		require.Equal(t, http.StatusBadRequest, code)
+	})
+
+	t.Run("with negative limit", func(t *testing.T) {
+		limit := -10
+		filter := serviceModels.BrandFilters{
+			BaseList: serviceModels.BaseList{
+				Limit: &limit,
+			},
+		}
+		_, code, err := s.base.client.GetBrands(s.base.ctx, s.adminToken.AccessToken, &filter)
+		require.NoError(t, err)
+		require.Equal(t, http.StatusBadRequest, code)
+	})
+
+	t.Run("with negative offset", func(t *testing.T) {
+		offset := -10
+		filter := serviceModels.BrandFilters{
+			BaseList: serviceModels.BaseList{
+				Offset: &offset,
+			},
+		}
+		_, code, err := s.base.client.GetBrands(s.base.ctx, s.adminToken.AccessToken, &filter)
+		require.NoError(t, err)
+		require.Equal(t, http.StatusBadRequest, code)
+	})
+}
+
+func (s *BrandSuite) ListForbidden(t *testing.T) {
+	t.Skip("Brands list is public endpoint")
 }
