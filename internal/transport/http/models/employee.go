@@ -7,23 +7,28 @@ import (
 	"github.com/apple5343/errorx"
 )
 
+var EmployeeOrderByMap = map[string]models.EmployeeOrderBy{
+	"created_at": models.EmployeeOrderByCreatedAt,
+	"hire_date":  models.EmployeeOrderByHireDate,
+}
+
 var (
 	ErrInvalidRole   = errorx.NewError("invalid role", errorx.BadRequest)
 	ErrInvalidStatus = errorx.NewError("invalid status", errorx.BadRequest)
 )
 
 type Employee struct {
-	ID        string    `json:"id"`
-	FullName  string    `json:"full_name"`
-	Phone     string    `json:"phone"`
-	Email     string    `json:"email"`
-	Password  string    `json:"password,omitempty"`
-	Passport  Passport  `json:"passport"`
-	Role      string    `json:"role"`
-	Status    string    `json:"status"`
-	HireDate  time.Time `json:"hire_date"`
-	CreatedAt time.Time `json:"created_at"`
-	UpdatedAt time.Time `json:"updated_at"`
+	ID        string     `json:"id"`
+	FullName  string     `json:"full_name"`
+	Phone     string     `json:"phone"`
+	Email     string     `json:"email"`
+	Password  string     `json:"password,omitempty"`
+	Passport  Passport   `json:"passport"`
+	Role      string     `json:"role"`
+	Status    string     `json:"status"`
+	HireDate  *time.Time `json:"hire_date,omitempty"`
+	CreatedAt time.Time  `json:"created_at"`
+	UpdatedAt time.Time  `json:"updated_at"`
 }
 
 func EmployeeToHttp(e *models.Employee) *Employee {

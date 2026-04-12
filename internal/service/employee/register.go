@@ -25,7 +25,6 @@ func (s *employeeService) Register(ctx context.Context, e *models.Employee) (*mo
 	if err := e.BeforeCreate(s.clock); err != nil {
 		return nil, errorx.Wrap("register employee", errorx.BadRequest, err)
 	}
-	e.HireDate = e.CreatedAt
 	e, err := s.repo.Create(ctx, e)
 	if err != nil {
 		if errors.Is(err, repo.ErrAlreadyExists) {
@@ -53,7 +52,9 @@ func (s *employeeService) Hire(ctx context.Context, id string) (*models.Employee
 		return nil, errorx.NewError("employee already hired", errorx.BadRequest)
 	}
 	e.Status = models.EmployeeStatusActive
-	e.HireDate = s.clock.Now()
+	now := s.clock.Now()
+	e.HireDate = &now
+	e.UpdatedAt = now
 	e, err = s.repo.Update(ctx, e)
 	if err != nil {
 		return nil, errorx.Wrap("hire employee", errorx.Internal, err)
@@ -67,7 +68,7 @@ func (s *employeeService) RegisterAdmin(ctx context.Context, e *models.Employee)
 	if err := e.BeforeCreate(s.clock); err != nil {
 		return nil, errorx.Wrap("register employee", errorx.BadRequest, err)
 	}
-	e.HireDate = e.CreatedAt
+	e.HireDate = &e.CreatedAt
 	e.Status = models.EmployeeStatusActive
 	e, err := s.repo.Create(ctx, e)
 	if err != nil {

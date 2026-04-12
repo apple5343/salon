@@ -91,6 +91,7 @@ func (s *Server) routes() {
 		}
 		employees.POST("/:id/hire", authMiddleware(s.employeeHandler.Hire()))
 		//TODO dismiss
+		employees.GET("", authMiddleware(s.employeeHandler.GetEmployees()))
 		employees.GET("/:id", authMiddleware(s.employeeHandler.GetByID()))
 		employees.PUT("/:id", authMiddleware(s.employeeHandler.Update()))
 	}

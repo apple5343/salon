@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS employees (
     passport_issued_by VARCHAR(255) NOT NULL,
     role VARCHAR(32) NOT NULL,
     status VARCHAR(32) NOT NULL,
-    hire_date DATE NOT NULL,
+    hire_date DATE,
     created_at TIMESTAMP NOT NULL,
     updated_at TIMESTAMP NOT NULL,
     CONSTRAINT unique_employee_email UNIQUE (email),

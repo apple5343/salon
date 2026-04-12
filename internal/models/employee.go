@@ -28,7 +28,7 @@ type Employee struct {
 	Passport     Passport
 	Role         EmployeeRole   `validate:"required"`
 	Status       EmployeeStatus `validate:"required"`
-	HireDate     time.Time
+	HireDate     *time.Time
 	CreatedAt    time.Time
 	UpdatedAt    time.Time
 }
@@ -68,4 +68,23 @@ func (e *Employee) BeforeUpdate(c clock.Clock) error {
 
 func (e *Employee) Validate() error {
 	return Validator().Struct(e)
+}
+
+type EmployeeOrderBy string
+
+const (
+	EmployeeOrderByCreatedAt EmployeeOrderBy = "created_at"
+	EmployeeOrderByHireDate  EmployeeOrderBy = "hire_date"
+)
+
+type EmployeeFilters struct {
+	FullName *string         `validate:"omitempty,min=1"`
+	Role     *EmployeeRole   `validate:"omitempty"`
+	Status   *EmployeeStatus `validate:"omitempty"`
+	BaseList
+	OrderBy *EmployeeOrderBy
+}
+
+func (f *EmployeeFilters) Validate() error {
+	return Validator().Struct(f)
 }

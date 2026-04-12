@@ -5,8 +5,10 @@ import (
 	"context"
 	"encoding/json"
 	"net/http"
+	serviceModels "salon/internal/models"
 	httpModels "salon/internal/transport/http/models"
 	"salon/tests/integration/models"
+	"strconv"
 )
 
 func (c *Client) LoginEmployee(ctx context.Context, email, password string) (*models.EmployeeToken, int, error) {
@@ -220,4 +222,49 @@ func (c *Client) Profile(ctx context.Context, token string) (*httpModels.Employe
 		return nil, 0, err
 	}
 	return &r, resp.StatusCode, nil
+}
+
+func (c *Client) GetEmployees(ctx context.Context, token string, filter *serviceModels.EmployeeFilters) ([]*httpModels.Employee, int, error) {
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, c.BaseUrl+"/employees", nil)
+	if err != nil {
+		return nil, 0, err
+	}
+	if token != "" {
+		req.Header.Set("Authorization", "Bearer "+token)
+	}
+	q := req.URL.Query()
+	if filter.FullName != nil {
+		q.Add("full_name", *filter.FullName)
+	}
+	if filter.Role != nil {
+		q.Add("role", string(*filter.Role))
+	}
+	if filter.Status != nil {
+		q.Add("status", string(*filter.Status))
+	}
+	if filter.OrderBy != nil {
+		q.Add("order_by", string(*filter.OrderBy))
+	}
+	if filter.OrderDirection != nil {
+		q.Add("order_direction", string(*filter.OrderDirection))
+	}
+	if filter.Limit != nil {
+		q.Add("limit", strconv.Itoa(*filter.Limit))
+	}
+	if filter.Offset != nil {
+		q.Add("offset", strconv.Itoa(*filter.Offset))
+	}
+	req.URL.RawQuery = q.Encode()
+	resp, err := c.C.Do(req)
+	if err != nil {
+		return nil, 0, err
+	}
+	if resp.StatusCode != http.StatusOK {
+		return nil, resp.StatusCode, nil
+	}
+	var r []*httpModels.Employee
+	if err := json.NewDecoder(resp.Body).Decode(&r); err != nil {
+		return nil, 0, err
+	}
+	return r, resp.StatusCode, nil
 }

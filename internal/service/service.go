@@ -14,7 +14,7 @@ type EmployeeService interface {
 	GetAccessToken(ctx context.Context) (string, error)
 
 	GetByID(ctx context.Context, id string) (*models.Employee, error)
-	//TODO list
+	GetEmployees(ctx context.Context, filters *models.EmployeeFilters) ([]*models.Employee, error)
 	//TODO stat
 	Profile(ctx context.Context) (*models.Employee, error)
 	Update(ctx context.Context, e *models.Employee) (*models.Employee, error)
