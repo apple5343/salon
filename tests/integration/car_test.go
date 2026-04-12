@@ -102,6 +102,8 @@ func (s *CarSuite) TestUpdate() {
 
 func (s *CarSuite) TestList() {
 	s.T().Run("list", s.List)
+	s.T().Run("invalid", s.ListInvalid)
+	s.T().Run("forbidden", s.ListForbidden)
 }
 
 func (s *CarSuite) RandomSupplier() *httpModels.SupplierInternalResponse {
@@ -884,6 +886,205 @@ func (s *CarSuite) List(t *testing.T) {
 		})
 	}
 
+	t.Run("filter by supplier_id & order by year desc", func(t *testing.T) {
+		for supplierID := range s.suppliers {
+			limit := 10
+			offset := 0
+			orderBy := serviceModels.CarOrderByYear
+			orderDirection := serviceModels.OrderDirectionDESC
+			filter := serviceModels.CarFilters{
+				BaseList: serviceModels.BaseList{
+					Limit:          &limit,
+					Offset:         &offset,
+					OrderDirection: &orderDirection,
+				},
+				SupplierID: &supplierID,
+				OrderBy:    &orderBy,
+			}
+			expected := []string{}
+			for id := range s.cars {
+				if s.cars[id].Supplier.ID == supplierID {
+					expected = append(expected, id)
+				}
+			}
+			if len(expected) == 0 {
+				continue
+			}
+			all, sorted := s.CheckList(t, s.adminToken.AccessToken, &filter, expected)
+			for i := 1; i < len(sorted); i++ {
+				if s.cars[sorted[i-1]].Year < s.cars[sorted[i]].Year {
+					t.Errorf("invalid order by year desc: %v < %v", s.cars[sorted[i-1]].Year, s.cars[sorted[i]].Year)
+				}
+			}
+			for id, c := range all {
+				require.Equal(t, s.suppliers[supplierID].Name, c.SupplierName)
+				CompareCarsShort(t, s.cars[id], c)
+			}
+		}
+	})
+
+	t.Run("filter by model_id & order by mileage asc", func(t *testing.T) {
+		for modelID := range s.models {
+			limit := 10
+			offset := 0
+			orderBy := serviceModels.CarOrderByMileage
+			filter := serviceModels.CarFilters{
+				BaseList: serviceModels.BaseList{
+					Limit:  &limit,
+					Offset: &offset,
+				},
+				ModelID: &modelID,
+				OrderBy: &orderBy,
+			}
+			expected := []string{}
+			for id := range s.cars {
+				if s.cars[id].Model.ID == modelID {
+					expected = append(expected, id)
+				}
+			}
+			if len(expected) == 0 {
+				continue
+			}
+			all, sorted := s.CheckList(t, s.adminToken.AccessToken, &filter, expected)
+			for i := 1; i < len(sorted); i++ {
+				if s.cars[sorted[i-1]].Mileage > s.cars[sorted[i]].Mileage {
+					t.Errorf("invalid order by mileage asc: %v > %v", s.cars[sorted[i-1]].Mileage, s.cars[sorted[i]].Mileage)
+				}
+			}
+			for id, c := range all {
+				require.Equal(t, s.models[modelID].Name, c.ModelName)
+				CompareCarsShort(t, s.cars[id], c)
+			}
+		}
+	})
+
+	t.Run("filter by brand_id & order by price asc", func(t *testing.T) {
+		for brandID := range s.brands {
+			limit := 10
+			offset := 0
+			orderBy := serviceModels.CarOrderByPrice
+			filter := serviceModels.CarFilters{
+				BaseList: serviceModels.BaseList{
+					Limit:  &limit,
+					Offset: &offset,
+				},
+				BrandID: &brandID,
+				OrderBy: &orderBy,
+			}
+			expected := []string{}
+			for id := range s.cars {
+				if s.cars[id].Model.Brand.ID == brandID {
+					expected = append(expected, id)
+				}
+			}
+			if len(expected) == 0 {
+				continue
+			}
+			all, sorted := s.CheckList(t, s.adminToken.AccessToken, &filter, expected)
+			for i := 1; i < len(sorted); i++ {
+				price1, err := decimal.NewFromString(s.cars[sorted[i-1]].Price)
+				require.NoError(t, err)
+				price2, err := decimal.NewFromString(s.cars[sorted[i]].Price)
+				require.NoError(t, err)
+				if price1.GreaterThan(price2) {
+					t.Errorf("invalid order by price asc: %v > %v", s.cars[sorted[i-1]].Price, s.cars[sorted[i]].Price)
+				}
+			}
+			for id, c := range all {
+				require.Equal(t, s.brands[brandID].Name, c.BrandName)
+				CompareCarsShort(t, s.cars[id], c)
+			}
+		}
+	})
+
+	t.Run("filter by brand_id and year range & order by price desc", func(t *testing.T) {
+		for brandID := range s.brands {
+			limit := 10
+			offset := 0
+			orderBy := serviceModels.CarOrderByPrice
+			orderDirection := serviceModels.OrderDirectionDESC
+			minYear := 2010
+			maxYear := 2020
+			filter := serviceModels.CarFilters{
+				BaseList: serviceModels.BaseList{
+					Limit:          &limit,
+					Offset:         &offset,
+					OrderDirection: &orderDirection,
+				},
+				BrandID: &brandID,
+				MinYear: &minYear,
+				MaxYear: &maxYear,
+				OrderBy: &orderBy,
+			}
+			expected := []string{}
+			for id := range s.cars {
+				if s.cars[id].Model.Brand.ID == brandID && s.cars[id].Year >= minYear && s.cars[id].Year <= maxYear {
+					expected = append(expected, id)
+				}
+			}
+			if len(expected) == 0 {
+				continue
+			}
+			all, sorted := s.CheckList(t, s.adminToken.AccessToken, &filter, expected)
+			for i := 1; i < len(sorted); i++ {
+				price1, err := decimal.NewFromString(s.cars[sorted[i-1]].Price)
+				require.NoError(t, err)
+				price2, err := decimal.NewFromString(s.cars[sorted[i]].Price)
+				require.NoError(t, err)
+				if price1.LessThan(price2) {
+					t.Errorf("invalid order by price desc: %v < %v", s.cars[sorted[i-1]].Price, s.cars[sorted[i]].Price)
+				}
+			}
+			for id, c := range all {
+				require.Equal(t, s.brands[brandID].Name, c.BrandName)
+				require.GreaterOrEqual(t, c.Year, minYear)
+				require.LessOrEqual(t, c.Year, maxYear)
+				CompareCarsShort(t, s.cars[id], c)
+			}
+		}
+	})
+
+	t.Run("filter by supplier_id and mileage range & order by year asc", func(t *testing.T) {
+		for supplierID := range s.suppliers {
+			limit := 10
+			offset := 0
+			orderBy := serviceModels.CarOrderByYear
+			minMileage := 10
+			maxMileage := 80
+			filter := serviceModels.CarFilters{
+				BaseList: serviceModels.BaseList{
+					Limit:  &limit,
+					Offset: &offset,
+				},
+				SupplierID: &supplierID,
+				MinMileage: &minMileage,
+				MaxMileage: &maxMileage,
+				OrderBy:    &orderBy,
+			}
+			expected := []string{}
+			for id := range s.cars {
+				if s.cars[id].Supplier.ID == supplierID && s.cars[id].Mileage >= minMileage && s.cars[id].Mileage <= maxMileage {
+					expected = append(expected, id)
+				}
+			}
+			if len(expected) == 0 {
+				continue
+			}
+			all, sorted := s.CheckList(t, s.adminToken.AccessToken, &filter, expected)
+			for i := 1; i < len(sorted); i++ {
+				if s.cars[sorted[i-1]].Year > s.cars[sorted[i]].Year {
+					t.Errorf("invalid order by year asc: %v > %v", s.cars[sorted[i-1]].Year, s.cars[sorted[i]].Year)
+				}
+			}
+			for id, c := range all {
+				require.Equal(t, s.suppliers[supplierID].Name, c.SupplierName)
+				require.GreaterOrEqual(t, s.cars[id].Mileage, minMileage)
+				require.LessOrEqual(t, s.cars[id].Mileage, maxMileage)
+				CompareCarsShort(t, s.cars[id], c)
+			}
+		}
+	})
+
 	t.Run("filter by all combinations of color and interior color & order by price asc", func(t *testing.T) {
 		colors := models.CarColors
 		limit := 50
@@ -934,4 +1135,106 @@ func (s *CarSuite) List(t *testing.T) {
 			}
 		}
 	})
+}
+
+func (s *CarSuite) ListInvalid(t *testing.T) {
+	t.Run("with invalid order_by", func(t *testing.T) {
+		var orderBy serviceModels.CarOrderBy = "invalid"
+		filter := serviceModels.CarFilters{OrderBy: &orderBy}
+		_, code, err := s.base.client.GetCars(s.base.ctx, s.adminToken.AccessToken, &filter)
+		require.NoError(t, err)
+		require.Equal(t, http.StatusBadRequest, code)
+	})
+
+	t.Run("with invalid order_direction", func(t *testing.T) {
+		var orderDirection serviceModels.OrderDirection = "invalid"
+		filter := serviceModels.CarFilters{
+			BaseList: serviceModels.BaseList{
+				OrderDirection: &orderDirection,
+			},
+		}
+		_, code, err := s.base.client.GetCars(s.base.ctx, s.adminToken.AccessToken, &filter)
+		require.NoError(t, err)
+		require.Equal(t, http.StatusBadRequest, code)
+	})
+
+	t.Run("with invalid status", func(t *testing.T) {
+		var status serviceModels.CarStatus = "invalid"
+		filter := serviceModels.CarFilters{Status: &status}
+		_, code, err := s.base.client.GetCars(s.base.ctx, s.adminToken.AccessToken, &filter)
+		require.NoError(t, err)
+		require.Equal(t, http.StatusBadRequest, code)
+	})
+
+
+	t.Run("with negative limit", func(t *testing.T) {
+		limit := -10
+		filter := serviceModels.CarFilters{
+			BaseList: serviceModels.BaseList{
+				Limit: &limit,
+			},
+		}
+		_, code, err := s.base.client.GetCars(s.base.ctx, s.adminToken.AccessToken, &filter)
+		require.NoError(t, err)
+		require.Equal(t, http.StatusBadRequest, code)
+	})
+
+	t.Run("with negative offset", func(t *testing.T) {
+		offset := -10
+		filter := serviceModels.CarFilters{
+			BaseList: serviceModels.BaseList{
+				Offset: &offset,
+			},
+		}
+		_, code, err := s.base.client.GetCars(s.base.ctx, s.adminToken.AccessToken, &filter)
+		require.NoError(t, err)
+		require.Equal(t, http.StatusBadRequest, code)
+	})
+
+
+	t.Run("with negative min_mileage", func(t *testing.T) {
+		minMileage := -10
+		filter := serviceModels.CarFilters{MinMileage: &minMileage}
+		_, code, err := s.base.client.GetCars(s.base.ctx, s.adminToken.AccessToken, &filter)
+		require.NoError(t, err)
+		require.Equal(t, http.StatusBadRequest, code)
+	})
+
+	t.Run("with negative max_mileage", func(t *testing.T) {
+		maxMileage := -10
+		filter := serviceModels.CarFilters{MaxMileage: &maxMileage}
+		_, code, err := s.base.client.GetCars(s.base.ctx, s.adminToken.AccessToken, &filter)
+		require.NoError(t, err)
+		require.Equal(t, http.StatusBadRequest, code)
+	})
+
+	t.Run("with min_mileage greater than max_mileage", func(t *testing.T) {
+		minMileage := 100000
+		maxMileage := 50000
+		filter := serviceModels.CarFilters{MinMileage: &minMileage, MaxMileage: &maxMileage}
+		_, code, err := s.base.client.GetCars(s.base.ctx, s.adminToken.AccessToken, &filter)
+		require.NoError(t, err)
+		require.Equal(t, http.StatusBadRequest, code)
+	})
+
+	t.Run("with invalid min_year", func(t *testing.T) {
+		minYear := 1800
+		filter := serviceModels.CarFilters{MinYear: &minYear}
+		_, code, err := s.base.client.GetCars(s.base.ctx, s.adminToken.AccessToken, &filter)
+		require.NoError(t, err)
+		require.Equal(t, http.StatusBadRequest, code)
+	})
+
+	t.Run("with min_year greater than max_year", func(t *testing.T) {
+		minYear := 2020
+		maxYear := 2010
+		filter := serviceModels.CarFilters{MinYear: &minYear, MaxYear: &maxYear}
+		_, code, err := s.base.client.GetCars(s.base.ctx, s.adminToken.AccessToken, &filter)
+		require.NoError(t, err)
+		require.Equal(t, http.StatusBadRequest, code)
+	})
+}
+
+func (s *CarSuite) ListForbidden(t *testing.T) {
+	t.Skip("Cars list is public endpoint")
 }
