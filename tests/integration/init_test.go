@@ -179,6 +179,7 @@ func (suite *BaseTestSuite) SetupSuite() {
 	suite.cancel = cancel
 
 	suite.MustInitConfig(envPath)
+	suite.MustCreateLogsDir()
 	suite.MustInitCompose(composePath)
 	suite.compose.Up(ctx)
 	suite.MustInitDB()
@@ -222,6 +223,12 @@ func (suite *BaseTestSuite) MustInitCompose(composePath string) {
 		suite.FailNow("init compose: " + err.Error())
 	}
 	suite.compose = c.WithEnv(suite.GetEnv()).WaitForService("app-test", wait.NewHealthStrategy())
+}
+
+func (suite *BaseTestSuite) MustCreateLogsDir() {
+	if err := os.MkdirAll("logs", 0755); err != nil {
+		suite.FailNow("create logs dir: " + err.Error())
+	}
 }
 
 func (suite *BaseTestSuite) MustInitDB() {
