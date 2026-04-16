@@ -5,8 +5,8 @@ import (
 	"errors"
 	"log"
 	"salon/internal/models"
+	"salon/internal/pkg/simulation/generator"
 	ctxutil "salon/internal/utils/context"
-	"salon/pkg/simulation/generator"
 	"time"
 
 	"github.com/brianvoe/gofakeit"

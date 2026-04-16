@@ -4,9 +4,9 @@ import (
 	"errors"
 	"math/rand/v2"
 	"salon/internal/models"
+	"salon/internal/pkg/simulation/generator"
 	"salon/internal/service"
 	"salon/pkg/clock"
-	"salon/pkg/simulation/generator"
 	"sort"
 	"time"
 )

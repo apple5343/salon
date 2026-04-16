@@ -5,7 +5,7 @@ import (
 	"log"
 	"salon/internal/app"
 	"salon/pkg/clock"
-	"salon/pkg/simulation"
+	"salon/internal/pkg/simulation"
 	"time"
 
 	"go.uber.org/fx"
