@@ -13,10 +13,12 @@ var (
 
 type analyticsService struct {
 	analyticsRepository repository.AnalyticsRepository
+	employeeService     service.EmployeeService
 }
 
-func NewService(repo repository.AnalyticsRepository) service.AnalyticsService {
+func NewService(repo repository.AnalyticsRepository, employeeService service.EmployeeService) service.AnalyticsService {
 	return &analyticsService{
 		analyticsRepository: repo,
+		employeeService:     employeeService,
 	}
 }
