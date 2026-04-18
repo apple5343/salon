@@ -160,5 +160,6 @@ func (s *Server) routes() {
 	analytics := s.e.Group("/analytics")
 	{
 		analytics.GET("/sales", authMiddleware(s.analyticsHandler.Sales()))
+		analytics.GET("/warehouse", authMiddleware(s.analyticsHandler.Warehouse()))
 	}
 }

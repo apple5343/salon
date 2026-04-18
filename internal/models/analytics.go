@@ -19,21 +19,22 @@ type SalesAnalytics struct {
 	CompletedRevenue       decimal.Decimal     // Сумма всех final_price завершенныйх сделок.
 	AverageCheck           decimal.Decimal     // Средний чек у завершенных сделок
 	ConversionRate         decimal.Decimal     // (SaleCompleted) ко всем начатым (SaleCreated)
-	DiscountImpact         decimal.Decimal     // Сумма всех discount_amount у завершенных сделок
-	AverageMargin          decimal.Decimal     // Средняя разница между final_price и origin_price у завершенных сделок
+	//Далее подсчеты для завершенных сделок
+	DiscountImpact         decimal.Decimal     // Сумма всех discount_amount
+	AverageMargin          decimal.Decimal     // Средняя разница между final_price и origin_price
 	PaymentTypesPopularity map[PaymentType]int // Количество продаж по типу оплаты
 	CarsPopularity         CarsPopularity      // Количество проданных машин по параметрам
 	BrandsPopularity       map[string]int      // Количество проданных машин по брендам
 	ModelsPopularity       map[string]int      // Количество проданных машин по моделям
 }
 
-type WarehouseAnalytics struct { // В учет не берутся проданные машины, статиститка не зависит от периода
+type WarehouseAnalytics struct { // В учет не берутся проданные машины, статиститка не зависит от периода (кроме параметра Turnover)
+	TotalCars    int               // Количество всех машин
 	CarsByStatus map[CarStatus]int // Количество машин по статусу (кроме проданных)
-	TotalCars    int
-	Turnover     decimal.Decimal // Разница во времени между cars.created_at (поступление) и sales.sale_date (продажа). Брать среднюю?
-	CarsCount    CarsPopularity  // Количество машин по параметрам
-	BrandsCount  map[string]int  // Количество машин по брендам
-	ModelsCount  map[string]int  // Количество машин по моделям
+	Turnover     decimal.Decimal   // Средняя разница во времени между cars.created_at (поступление) и sales.sale_date (продажа).
+	CarsCount    CarsPopularity    // Количество машин по параметрам
+	BrandsCount  map[string]int    // Количество машин по брендам
+	ModelsCount  map[string]int    // Количество машин по моделям
 }
 
 type EmployeeAnalytics struct {

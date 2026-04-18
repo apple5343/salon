@@ -78,4 +78,5 @@ type EventRepository interface {
 
 type AnalyticsRepository interface {
 	GetSalesAnalytics(ctx context.Context, dateFrom, dateTo *time.Time) (*models.SalesAnalytics, error)
+	GetWarehouseAnalytics(ctx context.Context, turnoverDateFrom, turnoverDateTo *time.Time) (*models.WarehouseAnalytics, error)
 }

@@ -53,3 +53,23 @@ func CarsPopularityToHttp(carsPopularity models.CarsPopularity) CarsPopularity {
 		DriveTypesPopularity:        carsPopularity.DriveTypesPopularity,
 	}
 }
+
+type WarehouseAnalytics struct {
+	TotalCars    int                      `json:"total_cars"`
+	CarsByStatus map[models.CarStatus]int `json:"cars_by_status"`
+	Turnover     string                   `json:"turnover"`
+	CarsCount    CarsPopularity           `json:"cars_count"`
+	BrandsCount  map[string]int           `json:"brands_count"`
+	ModelsCount  map[string]int           `json:"models_count"`
+}
+
+func WarehouseAnalyticsToHttp(warehouseAnalytics *models.WarehouseAnalytics) *WarehouseAnalytics {
+	return &WarehouseAnalytics{
+		TotalCars:    warehouseAnalytics.TotalCars,
+		CarsByStatus: warehouseAnalytics.CarsByStatus,
+		Turnover:     warehouseAnalytics.Turnover.String(),
+		CarsCount:    CarsPopularityToHttp(warehouseAnalytics.CarsCount),
+		BrandsCount:  warehouseAnalytics.BrandsCount,
+		ModelsCount:  warehouseAnalytics.ModelsCount,
+	}
+}

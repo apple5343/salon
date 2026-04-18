@@ -76,4 +76,5 @@ type EventService interface {
 
 type AnalyticsService interface {
 	Sales(ctx context.Context, dateFrom, dateTo *time.Time) (*models.SalesAnalytics, error)
+	Warehouse(ctx context.Context, turnoverDateFrom, turnoverDateTo *time.Time) (*models.WarehouseAnalytics, error)
 }
