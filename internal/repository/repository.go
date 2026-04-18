@@ -75,3 +75,7 @@ type EventRepository interface {
 	GetByID(ctx context.Context, id string) (*models.Event, error)
 	GetEventsByFilter(ctx context.Context, filter *models.EventFilters) ([]*models.Event, error)
 }
+
+type AnalyticsRepository interface {
+	GetSalesAnalytics(ctx context.Context, dateFrom, dateTo *time.Time) (*models.SalesAnalytics, error)
+}

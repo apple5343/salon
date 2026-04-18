@@ -47,6 +47,7 @@ func (s *Sale) BeforeCreate(c clock.Clock) error {
 	now := c.Now()
 	s.CreatedAt = now
 	s.UpdatedAt = now
+	s.SaleDate = now
 	return nil
 }
 

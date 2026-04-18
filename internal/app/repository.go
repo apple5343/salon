@@ -1,6 +1,7 @@
 package app
 
 import (
+	"salon/internal/repository/analytics"
 	"salon/internal/repository/brand"
 	"salon/internal/repository/car"
 	"salon/internal/repository/client"
@@ -24,5 +25,6 @@ func RepositoryModules() fx.Option {
 		car.NewModule(),
 		event.NewModule(),
 		sale.NewModule(),
+		analytics.NewModule(),
 	)
 }

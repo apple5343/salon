@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"salon/internal/config"
 	"salon/internal/service"
+	"salon/internal/transport/http/analytics"
 	"salon/internal/transport/http/brand"
 	"salon/internal/transport/http/car"
 	"salon/internal/transport/http/client"
@@ -24,35 +25,38 @@ type Server struct {
 	jwtConfig *config.JWT
 	logger    logger.Logger
 
-	employeeHandler *employee.Handler
-	supplierHandler *supplier.Handler
-	clientHandler   *client.Handler
-	brandHandler    *brand.Handler
-	modelHandler    *model.Handler
-	carHandler      *car.Handler
-	saleHandler     *sale.Handler
-	eventHandler    *event.Handler
-	e               *echo.Echo
+	employeeHandler  *employee.Handler
+	supplierHandler  *supplier.Handler
+	clientHandler    *client.Handler
+	brandHandler     *brand.Handler
+	modelHandler     *model.Handler
+	carHandler       *car.Handler
+	saleHandler      *sale.Handler
+	eventHandler     *event.Handler
+	analyticsHandler *analytics.Handler
+	e                *echo.Echo
 }
 
 func NewServer(config *config.HttpServer, jwtConfig *config.JWT, logger logger.Logger,
 	employeeService service.EmployeeService, supplierService service.SupplierService,
 	clientService service.ClientService, carService service.CarService,
 	brandService service.BrandService, modelService service.ModelService,
-	saleService service.SaleService, eventService service.EventService) (*Server, error) {
+	saleService service.SaleService, eventService service.EventService,
+	analyticsService service.AnalyticsService) (*Server, error) {
 	return &Server{
-		config:          config,
-		jwtConfig:       jwtConfig,
-		employeeHandler: employee.NewHandler(employeeService),
-		supplierHandler: supplier.NewHandler(supplierService),
-		clientHandler:   client.NewHandler(clientService),
-		brandHandler:    brand.NewHandler(brandService),
-		modelHandler:    model.NewHandler(modelService),
-		carHandler:      car.NewHandler(carService),
-		saleHandler:     sale.NewHandler(saleService),
-		eventHandler:    event.NewHandler(eventService),
-		logger:          logger,
-		e:               echo.New(),
+		config:           config,
+		jwtConfig:        jwtConfig,
+		employeeHandler:  employee.NewHandler(employeeService),
+		supplierHandler:  supplier.NewHandler(supplierService),
+		clientHandler:    client.NewHandler(clientService),
+		brandHandler:     brand.NewHandler(brandService),
+		modelHandler:     model.NewHandler(modelService),
+		carHandler:       car.NewHandler(carService),
+		saleHandler:      sale.NewHandler(saleService),
+		eventHandler:     event.NewHandler(eventService),
+		analyticsHandler: analytics.NewHandler(analyticsService),
+		logger:           logger,
+		e:                echo.New(),
 	}, nil
 }
 
@@ -151,5 +155,10 @@ func (s *Server) routes() {
 	{
 		events.GET("", authMiddleware(s.eventHandler.GetEvents()))
 		events.GET("/:id", authMiddleware(s.eventHandler.GetByID()))
+	}
+
+	analytics := s.e.Group("/analytics")
+	{
+		analytics.GET("/sales", authMiddleware(s.analyticsHandler.Sales()))
 	}
 }

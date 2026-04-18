@@ -74,7 +74,7 @@ func NewSimulation(carService service.CarService, modelService service.ModelServ
 
 func (s *Simulation) Run() {
 	s.Init()
-	for i := 0; i < 40; i++ {
+	for i := 0; i < s.cfg.DaysCount; i++ {
 		s.PlanDay()
 		s.ProcessDay()
 		s.currendDay = s.currendDay.AddDate(0, 0, 1)

@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"salon/internal/models"
+	"time"
 )
 
 type EmployeeService interface {
@@ -74,5 +75,5 @@ type EventService interface {
 }
 
 type AnalyticsService interface {
-	
+	Sales(ctx context.Context, dateFrom, dateTo *time.Time) (*models.SalesAnalytics, error)
 }

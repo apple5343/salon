@@ -12,12 +12,15 @@ type CarsPopularity struct {
 }
 
 type SalesAnalytics struct {
-	TotalRevenue           decimal.Decimal // Сумма всех final_price.
-	TotalSales             int
-	AverageCheck           decimal.Decimal
+	TotalDeals             int                 // Количество всех сделок
+	TotalCanceled          int                 // Количество отмененных сделок
+	CanceledRevenue        decimal.Decimal     // Сумма всех final_price отмененных сделок
+	TotalСompleted         int                 // Количество завершенных сделок
+	CompletedRevenue       decimal.Decimal     // Сумма всех final_price завершенныйх сделок.
+	AverageCheck           decimal.Decimal     // Средний чек у завершенных сделок
 	ConversionRate         decimal.Decimal     // (SaleCompleted) ко всем начатым (SaleCreated)
-	DiscountImpact         decimal.Decimal     // Сумма всех discount_amount
-	AverageMargin          decimal.Decimal     // Средняя разница между final_price и origin_price
+	DiscountImpact         decimal.Decimal     // Сумма всех discount_amount у завершенных сделок
+	AverageMargin          decimal.Decimal     // Средняя разница между final_price и origin_price у завершенных сделок
 	PaymentTypesPopularity map[PaymentType]int // Количество продаж по типу оплаты
 	CarsPopularity         CarsPopularity      // Количество проданных машин по параметрам
 	BrandsPopularity       map[string]int      // Количество проданных машин по брендам

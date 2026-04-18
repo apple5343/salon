@@ -1,6 +1,7 @@
 package app
 
 import (
+	"salon/internal/service/analytics"
 	"salon/internal/service/brand"
 	"salon/internal/service/car"
 	"salon/internal/service/client"
@@ -24,5 +25,6 @@ func ServiceModules() fx.Option {
 		model.NewModule(),
 		sale.NewModule(),
 		event.NewModule(),
+		analytics.NewModule(),
 	)
 }

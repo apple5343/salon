@@ -33,9 +33,9 @@ func (r *saleRepository) Create(ctx context.Context, s *service.Sale) (*service.
 	repoS := models.SaleToDatabase(s)
 	repoS.ID = id
 	_, err = tx.NamedExecContext(ctx, `INSERT INTO sales
-		(id, car_id, client_id, employee_id, original_price, discount_amount, discount_percent,
+		(id, car_id, client_id, employee_id, sale_date, original_price, discount_amount, discount_percent,
 		payment_type, status, notes, created_at, updated_at) 
-		VALUES (:id, :car_id, :client_id, :employee_id, :original_price, :discount_amount, :discount_percent, 
+		VALUES (:id, :car_id, :client_id, :employee_id, :sale_date, :original_price, :discount_amount, :discount_percent, 
 		:payment_type, :status, :notes, :created_at, :updated_at)`,
 		repoS)
 	if err != nil {
