@@ -16,7 +16,9 @@ func (s *analyticsService) Employee(ctx context.Context, employeeID string, date
 	if _, err := s.employeeService.GetByID(ctx, employeeID); err != nil {
 		return nil, err
 	}
-	
+	if dateFrom != nil && dateTo != nil && dateFrom.After(*dateTo) {
+		return nil, ErrInvalidTimeRange
+	}
 	result, err := s.analyticsRepository.GetEmployeeAnalytics(ctx, employeeID, dateFrom, dateTo)
 	if err != nil {
 		return nil, errorx.Wrap("get employee statistic", errorx.Internal, err)

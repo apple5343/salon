@@ -13,6 +13,9 @@ func (s *analyticsService) Warehouse(ctx context.Context, turnoverDateFrom, turn
 	if role := ctxutil.UserRoleFromContext(ctx); role != string(models.EmployeeRoleAdmin) {
 		return nil, ErrForbidden
 	}
+	if turnoverDateFrom != nil && turnoverDateTo != nil && turnoverDateFrom.After(*turnoverDateTo) {
+		return nil, ErrInvalidTimeRange
+	}
 	result, err := s.analyticsRepository.GetWarehouseAnalytics(ctx, turnoverDateFrom, turnoverDateTo)
 	if err != nil {
 		return nil, errorx.Wrap("get warehouse statistic", errorx.Internal, err)

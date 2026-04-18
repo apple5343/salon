@@ -73,3 +73,21 @@ func WarehouseAnalyticsToHttp(warehouseAnalytics *models.WarehouseAnalytics) *Wa
 		ModelsCount:  warehouseAnalytics.ModelsCount,
 	}
 }
+
+type SupplierAnalytics struct {
+	SupplierID          string `json:"supplier_id"`
+	SupplierName        string `json:"supplier_name"`
+	TotalCars           int    `json:"total_cars"`
+	AverageDeliveryTime int    `json:"average_delivery_time"`
+	TotalPrice          string `json:"total_price"`
+}
+
+func SupplierAnalyticsToHttp(supplierAnalytics *models.SupplierAnalytics) *SupplierAnalytics {
+	return &SupplierAnalytics{
+		SupplierID:          supplierAnalytics.SupplierID,
+		SupplierName:        supplierAnalytics.SupplierName,
+		TotalCars:           supplierAnalytics.TotalCars,
+		AverageDeliveryTime: supplierAnalytics.AverageDeliveryTime,
+		TotalPrice:          supplierAnalytics.TotalPrice.String(),
+	}
+}
