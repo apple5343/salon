@@ -8,6 +8,8 @@ services:
       POSTGRES_DB: ${POSTGRES_NAME}
     ports:
       - "${POSTGRES_PORT}:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD", "pg_isready", "-U", "${POSTGRES_USER}"]
       interval: 30s
@@ -22,9 +24,17 @@ services:
       REDIS_PASSWORD: ${REDIS_PASSWORD}
     ports:
       - "${REDIS_PORT}:6379"
+    volumes:
+      - redisdata:/data
     healthcheck:
       test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD}", "ping"]
       interval: 30s
       timeout: 20s
       retries: 3
+
+volumes:
+  pgdata:
+    driver: local
+  redisdata:
+    driver: local
     

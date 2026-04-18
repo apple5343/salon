@@ -32,7 +32,7 @@ type TestConfig struct {
 	PostgresUser          string `env:"POSTGRES_USER" env-required:"true"`
 	PostgresPassword      string `env:"POSTGRES_PASSWORD" env-required:"true"`
 	PostgresDB            string `env:"POSTGRES_DB" env-required:"true"`
-	PostgresPort          string `env:"POSTGRES_PORT" renv-equired:"true"`
+	PostgresPort          string `env:"POSTGRES_PORT" env-required:"true"`
 	PostgresDSN           string `env:"POSTGRES_DSN" env-required:"true"`
 	RedisPort             string `env:"REDIS_PORT" env-required:"true"`
 	RedisAddr             string `env:"REDIS_ADDR" env-required:"true"`
@@ -222,7 +222,10 @@ func (suite *BaseTestSuite) MustInitCompose(composePath string) {
 	if err != nil {
 		suite.FailNow("init compose: " + err.Error())
 	}
-	suite.compose = c.WithEnv(suite.GetEnv()).WaitForService("app-test", wait.NewHealthStrategy())
+	suite.compose = c.WithEnv(suite.GetEnv()).
+		WaitForService("postgres-test", wait.NewHealthStrategy()).
+		WaitForService("redis-test", wait.NewHealthStrategy()).
+		WaitForService("app-test", wait.NewHealthStrategy())
 }
 
 func (suite *BaseTestSuite) MustCreateLogsDir() {
