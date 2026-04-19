@@ -79,4 +79,5 @@ type AnalyticsService interface {
 	Warehouse(ctx context.Context, turnoverDateFrom, turnoverDateTo *time.Time) (*models.WarehouseAnalytics, error)
 	Employee(ctx context.Context, employeeID string, dateFrom, dateTo *time.Time) (*models.EmployeeAnalytics, error)
 	Supplier(ctx context.Context, supplierID string, dateFrom, dateTo *time.Time) (*models.SupplierAnalytics, error)
+	Supply(ctx context.Context, dateFrom, dateTo *time.Time) (*models.SupplyAnalytics, error)
 }

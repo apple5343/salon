@@ -61,9 +61,10 @@ type SupplierAnalytics struct {
 }
 
 type SupplyAnalytics struct {
-	NewCars     int // Количество машин, которые были созданы
-	ArrivedCars int // Количество машин, которые были поставлены
-	CarsCount   CarsPopularity
-	BrandsCount map[string]int
-	ModelsCount map[string]int
+	NewCars            int // Количество машин, которые были созданы
+	CarsOnWay          int // Количество машин, которые находятся в пути
+	ArrivedCars        int // Количество машин, которые были поставлены
+	ArrivedCarsCount   CarsPopularity
+	ArrivedBrandsCount map[string]int
+	ArrivedModelsCount map[string]int
 }

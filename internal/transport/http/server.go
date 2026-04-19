@@ -161,6 +161,7 @@ func (s *Server) routes() {
 	{
 		analytics.GET("/sales", authMiddleware(s.analyticsHandler.Sales()))
 		analytics.GET("/warehouse", authMiddleware(s.analyticsHandler.Warehouse()))
+		analytics.GET("/supply", authMiddleware(s.analyticsHandler.Supply()))
 		analytics.GET("/employee/:id", authMiddleware(s.analyticsHandler.Employee()))
 		analytics.GET("/supplier/:id", authMiddleware(s.analyticsHandler.Supplier()))
 	}

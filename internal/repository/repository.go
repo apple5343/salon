@@ -81,4 +81,5 @@ type AnalyticsRepository interface {
 	GetWarehouseAnalytics(ctx context.Context, turnoverDateFrom, turnoverDateTo *time.Time) (*models.WarehouseAnalytics, error)
 	GetEmployeeAnalytics(ctx context.Context, employeeID string, dateFrom, dateTo *time.Time) (*models.EmployeeAnalytics, error)
 	GetSupplierAnalytics(ctx context.Context, supplierID string, dateFrom, dateTo *time.Time) (*models.SupplierAnalytics, error)
+	GetSupplyAnalytics(ctx context.Context, dateFrom, dateTo *time.Time) (*models.SupplyAnalytics, error)
 }

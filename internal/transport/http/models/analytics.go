@@ -91,3 +91,23 @@ func SupplierAnalyticsToHttp(supplierAnalytics *models.SupplierAnalytics) *Suppl
 		TotalPrice:          supplierAnalytics.TotalPrice.String(),
 	}
 }
+
+type SupplyAnalytics struct {
+	NewCars            int            `json:"new_cars"`
+	CarsOnWay          int            `json:"cars_on_way"`
+	ArrivedCars        int            `json:"arrived_cars"`
+	ArrivedCarsCount   CarsPopularity `json:"arrived_cars_count"`
+	ArrivedBrandsCount map[string]int `json:"arrived_brands_count"`
+	ArrivedModelsCount map[string]int `json:"arrived_models_count"`
+}
+
+func SupplyAnalyticsToHttp(supplyAnalytics *models.SupplyAnalytics) *SupplyAnalytics {
+	return &SupplyAnalytics{
+		NewCars:            supplyAnalytics.NewCars,
+		CarsOnWay:          supplyAnalytics.CarsOnWay,
+		ArrivedCars:        supplyAnalytics.ArrivedCars,
+		ArrivedCarsCount:   CarsPopularityToHttp(supplyAnalytics.ArrivedCarsCount),
+		ArrivedBrandsCount: supplyAnalytics.ArrivedBrandsCount,
+		ArrivedModelsCount: supplyAnalytics.ArrivedModelsCount,
+	}
+}
