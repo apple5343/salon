@@ -2,7 +2,6 @@ package logger
 
 import (
 	"context"
-	"salon/internal/config"
 
 	"go.uber.org/zap"
 )
@@ -21,13 +20,18 @@ type Logger interface {
 	Error(ctx context.Context, msg string, fields ...zap.Field)
 }
 
+type Config struct {
+	Level string `env:"LOGGER_LEVEL" env-default:"dev"`
+}
+
 type logger struct {
 	z *zap.Logger
 }
 
-func NewLogger(cfg *config.Logger) Logger {
+func NewLogger(cfg *Config) Logger {
 	loggerCfg := zap.NewProductionConfig()
 	loggerCfg.DisableStacktrace = true
+	loggerCfg.DisableCaller = true
 	if cfg.Level == "dev" {
 		loggerCfg.Level = zap.NewAtomicLevelAt(zap.DebugLevel)
 	}

@@ -8,6 +8,7 @@ import (
 
 	"github.com/apple5343/errorx"
 	"github.com/labstack/echo/v4"
+	"go.uber.org/zap"
 )
 
 func ErrorMiddleware() echo.MiddlewareFunc {
@@ -21,12 +22,16 @@ func ErrorMiddleware() echo.MiddlewareFunc {
 			if c.Response().Committed {
 				return err
 			}
-			l, okk := logger.FromContext(c.Request().Context())
-			if okk {
-				l.Error(c.Request().Context(), err.Error())
-			}
+
+			fields := []zap.Field{zap.String("transport", "http"), zap.String("path", c.Path()),
+				zap.String("method", c.Request().Method)}
+			defer func(err error) {
+				logger.FromContextOrDefault(c.Request().Context()).Error(c.Request().Context(), err.Error(), fields...)
+			}(err)
+
 			httpErr := &echo.HTTPError{}
 			if errors.As(err, &httpErr) {
+				fields = append(fields, zap.Int("http_code", httpErr.Code))
 				return c.JSON(httpErr.Code, map[string]string{
 					"status":  "error",
 					"message": fmt.Sprintf("%v", httpErr.Message),
@@ -34,19 +39,24 @@ func ErrorMiddleware() echo.MiddlewareFunc {
 			}
 
 			if commonErr, ok := errorx.ToCommonError(err); ok {
+				fields = append(fields, zap.Any("error_code", commonErr.Code()))
 				if commonErr.Code() == errorx.Internal {
+					fields = append(fields, zap.Int("http_code", http.StatusInternalServerError))
 					return c.JSON(
 						http.StatusInternalServerError,
 						map[string]string{"status": "error", "message": "Internal server error"},
 					)
 				}
 
+				httpCode := parseCommonCode(commonErr.Code())
+				fields = append(fields, zap.Int("http_code", httpCode))
 				return c.JSON(
-					parseCommonCode(commonErr.Code()),
+					httpCode,
 					map[string]string{"status": "error", "message": commonErr.Error()},
 				)
 			}
 
+			fields = append(fields, zap.Int("http_code", http.StatusInternalServerError))
 			return c.JSON(
 				http.StatusInternalServerError,
 				map[string]string{"status": "error", "message": "Internal server error"},

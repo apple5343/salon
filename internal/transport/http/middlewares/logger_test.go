@@ -3,7 +3,6 @@ package middlewares
 import (
 	"net/http"
 	"net/http/httptest"
-	"salon/internal/config"
 	"salon/pkg/logger"
 	"testing"
 
@@ -12,7 +11,7 @@ import (
 )
 
 func TestLogger(t *testing.T) {
-	l := logger.NewLogger(&config.Logger{})
+	l := logger.NewLogger(&logger.Config{})
 	req := httptest.NewRequest(http.MethodGet, "/", nil)
 	rec := httptest.NewRecorder()
 	c := echo.New().NewContext(req, rec)

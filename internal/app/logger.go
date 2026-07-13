@@ -1,6 +1,7 @@
 package app
 
 import (
+	"salon/internal/config"
 	"salon/pkg/logger"
 
 	"go.uber.org/fx"
@@ -9,6 +10,9 @@ import (
 func Logger() fx.Option {
 	return fx.Module(
 		"logger",
-		logger.NewModule(),
+		fx.Provide(
+			config.LoggerConfig,
+			logger.NewLogger,
+		),
 	)
 }

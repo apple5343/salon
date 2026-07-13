@@ -2,16 +2,13 @@ package config
 
 import (
 	"fmt"
+	"salon/pkg/logger"
 
 	"github.com/ilyakaznacheev/cleanenv"
 )
 
-type Logger struct {
-	Level string `env:"LOGGER_LEVEL" env-default:"dev"`
-}
-
-func LoggerConfig() (*Logger, error) {
-	cfg := &Logger{}
+func LoggerConfig() (*logger.Config, error) {
+	cfg := &logger.Config{}
 	if err := cleanenv.ReadEnv(cfg); err != nil {
 		return nil, fmt.Errorf("read config: %w", err)
 	}
