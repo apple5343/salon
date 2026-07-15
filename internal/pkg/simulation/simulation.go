@@ -109,7 +109,6 @@ func (s *Simulation) Init() {
 }
 
 func (s *Simulation) PlanDay() {
-	//TODO move poisson ratio to config
 	if s.currendDay.Weekday() == time.Saturday || s.currendDay.Weekday() == time.Sunday {
 		return
 	}

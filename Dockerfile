@@ -6,6 +6,7 @@ COPY . .
 RUN go mod download
 RUN go build -o main cmd/main/main.go
 RUN go build -o migrate cmd/migrator/main.go
+RUN go build -o simulation cmd/simulation/main.go
 RUN go build -o cli cmd/cli/main.go
 
 FROM alpine:latest AS runtime
@@ -16,6 +17,7 @@ RUN apk add --no-cache curl
 
 COPY --from=builder /app/main .
 COPY --from=builder /app/migrate .
+COPY --from=builder /app/simulation .
 COPY --from=builder /app/migrations ./migrations
 COPY --from=builder /app/cli .
 
@@ -27,3 +29,6 @@ ENTRYPOINT [ "/app/migrate" ]
 
 FROM runtime AS cli
 ENTRYPOINT [ "/app/cli" ]
+
+FROM runtime AS simulation
+ENTRYPOINT [ "/app/simulation" ]
