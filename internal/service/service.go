@@ -16,7 +16,6 @@ type EmployeeService interface {
 
 	GetByID(ctx context.Context, id string) (*models.Employee, error)
 	GetEmployees(ctx context.Context, filters *models.EmployeeFilters) ([]*models.Employee, error)
-	//TODO stat
 	Profile(ctx context.Context) (*models.Employee, error)
 	Update(ctx context.Context, e *models.Employee) (*models.Employee, error)
 }
@@ -24,7 +23,6 @@ type EmployeeService interface {
 type ClientService interface {
 	GetByID(ctx context.Context, id string) (*models.Client, error)
 	Register(ctx context.Context, c *models.Client) (*models.Client, error)
-	//TODO list
 	Update(ctx context.Context, c *models.Client) (*models.Client, error)
 }
 

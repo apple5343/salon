@@ -32,7 +32,6 @@ func (s *employeeService) Register(ctx context.Context, e *models.Employee) (*mo
 		}
 		return nil, errorx.Wrap("register employee", errorx.Internal, err)
 	}
-	//TODO добавить логи
 	return e, nil
 }
 
@@ -59,7 +58,6 @@ func (s *employeeService) Hire(ctx context.Context, id string) (*models.Employee
 	if err != nil {
 		return nil, errorx.Wrap("hire employee", errorx.Internal, err)
 	}
-	//TODO добавить логи
 	return e, nil
 }
 
@@ -77,6 +75,5 @@ func (s *employeeService) RegisterAdmin(ctx context.Context, e *models.Employee)
 		}
 		return nil, errorx.Wrap("register employee", errorx.Internal, err)
 	}
-	//TODO добавить логи
 	return e, nil
 }
