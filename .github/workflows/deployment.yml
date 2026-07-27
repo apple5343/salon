@@ -24,6 +24,8 @@ jobs:
         run: go test -v ./tests/integration/...
 
   deploy:
+    name: Deploy
+    needs: test
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -91,6 +93,7 @@ jobs:
             EOF
 
             docker load -i /tmp/images.tar
+            docker compose -f docker-compose.prod.yml down
             docker compose -f docker-compose.prod.yml up -d
 
             sleep 10
