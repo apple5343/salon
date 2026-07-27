@@ -1,4 +1,8 @@
-on: push
+name: Deployment
+on:
+  push:
+    branches:
+      - master
 jobs:
   test:
     name: Test
@@ -18,3 +22,79 @@ jobs:
       
       - name: Run tests
         run: go test -v ./tests/integration/...
+
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Build Docker images
+        run: |
+          docker compose pull
+          docker compose build
+          docker save $(docker compose config --images) -o images.tar
+      
+      - name: Copy images to server
+        uses: appleboy/scp-action@v1.0.0
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          source: "images.tar"
+          target: "/tmp/"
+      
+      - name: Copy compose files to server
+        uses: appleboy/scp-action@v1.0.0
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          source: "docker-compose.prod.yml"
+          target: "/opt/myapp/"
+      
+      - name: Deploy
+        uses: appleboy/ssh-action@v1.2.5
+        env:
+          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+          POSTGRES_DSN: ${{ secrets.POSTGRES_DSN }}
+          REDIS_ADDR: ${{ secrets.REDIS_ADDR }}
+          REDIS_PASSWORD: ${{ secrets.REDIS_PASSWORD }}
+          REDIS_DB: ${{ secrets.REDIS_DB }}
+          ACCESS_SECRET: ${{ secrets.ACCESS_SECRET }}
+          REFRESH_SECRET: ${{ secrets.REFRESH_SECRET }}
+          ADMIN_EMAIL: ${{ secrets.ADMIN_EMAIL }}
+          ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
+          HTTP_SERVER_ADDR: ':8081'
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          envs: POSTGRES_USER,POSTGRES_PASSWORD,POSTGRES_DB,POSTGRES_DSN,REDIS_ADDR,REDIS_PASSWORD,REDIS_DB,ACCESS_SECRET,REFRESH_SECRET,HTTP_SERVER_ADDR,ADMIN_EMAIL,ADMIN_PASSWORD
+          script: |
+            cd /opt/myapp
+            cat > .env << EOF
+            POSTGRES_USER=$POSTGRES_USER
+            POSTGRES_PASSWORD=$POSTGRES_PASSWORD
+            POSTGRES_DB=$POSTGRES_DB
+            POSTGRES_DSN=$POSTGRES_DSN
+            REDIS_ADDR=$REDIS_ADDR
+            REDIS_PASSWORD=$REDIS_PASSWORD
+            REDIS_DB=$REDIS_DB
+            ACCESS_SECRET=$ACCESS_SECRET
+            REFRESH_SECRET=$REFRESH_SECRET
+            ADMIN_EMAIL=$ADMIN_EMAIL
+            ADMIN_PASSWORD=$ADMIN_PASSWORD
+            HTTP_SERVER_ADDR=$HTTP_SERVER_ADDR
+            EOF
+
+            docker load -i /tmp/images.tar
+            docker compose -f docker-compose.prod.yml up -d
+
+            sleep 10
+            docker compose -f docker-compose.prod.yml ps
+
+            docker image prune -af
+            rm /tmp/images.tar
