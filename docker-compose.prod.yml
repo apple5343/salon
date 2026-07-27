@@ -55,9 +55,7 @@ services:
       - appnet
   
   migrate:
-    build:
-      context: .
-      target: migrate
+    image: salon-migrate:latest
     container_name: migrate
     environment:
       - POSTGRES_DSN=${POSTGRES_DSN}
