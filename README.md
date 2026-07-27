@@ -19,6 +19,7 @@ Backend-система управления автосалоном, написа
   - [Симуляция данных](#симуляция-данных)
 - [Переменные окружения](#переменные-окружения)
 - [Тестирование](#тестирование)
+- [CI/CD](#cicd)
 
 
 ## Стек
@@ -191,3 +192,53 @@ ACCESS_SECRET=example_access_secret REFRESH_SECRET=example_refresh_secret go run
 # Запустите тесты
 go test -v ./tests/integration/...
 ```
+
+## CI/CD
+
+Проект использует GitHub Actions для автоматического тестирования и развертывания.
+
+### Workflow
+
+При пуше в ветку `master` запускается pipeline (`.github/workflows/deployment.yml`), состоящий из двух этапов:
+
+**1. Test** — запуск интеграционных тестов
+- Установка Go 1.24.9
+- Загрузка зависимостей
+- Запуск тестов (`go test -v ./tests/integration/...`)
+
+**2. Deploy** — развертывание на сервер (выполняется только при успешном прохождении тестов)
+- Сборка Docker-образов через `docker compose`
+- Копирование образов и конфигурации на сервер
+- Создание `.env` файла из GitHub Secrets
+- Загрузка образов и перезапуск контейнеров
+- Очистка временных файлов
+
+### Необходимые Secrets
+
+Для работы CI/CD в GitHub настройте следующие secrets:
+
+**Сервер:**
+- `HOST` — адрес сервера
+- `USERNAME` — имя пользователя SSH
+- `KEY` — приватный SSH-ключ
+
+**База данных:**
+- `POSTGRES_USER`
+- `POSTGRES_PASSWORD`
+- `POSTGRES_DB`
+- `POSTGRES_DSN`
+
+**Redis:**
+- `REDIS_ADDR`
+- `REDIS_PASSWORD`
+- `REDIS_DB`
+
+**Приложение:**
+- `ACCESS_SECRET`
+- `REFRESH_SECRET`
+- `ADMIN_EMAIL`
+- `ADMIN_PASSWORD`
+
+### Развертывание
+
+Приложение разворачивается в директории `/opt/myapp` на целевом сервере. Используется `docker-compose.prod.yml` для запуска контейнеров в production-режиме.
